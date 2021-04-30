@@ -1,0 +1,94 @@
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: #333;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+a {
+  color: rgb(0, 100, 200);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(0, 80, 160);
+}
+
+label {
+  display: block;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-padding: 0.4em 0;
+  padding: 0.4em;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: #ccc;
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+.center {
+  justify-content: center;
+  justify-items: center;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.green-button {
+  background-color: #00c853 !important;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+ul {
+  padding-left: 0;
+}
+
+@media (max-width: 768px) {
+  .smui-card--padded,
+  .smui-card__content,
+  .smui-card__primary-action--padded {
+    padding: 8px !important;
+  }
+}
+
+.separator {
+  width: 100%;
+  border-bottom: lightgray solid 1px;
+  margin: 0.75em 0;
+}

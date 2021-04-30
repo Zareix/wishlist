@@ -1,0 +1,18 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+const firebaseConfig = {
+    apiKey: "AIzaSyB5OhrV6i_RuOw44cDgWjd0ujdXxhnVB44",
+    authDomain: "raphael-wishlist.firebaseapp.com",
+    projectId: "raphael-wishlist",
+    storageBucket: "raphael-wishlist.appspot.com",
+    messagingSenderId: "20760194101",
+    appId: "1:20760194101:web:982bc1b2d4527e3d2e557c"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+export const auth = firebase.auth();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+export const db = firebase.firestore();

@@ -1,0 +1,33 @@
+{
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public --no-clear"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@smui/button": "^4.1.0",
+    "@smui/circular-progress": "^4.1.0",
+    "@smui/fab": "^4.1.0",
+    "@smui/image-list": "^4.1.0",
+    "@smui/textfield": "^4.1.0",
+    "@smui/top-app-bar": "^4.1.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.0.0"
+  },
+  "dependencies": {
+    "firebase": "^8.4.1",
+    "rxfire": "^4.0.0",
+    "rxjs": "^6.6.7",
+    "sirv-cli": "^1.0.0",
+    "svelte-material-ui": "^4.1.0"
+  }
+}
