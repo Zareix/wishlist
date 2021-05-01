@@ -1,17 +1,23 @@
 <script>
   import { auth } from "./firebase"
-  
+  import { user } from "./stores"
+
   import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar"
   import IconButton from "@smui/icon-button"
 
-  export let user
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+
   export let back
 </script>
 
 <TopAppBar variant="fixed">
   <Row>
     <Section>
-      <Title on:click={back}><span class="cursor-pointer">Wishlist - {user.displayName}</span></Title>
+      <Title on:click={back}
+        ><span class="cursor-pointer">Wishlist - {currentUser.displayName}</span
+        ></Title
+      >
     </Section>
     <Section align="end" toolbar>
       <IconButton
@@ -24,7 +30,7 @@
 </TopAppBar>
 
 <style>
-    .cursor-pointer{
-        cursor: pointer;
-    }
+  .cursor-pointer {
+    cursor: pointer;
+  }
 </style>

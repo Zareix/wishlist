@@ -1,11 +1,14 @@
 <script>
   import { onMount } from "svelte"
   import { db } from "./firebase"
+  import { user } from "./stores"
   import Card, { Content } from "@smui/card"
-  
+
   import Item from "./Item.svelte"
-  
-  export let user
+
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+
   export let category
   export let modif
 
@@ -17,7 +20,7 @@
 
   onMount(async () => {
     await db
-      .collection(user.email)
+      .collection(currentUser.email)
       .doc("items")
       .collection(category)
       .orderBy("createdAt")
@@ -31,7 +34,7 @@
 </script>
 
 {#if items.length === 0}
-<div></div>
+  <div />
 {:else}
   <Card padded>
     <Content>

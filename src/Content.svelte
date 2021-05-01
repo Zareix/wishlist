@@ -4,30 +4,23 @@
   import { cubicIn } from "svelte/easing"
 
   import { db } from "./firebase"
+  import { user } from "./stores"
 
   import Button from "@smui/button"
   import Fab, { Icon } from "@smui/fab"
-  
+
   import AddItem from "./AddItem.svelte"
   import List from "./List.svelte"
   import TopBar from "./TopBar.svelte"
 
-  export let user
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   let isAdd = false
   let isModif = false
-  let fab = false
   let categories = []
 
   onMount(async () => {
-    window.addEventListener("scroll", (e) => {
-      if (!fab && window.pageYOffset > 100) {
-        fab = true
-      } else if (fab && window.pageYOffset <= 100) {
-        fab = false
-      }
-    })
-
     await db
       .collection("categories")
       .get()
@@ -49,45 +42,34 @@
 </script>
 
 <svelte:head>
-  <title>Wishlist - {user.displayName}</title>
+  <title>Wishlist - {currentUser.displayName}</title>
 </svelte:head>
 
 <div>
-  <header>
-    <TopBar {user} {back} />
-  </header>
+  <TopBar {back} />
   <section transition:fade={{ easing: cubicIn }}>
     {#if isAdd}
-      <AddItem {back} {user} />
+      <AddItem {back} />
     {:else if isModif}
-      <AddItem {back} itemModif={item} {user} />
+      <AddItem {back} itemModif={item} />
     {:else}
       <div>
-        <div class="flex center">
-          <Button
-            variant="raised"
+        <div class="fab" transition:scale={{ easing: cubicIn }}>
+          <Fab
+            color="primary"
             on:click={() => (isAdd = !isAdd)}
             class="green-button"
           >
-            Ajouter un objet
-          </Button>
+            <Icon class="material-icons">add</Icon>
+          </Fab>
         </div>
         {#each categories as c}
-          <div class="list">
-            <List {user} category={c} {modif} />
+          <div class=" flex center">
+            <div class="list">
+              <List category={c} {modif} />
+            </div>
           </div>
         {/each}
-        {#if fab}
-          <div class="fab" transition:scale={{ easing: cubicIn }}>
-            <Fab
-              color="primary"
-              on:click={() => (isAdd = !isAdd)}
-              class="green-button"
-            >
-              <Icon class="material-icons">add</Icon>
-            </Fab>
-          </div>
-        {/if}
       </div>
     {/if}
   </section>
@@ -102,12 +84,19 @@
 
   .fab {
     position: fixed;
-    z-index: 20;
+    z-index: 2;
     bottom: 15px;
     right: 15px;
   }
 
   .list {
+    width: 80vw;
     margin: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .list {
+      width: 90vw;
+    }
   }
 </style>

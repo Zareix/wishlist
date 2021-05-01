@@ -1,22 +1,18 @@
 <script>
-  import { auth, googleProvider } from "./firebase"
-  import { authState } from "rxfire/auth"
+  import { user } from "./stores"
 
   import Content from "./Content.svelte"
   import Login from "./Login.svelte"
-  
-  let user
 
-  const unsubscribe = authState(auth).subscribe((u) => (user = u))
-
-  const login = () => auth.signInWithPopup(googleProvider)
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 </script>
 
 <main>
-  {#if user}
-    <Content {user} />
+  {#if currentUser}
+    <Content />
   {:else}
-    <Login {login}/>
+    <Login />
   {/if}
 </main>
 

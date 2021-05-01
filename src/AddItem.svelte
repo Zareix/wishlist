@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
 
   import { db } from "./firebase"
+  import { user } from "./stores.js"
 
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
@@ -9,8 +10,10 @@
   import TextField from "@smui/textfield"
   import CircularProgress from "@smui/circular-progress"
 
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+
   export let back
-  export let user
 
   export let itemModif
 
@@ -44,7 +47,7 @@
     if (itemModif) {
       if (oldCategorie !== categorie) {
         adding = db
-          .collection(user.email)
+          .collection(currentUser.email)
           .doc("items")
           .collection(oldCategorie)
           .doc(itemModif.id)
@@ -53,7 +56,7 @@
         adding.then(
           () =>
             (adding = db
-              .collection(user.email)
+              .collection(currentUser.email)
               .doc("items")
               .collection(categorie)
               .add({
@@ -65,7 +68,7 @@
         )
       } else {
         adding = db
-          .collection(user.email)
+          .collection(currentUser.email)
           .doc("items")
           .collection(categorie)
           .doc(itemModif.id)
@@ -78,7 +81,7 @@
       }
     } else {
       adding = db
-        .collection(user.email)
+        .collection(currentUser.email)
         .doc("items")
         .collection(categorie)
         .add({
@@ -103,18 +106,20 @@
   {#if adding}
     <div>
       {#await adding}
-        <div class="loading">
-          <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+        <div class="loading flex center">
+          <CircularProgress style="height: 48px; width: 48px;" indeterminate />
         </div>
       {:then}
-        <div class="loading">
-          <h2>
-            Item {#if itemModif}mise à jour{:else}ajouté{/if} !
-          </h2>
-          <Button on:click={back}>
-            <Icon class="material-icons">arrow_back</Icon>
-            <Label>back</Label>
-          </Button>
+        <div class="loading flex center">
+          <div>
+            <h2>
+              Item {#if itemModif}mise à jour{:else}ajouté{/if} !
+            </h2>
+            <Button on:click={back}>
+              <Icon class="material-icons">arrow_back</Icon>
+              <Label>back</Label>
+            </Button>
+          </div>
         </div>
       {/await}
     </div>
@@ -124,7 +129,7 @@
       <Label>back</Label>
     </Button>
     <div id="addSection">
-      <Card>
+      <Card padded>
         <Content>
           <h1>Ajouter un objet</h1>
           <form on:submit={addItem}>
@@ -168,9 +173,11 @@
             <br />
             <div class="spacer" />
 
-            <Button variant="raised" type="submit" class="add-button">
-              {#if itemModif}Mettre à jour{:else}Ajouter{/if}
-            </Button>
+            <div class="flex center">
+              <Button variant="raised" type="submit" class="add-button">
+                {#if itemModif}Mettre à jour{:else}Ajouter{/if}
+              </Button>
+            </div>
           </form>
         </Content>
       </Card>
@@ -185,9 +192,9 @@
   }
 
   .loading {
-    margin: auto;
-    width: 50vw;
     text-align: center;
+    height: 70vh;
+    align-items: center;
   }
 
   .group {
@@ -202,5 +209,11 @@
   #addSection {
     width: 50vw;
     margin: auto;
+  }
+
+  @media (max-width: 768px) {
+    #addSection {
+      width: 80vw;
+    }
   }
 </style>

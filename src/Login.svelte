@@ -1,7 +1,15 @@
 <script>
+  import { auth, googleProvider } from "./firebase"
+  import { user } from "./stores"
+
+  import { authState } from "rxfire/auth"
   import Button, { Icon, Label } from "@smui/button"
 
-  export let login
+  const unsubscribe = authState(auth).subscribe((u) => {
+    user.set(u)
+  })
+
+  const login = () => auth.signInWithPopup(googleProvider)
 </script>
 
 <div class="connect">
