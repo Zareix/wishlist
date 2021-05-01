@@ -8,13 +8,11 @@
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 </script>
 
-<main>
-  {#if currentUser}
-    <Content />
-  {:else}
-    <Login />
-  {/if}
-</main>
+{#if currentUser}
+  <Content />
+{:else}
+  <Login />
+{/if}
 
 <style>
 </style>

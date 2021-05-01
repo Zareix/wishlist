@@ -72,6 +72,10 @@ input:disabled {
   background-color: #00c853 !important;
 }
 
+.red-icon-button {
+  color: #F44336 !important;
+}
+
 h1,
 h2,
 h3,

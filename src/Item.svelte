@@ -1,17 +1,36 @@
 <script>
+  import { db } from "./firebase"
+  import { user } from "./stores"
+
   import Card, { Content, ActionIcons } from "@smui/card"
   import IconButton from "@smui/icon-button"
+  import Tooltip, { Wrapper } from "@smui/tooltip"
 
   import ItemImage from "./ItemImage.svelte"
 
   export let item
   export let modif
+  export let removeItem
+
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   const formatRef = (ref) => {
     if (ref.startsWith("https://")) ref = ref.substring(8)
     if (ref.startsWith("http://")) ref = ref.substring(7)
 
     return ref.slice(0, ref.indexOf("/"))
+  }
+
+  const deleteItem = () => {
+    db.collection(currentUser.email)
+      .doc("items")
+      .collection(item.categorie)
+      .doc(item.id)
+      .delete()
+      .then(() => {
+        removeItem(item)
+      })
   }
 </script>
 
@@ -27,23 +46,32 @@
           <ItemImage {image} {index} />
         {/each}
       </div>
-      <h4>Références :</h4>
-      <ul>
-        {#if item.references.length === 0}
-          <li>Aucune référence</li>
-        {:else}
+      {#if item.references.length === 0}
+        <div />
+      {:else}
+        <h4>Références :</h4>
+        <ul>
           {#each item.references as ref, i}
             <li>
               <a href={ref}>{formatRef(ref)}</a>
             </li>
           {/each}
-        {/if}
-      </ul>
+        </ul>
+      {/if}
     </Content>
     <ActionIcons>
-      <IconButton on:click={() => modif(item)} class="material-icons"
-        >edit</IconButton
-      >
+      <Wrapper>
+        <IconButton on:click={() => modif(item)} class="material-icons"
+          >edit</IconButton
+        >
+        <Tooltip>Modifier</Tooltip>
+      </Wrapper>
+      <Wrapper>
+        <IconButton on:click={deleteItem} class="material-icons red-icon-button"
+          >delete</IconButton
+        >
+        <Tooltip>Supprimer</Tooltip>
+      </Wrapper>
     </ActionIcons>
   </Card>
 </li>

@@ -4,11 +4,12 @@
   import { db } from "./firebase"
   import { user } from "./stores.js"
 
+  import Loading from "./Loading.svelte"
+
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
   import Card, { Content } from "@smui/card"
   import TextField from "@smui/textfield"
-  import CircularProgress from "@smui/circular-progress"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -106,11 +107,9 @@
   {#if adding}
     <div>
       {#await adding}
-        <div class="loading flex center">
-          <CircularProgress style="height: 48px; width: 48px;" indeterminate />
-        </div>
+        <Loading/>
       {:then}
-        <div class="loading flex center">
+        <div class="loaded flex center">
           <div>
             <h2>
               Item {#if itemModif}mise à jour{:else}ajouté{/if} !
@@ -191,7 +190,7 @@
     margin-bottom: 1em;
   }
 
-  .loading {
+  .loaded {
     text-align: center;
     height: 70vh;
     align-items: center;

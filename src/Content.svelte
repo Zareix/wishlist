@@ -6,8 +6,8 @@
   import { db } from "./firebase"
   import { user } from "./stores"
 
-  import Button from "@smui/button"
   import Fab, { Icon } from "@smui/fab"
+  import Tooltip, { Wrapper } from "@smui/tooltip"
 
   import AddItem from "./AddItem.svelte"
   import List from "./List.svelte"
@@ -47,7 +47,7 @@
 
 <div>
   <TopBar {back} />
-  <section transition:fade={{ easing: cubicIn }}>
+  <main transition:fade={{ easing: cubicIn }}>
     {#if isAdd}
       <AddItem {back} />
     {:else if isModif}
@@ -55,28 +55,27 @@
     {:else}
       <div>
         <div class="fab" transition:scale={{ easing: cubicIn }}>
-          <Fab
-            color="primary"
-            on:click={() => (isAdd = !isAdd)}
-            class="green-button"
-          >
-            <Icon class="material-icons">add</Icon>
-          </Fab>
+          <Wrapper>
+            <Fab
+              color="primary"
+              on:click={() => (isAdd = !isAdd)}
+              class="green-button"
+            >
+              <Icon class="material-icons">add</Icon>
+            </Fab>
+            <Tooltip>Ajouter un item</Tooltip>
+          </Wrapper>
         </div>
         {#each categories as c}
-          <div class=" flex center">
-            <div class="list">
-              <List category={c} {modif} />
-            </div>
-          </div>
+          <List category={c} {modif} />
         {/each}
       </div>
     {/if}
-  </section>
+  </main>
 </div>
 
 <style>
-  section {
+  main {
     padding-bottom: 5rem;
     position: relative;
     top: 5rem;
@@ -87,16 +86,5 @@
     z-index: 2;
     bottom: 15px;
     right: 15px;
-  }
-
-  .list {
-    width: 80vw;
-    margin: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .list {
-      width: 90vw;
-    }
   }
 </style>
