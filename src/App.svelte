@@ -5,10 +5,11 @@
   import Login from "./Login.svelte"
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+
+  user.subscribe((v) => (currentUser = v))
 </script>
 
-{#if currentUser}
+{#if currentUser !== null}
   <Content />
 {:else}
   <Login />
