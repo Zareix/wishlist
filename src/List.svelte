@@ -4,8 +4,6 @@
   import { user } from "./stores"
 
   import Card, { Content } from "@smui/card"
-  import Snackbar, { Actions, Label } from "@smui/snackbar"
-  import IconButton from "@smui/icon-button"
 
   import Item from "./Item.svelte"
 
@@ -14,17 +12,27 @@
 
   export let category
   export let modif
+  export let choosenUser
+  export let snackbarOpen
 
-  let snackbar
+  let oldUser
   let items = []
 
-  const addItems = (i) => {
-    items = [...items, i]
+  onMount(() => {
+    oldUser = choosenUser
+  })
+
+  $: if (oldUser !== choosenUser) {
+    fetchData()
+    oldUser = choosenUser
   }
 
-  onMount(async () => {
+  $: canModif = currentUser.email === choosenUser
+
+  const fetchData = async () => {
+    items = []
     await db
-      .collection(currentUser.email)
+      .collection(choosenUser)
       .doc("items")
       .collection(category)
       .orderBy("createdAt")
@@ -34,35 +42,31 @@
           addItems({ id: i.id, categorie: category, ...i.data() })
         )
       )
-  })
+  }
+
+  const addItems = (i) => {
+    items = [...items, i]
+  }
 
   const removeItem = (item) => {
     items = items.filter((i) => i !== item)
-    snackbar.open()
+    snackbarOpen('"' + item.title + '" supprimé')
   }
 </script>
 
 {#if items.length === 0}
   <div />
 {:else}
-  <div class="flex center">
+  <div id={"category-" + category.replace(" ", "")} class="flex center">
     <div class="list">
       <Card padded>
         <Content>
           <h2>{category}</h2>
           <ul>
             {#each items as item}
-              <Item {item} {modif} {removeItem} />
+              <Item {item} {modif} {removeItem} {canModif} />
             {/each}
           </ul>
-          <Snackbar bind:this={snackbar}>
-            <Label>Item supprimé</Label>
-            <Actions>
-              <IconButton class="material-icons" title="Dismiss"
-                >close</IconButton
-              >
-            </Actions>
-          </Snackbar>
         </Content>
       </Card>
     </div>

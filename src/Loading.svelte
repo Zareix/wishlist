@@ -1,5 +1,5 @@
 <script>
-    import CircularProgress from "@smui/circular-progress"
+  import CircularProgress from "@smui/circular-progress"
 </script>
 
 <div class="loading flex center">
@@ -7,8 +7,8 @@
 </div>
 
 <style>
-    .loading{
-        width: 100%;
-        height: 100%;
-    }
+  .loading {
+    width: 100%;
+    height: 100%;
+  }
 </style>

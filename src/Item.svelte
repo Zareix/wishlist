@@ -11,15 +11,15 @@
   export let item
   export let modif
   export let removeItem
+  export let canModif
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   const formatRef = (ref) => {
-    if (ref.startsWith("https://")) ref = ref.substring(8)
-    if (ref.startsWith("http://")) ref = ref.substring(7)
-
-    return ref.slice(0, ref.indexOf("/"))
+    ref = ref.replace(new RegExp("(http)(s)?(://)"), "")
+    if (ref.indexOf("/") >= 0) return ref.slice(0, ref.indexOf("/"))
+    return ref
   }
 
   const deleteItem = () => {
@@ -59,20 +59,23 @@
         </ul>
       {/if}
     </Content>
-    <ActionIcons>
-      <Wrapper>
-        <IconButton on:click={() => modif(item)} class="material-icons"
-          >edit</IconButton
-        >
-        <Tooltip>Modifier</Tooltip>
-      </Wrapper>
-      <Wrapper>
-        <IconButton on:click={deleteItem} class="material-icons red-icon-button"
-          >delete</IconButton
-        >
-        <Tooltip>Supprimer</Tooltip>
-      </Wrapper>
-    </ActionIcons>
+    {#if canModif}
+      <ActionIcons>
+        <Wrapper>
+          <IconButton on:click={() => modif(item)} class="material-icons"
+            >edit</IconButton
+          >
+          <Tooltip>Modifier</Tooltip>
+        </Wrapper>
+        <Wrapper>
+          <IconButton
+            on:click={deleteItem}
+            class="material-icons red-icon-button">delete</IconButton
+          >
+          <Tooltip>Supprimer</Tooltip>
+        </Wrapper>
+      </ActionIcons>
+    {/if}
   </Card>
 </li>
 

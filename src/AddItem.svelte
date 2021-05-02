@@ -15,11 +15,11 @@
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   export let back
-
+  export let snackbarOpen
   export let itemModif
 
   let title = ""
-  let adding
+  let loading = false
   let categorie
   let oldCategorie
   let categories = []
@@ -45,18 +45,16 @@
   const addItem = (e) => {
     e.preventDefault()
     if (categorie === undefined) return
+    loading = true
     if (itemModif) {
       if (oldCategorie !== categorie) {
-        adding = db
-          .collection(currentUser.email)
+        db.collection(currentUser.email)
           .doc("items")
           .collection(oldCategorie)
           .doc(itemModif.id)
           .delete()
-
-        adding.then(
-          () =>
-            (adding = db
+          .then(() => {
+            return db
               .collection(currentUser.email)
               .doc("items")
               .collection(categorie)
@@ -65,11 +63,14 @@
                 createdAt: Date.now(),
                 references: refs.filter((r) => r !== ""),
                 images: images.filter((i) => i !== ""),
-              }))
-        )
+              })
+          })
+          .then(() => {
+            snackbarOpen("Item mise à jour")
+            back()
+          })
       } else {
-        adding = db
-          .collection(currentUser.email)
+        db.collection(currentUser.email)
           .doc("items")
           .collection(categorie)
           .doc(itemModif.id)
@@ -79,10 +80,13 @@
             references: refs.filter((r) => r !== ""),
             images: images.filter((i) => i !== ""),
           })
+          .then(() => {
+            snackbarOpen("Item mis à jour")
+            back()
+          })
       }
     } else {
-      adding = db
-        .collection(currentUser.email)
+      db.collection(currentUser.email)
         .doc("items")
         .collection(categorie)
         .add({
@@ -90,6 +94,10 @@
           createdAt: Date.now(),
           references: refs.filter((r) => r !== ""),
           images: images.filter((i) => i !== ""),
+        })
+        .then(() => {
+          snackbarOpen("Item ajouté")
+          back()
         })
     }
   }
@@ -104,24 +112,8 @@
 </script>
 
 <div>
-  {#if adding}
-    <div>
-      {#await adding}
-        <Loading/>
-      {:then}
-        <div class="loaded flex center">
-          <div>
-            <h2>
-              Item {#if itemModif}mise à jour{:else}ajouté{/if} !
-            </h2>
-            <Button on:click={back}>
-              <Icon class="material-icons">arrow_back</Icon>
-              <Label>back</Label>
-            </Button>
-          </div>
-        </div>
-      {/await}
-    </div>
+  {#if loading}
+    <Loading />
   {:else}
     <Button on:click={back} color="secondary">
       <Icon class="material-icons">arrow_back</Icon>
@@ -154,7 +146,10 @@
                 <br />
               {/each}
             </div>
-            <Button type="button" on:click={addRef}>Ajouter une ref</Button>
+            <Button type="button" on:click={addRef}
+              ><Icon class="material-icons">add</Icon>
+              <Label>Ajouter une ref</Label></Button
+            >
             <br />
             <div class="spacer" />
 
@@ -168,7 +163,10 @@
                 <br />
               {/each}
             </div>
-            <Button type="button" on:click={addImage}>Ajouter une image</Button>
+            <Button type="button" on:click={addImage}
+              ><Icon class="material-icons">add</Icon>
+              <Label>Ajouter une image</Label></Button
+            >
             <br />
             <div class="spacer" />
 
@@ -190,19 +188,9 @@
     margin-bottom: 1em;
   }
 
-  .loaded {
-    text-align: center;
-    height: 70vh;
-    align-items: center;
-  }
-
   .group {
     margin-left: 0.5em;
     margin-bottom: 0.125em;
-  }
-
-  .spacer {
-    height: 1em;
   }
 
   #addSection {
