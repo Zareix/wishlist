@@ -6,6 +6,7 @@ const CACHE_NAME = 'static-cache-v1';
 // Add list of files to cache here.
 const FILES_TO_CACHE = [
   '/offline.html',
+  '/offline.svg'
 ];
 
 self.addEventListener('install', (evt) => {
@@ -39,7 +40,7 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
-  console.log('[ServiceWorker] Fetch', evt.request.url);
+ // console.log('[ServiceWorker] Fetch', evt.request.url);
   // Add fetch event handler here.
   if (evt.request.mode !== 'navigate') {
     // Not a page navigation, bail.

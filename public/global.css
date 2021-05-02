@@ -1,3 +1,33 @@
+:root {
+  --mdc-shape-medium: 16px;
+  --mdc-theme-primary: #6002ee;
+}
+
+noscript {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+noscript > h2 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+noscript > img {
+  height: 60vh;
+}
+
+@media (max-width: 758px) {
+  noscript > img {
+    height: auto;
+    width: 80vw;
+  }
+}
+
 html,
 body {
   position: relative;
@@ -73,7 +103,7 @@ input:disabled {
 }
 
 .red-icon-button {
-  color: #F44336 !important;
+  color: #f44336 !important;
 }
 
 h1,
@@ -103,4 +133,13 @@ ul {
   width: 100%;
   border-bottom: lightgray solid 1px;
   margin: 0.75em 0;
+  margin: auto;
+}
+
+.spacer {
+  height: 1em;
+}
+
+.mdc-menu-surface {
+  border-radius: 4px !important;
 }
