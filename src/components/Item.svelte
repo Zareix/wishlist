@@ -1,15 +1,15 @@
 <script>
-  import { db } from "./firebase"
-  import { user } from "./stores"
+  import { db } from "../firebase"
+  import { user } from "../stores"
 
   import Card, { Content, ActionIcons } from "@smui/card"
   import IconButton from "@smui/icon-button"
   import Tooltip, { Wrapper } from "@smui/tooltip"
 
   import ItemImage from "./ItemImage.svelte"
+  import { Link } from "svelte-routing"
 
   export let item
-  export let modif
   export let removeItem
   export let canModif
 
@@ -40,6 +40,9 @@
       <h3>
         {item.title}
       </h3>
+      {#if item.description && item.description !== ""}
+        <p>{item.description}</p>
+      {/if}
       <div class="separator" />
       <div class="flex image-list">
         {#each item.images as image, index}
@@ -53,7 +56,7 @@
         <ul>
           {#each item.references as ref, i}
             <li>
-              <a href={ref}>{formatRef(ref)}</a>
+              <a href={ref} class="link">{formatRef(ref)}</a>
             </li>
           {/each}
         </ul>
@@ -62,9 +65,9 @@
     {#if canModif}
       <ActionIcons>
         <Wrapper>
-          <IconButton on:click={() => modif(item)} class="material-icons"
-            >edit</IconButton
-          >
+          <Link to={"/item/" + item.categorie + "/" + item.id}>
+            <IconButton class="material-icons">edit</IconButton>
+          </Link>
           <Tooltip>Modifier</Tooltip>
         </Wrapper>
         <Wrapper>
@@ -85,8 +88,9 @@
     padding-bottom: 0.5em;
   }
 
-  h3 {
-    margin-bottom: 1em;
+  p {
+    margin: 0;
+    margin-top: 0.5em;
   }
 
   h4 {
@@ -104,6 +108,12 @@
     gap: 0.5em 1em;
     align-items: center;
     align-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .image-list {
+      justify-content: center;
+    }
   }
 
   a {

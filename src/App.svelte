@@ -1,19 +1,22 @@
 <script>
-  import { user } from "./stores"
+  import { Router, Route } from "svelte-routing"
 
-  import Content from "./Content.svelte"
-  import Login from "./Login.svelte"
+  import Home from "./routes/Home.svelte"
+  import Login from "./routes/Login.svelte"
+  import Config from "./routes/Config.svelte"
+  import AddItem from "./routes/AddItem.svelte"
+  import ProtectedRoutes from "./routes/ProtectedRoutes.svelte"
 
-  let currentUser
-
-  user.subscribe((v) => (currentUser = v))
+  export let url = ""
 </script>
 
-{#if currentUser !== null}
-  <Content />
-{:else}
-  <Login />
-{/if}
+<Router {url}>
+  <Route path="login" component={Login} />
+  <ProtectedRoutes path="settings" component={Config} />
+  <ProtectedRoutes path="add" component={AddItem} />
+  <ProtectedRoutes path="item/:oldCategorie/:modifId" component={AddItem} />
+  <ProtectedRoutes path="/" component={Home} />
+</Router>
 
 <style>
 </style>

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
-  import { db } from "./firebase"
-  import { user } from "./stores"
+  import { db } from "../firebase"
+  import { user } from "../stores"
 
   import Card, { Content } from "@smui/card"
 
@@ -11,7 +11,6 @@
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   export let category
-  export let modif
   export let choosenUser
   export let snackbarOpen
 
@@ -64,7 +63,7 @@
           <h2>{category}</h2>
           <ul>
             {#each items as item}
-              <Item {item} {modif} {removeItem} {canModif} />
+              <Item {item} {removeItem} {canModif} />
             {/each}
           </ul>
         </Content>

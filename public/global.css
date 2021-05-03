@@ -47,17 +47,10 @@ header {
   top: 0;
 }
 
-a {
-  color: rgb(0, 100, 200);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-a:visited {
-  color: rgb(0, 80, 160);
+main {
+  padding-bottom: 5rem;
+  position: relative;
+  top: 5rem;
 }
 
 label {
@@ -132,8 +125,9 @@ ul {
 .separator {
   width: 100%;
   border-bottom: lightgray solid 1px;
-  margin: 0.75em 0;
   margin: auto;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
 }
 
 .spacer {
@@ -142,4 +136,27 @@ ul {
 
 .mdc-menu-surface {
   border-radius: 4px !important;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.white {
+  color: white;
+}
+
+.link {
+  color: #3700b3;
+}
+
+.link:hover {
+  color: #2f019b;
+  text-decoration: underline;
 }

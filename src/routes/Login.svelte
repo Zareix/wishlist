@@ -1,27 +1,31 @@
 <script>
-  import { auth, googleProvider } from "./firebase"
-  import { user } from "./stores"
+  import { auth, googleProvider } from "../firebase"
+  import { user } from "../stores"
 
   import { authState } from "rxfire/auth"
   import Button, { Icon, Label } from "@smui/button"
+  import { navigate } from "svelte-routing"
 
   const unsubscribe = authState(auth).subscribe((u) => {
     user.set(u)
   })
 
-  const login = () => auth.signInWithPopup(googleProvider)
+  const login = () =>
+    auth
+      .signInWithPopup(googleProvider)
+      .then(() => navigate("/", { replace: false }))
 </script>
 
-<div class="connect">
+<main id="login" class="connect">
   <h1>Wishlist</h1>
   <Button on:click={login} variant="raised">
     <Icon class="material-icons">login</Icon>
     <Label>Se connecter avec Google</Label>
   </Button>
-</div>
+</main>
 
 <style>
-  div {
+  main {
     height: 100vh;
     display: flex;
     flex-direction: column;

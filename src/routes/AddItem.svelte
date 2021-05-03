@@ -1,27 +1,29 @@
 <script>
   import { onMount } from "svelte"
 
-  import { db } from "./firebase"
-  import { user } from "./stores.js"
+  import { db } from "../firebase"
+  import { user } from "../stores.js"
 
-  import Loading from "./Loading.svelte"
+  import Loading from "../components/Loading.svelte"
+  import TopBar from "../components/TopBar.svelte"
+  import BackButton from "../components/BackButton.svelte"
 
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
   import Card, { Content } from "@smui/card"
   import TextField from "@smui/textfield"
+  import { navigate } from "svelte-routing"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
-  export let back
-  export let snackbarOpen
-  export let itemModif
+  export let modifId
+  export let oldCategorie
 
   let title = ""
   let loading = false
+  let description = ""
   let categorie
-  let oldCategorie
   let categories = []
   let refs = []
   let images = []
@@ -33,12 +35,21 @@
       .then((cat) => {
         cat.docs.forEach((d) => (categories = [...categories, d.id]))
       })
-    if (itemModif) {
-      title = itemModif.title
-      refs = itemModif.references
-      images = itemModif.images
-      categorie = itemModif.categorie
-      oldCategorie = itemModif.categorie
+
+    if (modifId) {
+      await db
+        .collection(currentUser.email)
+        .doc("items")
+        .collection(oldCategorie)
+        .doc(modifId)
+        .get()
+        .then((i) => {
+          categorie = oldCategorie
+          title = i.data().title
+          refs = i.data().references
+          images = i.data().images
+          description = i.data().description
+        })
     }
   })
 
@@ -46,12 +57,12 @@
     e.preventDefault()
     if (categorie === undefined) return
     loading = true
-    if (itemModif) {
+    if (modifId) {
       if (oldCategorie !== categorie) {
         db.collection(currentUser.email)
           .doc("items")
           .collection(oldCategorie)
-          .doc(itemModif.id)
+          .doc(modifId)
           .delete()
           .then(() => {
             return db
@@ -60,30 +71,26 @@
               .collection(categorie)
               .add({
                 title,
+                description,
                 createdAt: Date.now(),
                 references: refs.filter((r) => r !== ""),
                 images: images.filter((i) => i !== ""),
               })
           })
-          .then(() => {
-            snackbarOpen("Item mise à jour")
-            back()
-          })
+          .then(() => back())
       } else {
         db.collection(currentUser.email)
           .doc("items")
           .collection(categorie)
-          .doc(itemModif.id)
+          .doc(modifId)
           .update({
             title,
+            description,
             createdAt: Date.now(),
             references: refs.filter((r) => r !== ""),
             images: images.filter((i) => i !== ""),
           })
-          .then(() => {
-            snackbarOpen("Item mis à jour")
-            back()
-          })
+          .then(() => back())
       }
     } else {
       db.collection(currentUser.email)
@@ -91,15 +98,17 @@
         .collection(categorie)
         .add({
           title,
+          description,
           createdAt: Date.now(),
           references: refs.filter((r) => r !== ""),
           images: images.filter((i) => i !== ""),
         })
-        .then(() => {
-          snackbarOpen("Item ajouté")
-          back()
-        })
+        .then(() => back())
     }
+  }
+
+  const back = () => {
+    navigate("/")
   }
 
   const addRef = () => {
@@ -111,14 +120,12 @@
   }
 </script>
 
-<div>
+<TopBar />
+<main>
   {#if loading}
     <Loading />
   {:else}
-    <Button on:click={back} color="secondary">
-      <Icon class="material-icons">arrow_back</Icon>
-      <Label>back</Label>
-    </Button>
+    <BackButton />
     <div id="addSection">
       <Card padded>
         <Content>
@@ -133,6 +140,10 @@
             <div class="spacer" />
 
             <TextField label="Titre" bind:value={title} />
+            <br />
+            <div class="spacer" />
+
+            <TextField label="Description/Remarques" bind:value={description} />
             <br />
             <div class="spacer" />
 
@@ -172,7 +183,7 @@
 
             <div class="flex center">
               <Button variant="raised" type="submit" class="add-button">
-                {#if itemModif}Mettre à jour{:else}Ajouter{/if}
+                {#if modifId}Mettre à jour{:else}Ajouter{/if}
               </Button>
             </div>
           </form>
@@ -180,7 +191,7 @@
       </Card>
     </div>
   {/if}
-</div>
+</main>
 
 <style>
   h1 {

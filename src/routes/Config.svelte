@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte"
 
-  import { db } from "./firebase"
-  import { user } from "./stores"
+  import { db } from "../firebase"
+  import { user } from "../stores"
 
   import TextField from "@smui/textfield"
   import Button, { Icon } from "@smui/button"
@@ -10,16 +10,16 @@
   import IconButton from "@smui/icon-button"
   import Card, { Content } from "@smui/card"
 
+  import TopBar from "../components/TopBar.svelte"
+  import BackButton from "../components/BackButton.svelte"
+
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
-
-  export let back
 
   let canWatch = []
   let snackbar
   let snackbarText = ""
-
-  onMount(async () => {
+  onMount(() => {
     db.collection("permissions")
       .doc(currentUser.email)
       .get()
@@ -48,17 +48,15 @@
   }
 </script>
 
-<div>
-  <Button on:click={back}>
-    <Icon class="material-icons">arrow_back</Icon>
-    <Label>back</Label>
-  </Button>
-  <div id="config" class="flex center">
+<TopBar />
+<main id="settings">
+  <BackButton />
+  <div id="permissions" class="flex center">
     <Card>
       <Content>
         <div class="padding">
           <h2>Qui peut voir votre Wishlist ?</h2>
-          <div class="permissions">
+          <div class="permissions-inputs">
             {#each canWatch as email, i}
               <TextField label={"Email " + (i + 1)} bind:value={email} />
               <br />
@@ -83,14 +81,14 @@
       </Content>
     </Card>
   </div>
-</div>
+</main>
 
 <style>
   h2 {
     margin-bottom: 0.75em;
   }
 
-  #config {
+  #permissions {
     margin-top: 2em;
   }
 
@@ -98,7 +96,7 @@
     padding: 1em;
   }
 
-  .permissions {
+  .permissions-inputs {
     margin-left: 0.5em;
     margin-bottom: 0.125em;
   }
