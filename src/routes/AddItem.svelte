@@ -48,7 +48,7 @@
           title = i.data().title
           refs = i.data().references
           images = i.data().images
-          description = i.data().description
+          description = i.data().description ? i.data().description : ""
         })
     }
   })
