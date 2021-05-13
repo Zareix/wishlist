@@ -13,6 +13,8 @@
   import Card, { Content } from "@smui/card"
   import TextField from "@smui/textfield"
   import { navigate } from "svelte-routing"
+  import IconButton from "@smui/icon-button"
+  import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -23,10 +25,12 @@
   let title = ""
   let loading = false
   let description = ""
-  let categorie
+  let categorie = ""
   let categories = []
   let refs = []
   let images = []
+  let snackbar
+  let snackbarText
 
   onMount(async () => {
     await db
@@ -55,8 +59,22 @@
 
   const addItem = (e) => {
     e.preventDefault()
-    if (categorie === undefined) return
+
+    snackbar.close()
+    snackbarText = ""
+
+    if (title === undefined || title === "")
+      snackbarText = "Merci d'entrer un titre"
+    if (categorie === undefined || categorie === "")
+      snackbarText = "Merci de choisir une catégorie"
+
+    if (snackbarText !== "") {
+      snackbar.open()
+      return
+    }
+
     loading = true
+
     if (modifId) {
       if (oldCategorie !== categorie) {
         db.collection(currentUser.email)
@@ -191,6 +209,12 @@
       </Card>
     </div>
   {/if}
+  <Snackbar bind:this={snackbar} class="snackbar-warning-container">
+    <LabelSnack>{snackbarText}</LabelSnack>
+    <Actions>
+      <IconButton class="material-icons" title="Dismiss">close</IconButton>
+    </Actions>
+  </Snackbar>
 </main>
 
 <style>
@@ -199,6 +223,10 @@
     margin-bottom: 1em;
   }
 
+  :global(.snackbar-warning-container > .mdc-snackbar__surface) {
+    background-color: #ff1744;
+  }
+  
   .group {
     margin-left: 0.5em;
     margin-bottom: 0.125em;
