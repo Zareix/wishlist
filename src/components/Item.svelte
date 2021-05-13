@@ -56,7 +56,12 @@
         <ul>
           {#each item.references as ref, i}
             <li>
-              <a href={ref} class="link">{formatRef(ref)}</a>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={ref}
+                class="link">{formatRef(ref)}</a
+              >
             </li>
           {/each}
         </ul>
