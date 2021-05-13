@@ -160,3 +160,8 @@ a:hover {
   color: #2f019b;
   text-decoration: underline;
 }
+
+#back-btn {
+  margin-left: 1rem;
+  margin-bottom : 0.75rem;
+}
