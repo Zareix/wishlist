@@ -48,9 +48,14 @@ header {
 }
 
 main {
+  width: 100vw;
   padding-bottom: 5rem;
   position: relative;
   top: 5rem;
+}
+
+main#login {
+  top: 0;
 }
 
 label {
@@ -163,5 +168,5 @@ a:hover {
 
 #back-btn {
   margin-left: 1rem;
-  margin-bottom : 0.75rem;
+  margin-bottom: 0.75rem;
 }

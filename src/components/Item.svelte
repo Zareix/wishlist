@@ -5,6 +5,7 @@
   import Card, { Content, ActionIcons } from "@smui/card"
   import IconButton from "@smui/icon-button"
   import Tooltip, { Wrapper } from "@smui/tooltip"
+  import Chip, { Set, Text } from "@smui/chips"
 
   import ItemImage from "./ItemImage.svelte"
   import { Link } from "svelte-routing"
@@ -17,12 +18,18 @@
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   const formatRef = (ref) => {
-    ref = ref.replace(new RegExp("(http)(s)?(://)"), "")
+    ref = ref.replace(new RegExp("(http)(s)?(://)(www\\.)?(m\\.)?"), "")
     if (ref.indexOf("/") >= 0) return ref.slice(0, ref.indexOf("/"))
     return ref
   }
 
-  const deleteItem = () => {
+  const deleteItem = async () => {
+    await db
+      .collection(currentUser.email)
+      .doc("items")
+      .collection("_archive")
+      .add(item)
+
     db.collection(currentUser.email)
       .doc("items")
       .collection(item.categorie)
@@ -52,19 +59,11 @@
       {#if item.references.length === 0}
         <div />
       {:else}
-        <h4>Références :</h4>
-        <ul>
-          {#each item.references as ref, i}
-            <li>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={ref}
-                class="link">{formatRef(ref)}</a
-              >
-            </li>
-          {/each}
-        </ul>
+        <Set chips={item.references} let:chip>
+          <a href={chip}>
+            <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
+          </a>
+        </Set>
       {/if}
     </Content>
     {#if canModif}
@@ -98,19 +97,11 @@
     margin-top: 0.5em;
   }
 
-  h4 {
-    margin: 0.5em;
-    margin-top: 1em;
-  }
-
-  ul {
-    padding-left: 1em;
-  }
-
   .image-list {
     width: 100%;
     flex-wrap: wrap;
     gap: 0.5em 1em;
+    margin-bottom: 0.25em;
     align-items: center;
     align-content: center;
   }

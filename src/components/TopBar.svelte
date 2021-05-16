@@ -28,7 +28,16 @@
         </Title>
       </Link>
     </Section>
-    <Section align="end" toolbar>
+    <Section align="end" toolbar
+      ><Wrapper>
+        <Link to="/archive">
+          <IconButton class="material-icons" aria-label="logout"
+            >archive</IconButton
+          >
+        </Link>
+
+        <Tooltip>Archive</Tooltip>
+      </Wrapper>
       <Wrapper>
         <Link to="/settings">
           <IconButton class="material-icons" aria-label="logout"

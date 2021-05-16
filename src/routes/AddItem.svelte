@@ -29,6 +29,7 @@
   let categories = []
   let refs = []
   let images = []
+  let createdAt
   let snackbar
   let snackbarText
 
@@ -52,6 +53,7 @@
           title = i.data().title
           refs = i.data().references
           images = i.data().images
+          createdAt = i.data().createdAt
           description = i.data().description ? i.data().description : ""
         })
     }
@@ -90,7 +92,7 @@
               .add({
                 title,
                 description,
-                createdAt: Date.now(),
+                createdAt,
                 references: refs.filter((r) => r !== ""),
                 images: images.filter((i) => i !== ""),
               })
@@ -104,7 +106,6 @@
           .update({
             title,
             description,
-            createdAt: Date.now(),
             references: refs.filter((r) => r !== ""),
             images: images.filter((i) => i !== ""),
           })
@@ -226,7 +227,7 @@
   :global(.snackbar-warning-container > .mdc-snackbar__surface) {
     background-color: #ff1744;
   }
-  
+
   .group {
     margin-left: 0.5em;
     margin-bottom: 0.125em;
