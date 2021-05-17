@@ -60,7 +60,7 @@
         <div />
       {:else}
         <Set chips={item.references} let:chip>
-          <a href={chip}>
+          <a href={chip} target="_blank" rel="noopener noreferrer">
             <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
           </a>
         </Set>
