@@ -12,7 +12,6 @@
 
 <style>
   h1 {
-    margin: 0 auto;
-    width: fit-content;
+    text-align: center;
   }
 </style>
