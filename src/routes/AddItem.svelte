@@ -225,7 +225,7 @@
   }
 
   :global(.snackbar-warning-container > .mdc-snackbar__surface) {
-    background-color: #ff1744;
+    background-color: #B00020;
   }
 
   .group {
