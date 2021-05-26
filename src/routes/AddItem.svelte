@@ -65,9 +65,9 @@
     snackbar.close()
     snackbarText = ""
 
-    if (title === undefined || title === "")
+    if (title === undefined || title.trim() === "")
       snackbarText = "Merci d'entrer un titre"
-    if (categorie === undefined || categorie === "")
+    if (categorie === undefined || categorie.trim() === "")
       snackbarText = "Merci de choisir une catégorie"
 
     if (snackbarText !== "") {
