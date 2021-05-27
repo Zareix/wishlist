@@ -10,9 +10,11 @@
   import ItemImage from "./ItemImage.svelte"
   import { Link } from "svelte-routing"
 
-  export let item
-  export let removeItem
-  export let canModif
+  export let item = undefined
+  export let removeItem = undefined
+  export let canModif = undefined
+  export let restoreItem = undefined
+  export let permanentDeleteItem = undefined
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -28,7 +30,8 @@
       .collection(currentUser.email)
       .doc("items")
       .collection("_archive")
-      .add(item)
+      .doc(item.id)
+      .set(item)
 
     db.collection(currentUser.email)
       .doc("items")
@@ -66,7 +69,23 @@
         </Set>
       {/if}
     </Content>
-    {#if canModif}
+    {#if restoreItem}
+      <ActionIcons>
+        <Wrapper>
+          <IconButton on:click={() => restoreItem(item)} class="material-icons"
+            >restore_from_trash</IconButton
+          >
+          <Tooltip>Restaurer</Tooltip>
+        </Wrapper>
+        <Wrapper>
+          <IconButton
+            on:click={() => permanentDeleteItem(item)}
+            class="material-icons red-icon-button">delete</IconButton
+          >
+          <Tooltip>Supprimer définitivement</Tooltip>
+        </Wrapper>
+      </ActionIcons>
+    {:else if canModif}
       <ActionIcons>
         <Wrapper>
           <Link to={"/item/" + item.categorie + "/" + item.id}>
