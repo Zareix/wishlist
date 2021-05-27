@@ -1,6 +1,9 @@
 :root {
   --mdc-shape-medium: 16px;
   --mdc-theme-primary: #6002ee;
+  --mdc-theme-primary-attenuated: #7e3ff2;
+  --mdc-theme-primary-light: #9965f4;
+  --mdc-shape-medium: 16px;
 }
 
 noscript {
@@ -48,7 +51,6 @@ header {
 }
 
 main {
-  width: 100vw;
   padding-bottom: 5rem;
   position: relative;
   top: 5rem;
@@ -90,6 +92,11 @@ input:disabled {
 .center {
   justify-content: center;
   justify-items: center;
+}
+
+.align-center {
+  align-items: center;
+  align-content: center;
 }
 
 .m-auto {
@@ -139,10 +146,6 @@ ul {
   height: 1em;
 }
 
-.mdc-menu-surface {
-  border-radius: 4px !important;
-}
-
 a {
   color: #333;
   text-decoration: none;
@@ -169,4 +172,22 @@ a:hover {
 #back-btn {
   margin-left: 1rem;
   margin-bottom: 0.75rem;
+}
+
+#navTitle {
+  color: white;
+  margin-right: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mdc-chip {
+  background-color: var(--mdc-theme-primary-attenuated);
+  color: white;
+}
+
+.mdc-chip:hover {
+  background-color: var(--mdc-theme-primary);
+  color: white;
 }

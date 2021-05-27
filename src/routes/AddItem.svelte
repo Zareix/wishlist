@@ -19,7 +19,7 @@
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
-  export let modifId
+  export let modifId = undefined
   export let oldCategorie
 
   let title = ""
@@ -210,7 +210,7 @@
       </Card>
     </div>
   {/if}
-  <Snackbar bind:this={snackbar} class="snackbar-warning-container">
+  <Snackbar bind:this={snackbar} class="snackbar-warning-container" id=snackbarAddItem>
     <LabelSnack>{snackbarText}</LabelSnack>
     <Actions>
       <IconButton class="material-icons" title="Dismiss">close</IconButton>

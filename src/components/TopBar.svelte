@@ -17,10 +17,10 @@
   }
 </script>
 
-<TopAppBar variant="fixed">
+<TopAppBar variant="fixed" id="navbar">
   <Row>
     <Section>
-      <Link>
+      <Link id="navTitle">
         <Title>
           <span class="cursor-pointer white"
             >Wishlist - {currentUser.displayName}</span

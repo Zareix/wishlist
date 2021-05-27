@@ -53,9 +53,7 @@
   }
 </script>
 
-{#if items.length === 0}
-  <div />
-{:else}
+{#if items.length !== 0}
   <div id={"category-" + category.replace(" ", "")} class="flex center">
     <div class="list">
       <Card padded>

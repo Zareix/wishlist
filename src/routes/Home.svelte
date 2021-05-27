@@ -49,10 +49,6 @@
       })
   })
 
-  const goToConfig = () => {
-    isConfig = true
-  }
-
   const snackbarOpen = (message) => {
     snackbarText = message
     snackbar.open()
@@ -64,7 +60,7 @@
 </svelte:head>
 
 <TopBar />
-<main id="home" transition:fade={{ easing: cubicIn }}>
+<main id="home">
   <div id="fab-add" class="fab" transition:scale={{ easing: cubicIn }}>
     <Wrapper>
       <Link to="/add">
@@ -75,12 +71,12 @@
       <Tooltip>Ajouter un item</Tooltip>
     </Wrapper>
   </div>
-  <div id="select-wishlist-section" class="flex center">
+  <div id="selectWishlistSection" class="flex center">
     <Select
       bind:value={choosenUser}
       label="Wishlist de"
       variant="filled"
-      id="select-wishlist"
+      id="selectWishlist"
     >
       {#each allUsers as email}
         <Option value={email}>{email}</Option>
@@ -99,7 +95,7 @@
       />
     {/each}
   </div>
-  <Snackbar bind:this={snackbar}>
+  <Snackbar bind:this={snackbar} id="snackbarHome">
     <Label>{snackbarText}</Label>
     <Actions>
       <IconButton class="material-icons" title="Dismiss">close</IconButton>

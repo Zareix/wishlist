@@ -15,6 +15,11 @@
     class="pointer"
   />
   <Dialog bind:open>
+    <Actions>
+      <IconButton on:click={() => (open = false)} class="material-icons"
+        >close</IconButton
+      >
+    </Actions>
     <Content id="default-focus-content">
       <div class="flex center" on:click={() => (open = false)}>
         <img src={image} alt={"item-" + index} class="image-dialog" />
