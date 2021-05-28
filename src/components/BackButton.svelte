@@ -5,7 +5,7 @@
   export let url = "/"
 </script>
 
-<Link to={url} id="back-btn">
+<Link to={url} id="backButton">
   <Button>
     <Icon class="material-icons">arrow_back</Icon>
     <Label>back</Label>
@@ -13,4 +13,8 @@
 </Link>
 
 <style>
+  :global(#back-btn) {
+    margin-left: 1rem;
+    margin-bottom: 0.75rem;
+  }
 </style>

@@ -140,77 +140,79 @@
 </script>
 
 <TopBar />
-<main>
+<main id="addItem">
   {#if loading}
     <Loading />
   {:else}
     <BackButton />
-    <div id="addSection">
-      <Card padded>
-        <Content>
-          <h1>Ajouter un objet</h1>
-          <form on:submit={addItem}>
-            <Select bind:value={categorie} label="Catégorie">
-              {#each categories as cat}
-                <Option value={cat}>{cat.toUpperCase()}</Option>
-              {/each}
-            </Select>
-            <br />
-            <div class="spacer" />
+    <Card padded id="addCard">
+      <Content>
+        <h1>Ajouter un objet</h1>
+        <form on:submit={addItem}>
+          <Select bind:value={categorie} label="Catégorie">
+            {#each categories as cat}
+              <Option value={cat}>{cat.toUpperCase()}</Option>
+            {/each}
+          </Select>
+          <br />
+          <div class="spacer" />
 
-            <TextField label="Titre" bind:value={title} />
-            <br />
-            <div class="spacer" />
+          <TextField label="Titre" bind:value={title} />
+          <br />
+          <div class="spacer" />
 
-            <TextField label="Description/Remarques" bind:value={description} />
-            <br />
-            <div class="spacer" />
+          <TextField label="Description/Remarques" bind:value={description} />
+          <br />
+          <div class="spacer" />
 
-            {#if refs.length > 0}
-              <div class="separator" />
-              <h4>Réferences :</h4>
-            {/if}
-            <div class="group">
-              {#each refs as ref, i}
-                <TextField label={"Réference " + (i + 1)} bind:value={ref} />
-                <br />
-              {/each}
-            </div>
-            <Button type="button" on:click={addRef}
-              ><Icon class="material-icons">add</Icon>
-              <Label>Ajouter une ref</Label></Button
-            >
-            <br />
-            <div class="spacer" />
+          {#if refs.length > 0}
+            <div class="separator" />
+            <h4>Réferences :</h4>
+          {/if}
+          <div class="group">
+            {#each refs as ref, i}
+              <TextField label={"Réference " + (i + 1)} bind:value={ref} />
+              <br />
+            {/each}
+          </div>
+          <Button type="button" on:click={addRef}
+            ><Icon class="material-icons">add</Icon>
+            <Label>Ajouter une ref</Label></Button
+          >
+          <br />
+          <div class="spacer" />
 
-            {#if images.length > 0}
-              <div class="separator" />
-              <h4>Images :</h4>
-            {/if}
-            <div class="group">
-              {#each images as img, i}
-                <TextField label={"Image " + (i + 1)} bind:value={img} />
-                <br />
-              {/each}
-            </div>
-            <Button type="button" on:click={addImage}
-              ><Icon class="material-icons">add</Icon>
-              <Label>Ajouter une image</Label></Button
-            >
-            <br />
-            <div class="spacer" />
+          {#if images.length > 0}
+            <div class="separator" />
+            <h4>Images :</h4>
+          {/if}
+          <div class="group">
+            {#each images as img, i}
+              <TextField label={"Image " + (i + 1)} bind:value={img} />
+              <br />
+            {/each}
+          </div>
+          <Button type="button" on:click={addImage}
+            ><Icon class="material-icons">add</Icon>
+            <Label>Ajouter une image</Label></Button
+          >
+          <br />
+          <div class="spacer" />
 
-            <div class="flex center">
-              <Button variant="raised" type="submit" class="add-button">
-                {#if modifId}Mettre à jour{:else}Ajouter{/if}
-              </Button>
-            </div>
-          </form>
-        </Content>
-      </Card>
-    </div>
+          <div class="flex center">
+            <Button variant="raised" type="submit" class="add-button">
+              {#if modifId}Mettre à jour{:else}Ajouter{/if}
+            </Button>
+          </div>
+        </form>
+      </Content>
+    </Card>
   {/if}
-  <Snackbar bind:this={snackbar} class="snackbar-warning-container" id=snackbarAddItem>
+  <Snackbar
+    bind:this={snackbar}
+    class="snackbar-warning-container"
+    id="snackbarAddItem"
+  >
     <LabelSnack>{snackbarText}</LabelSnack>
     <Actions>
       <IconButton class="material-icons" title="Dismiss">close</IconButton>
@@ -225,7 +227,7 @@
   }
 
   :global(.snackbar-warning-container > .mdc-snackbar__surface) {
-    background-color: #B00020;
+    background-color: #b00020;
   }
 
   .group {
@@ -233,13 +235,14 @@
     margin-bottom: 0.125em;
   }
 
-  #addSection {
+  :global(#addCard) {
     width: 50vw;
     margin: auto;
+    margin-top: 2em;
   }
 
   @media (max-width: 768px) {
-    #addSection {
+    :global(#addCard) {
       width: 80vw;
     }
   }

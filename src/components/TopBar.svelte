@@ -2,7 +2,7 @@
   import { auth } from "../firebase"
   import { user } from "../stores"
 
-  import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar"
+  import TopAppBar, { Section, Title } from "@smui/top-app-bar"
   import IconButton from "@smui/icon-button"
   import Tooltip, { Wrapper } from "@smui/tooltip"
   import { Link, navigate } from "svelte-routing"
@@ -18,14 +18,10 @@
 </script>
 
 <TopAppBar variant="fixed" id="navbar">
-  <Row>
+  <nav class="mdc-top-app-bar__row">
     <Section>
       <Link id="navTitle">
-        <Title>
-          <span class="cursor-pointer white"
-            >Wishlist - {currentUser.displayName}</span
-          >
-        </Title>
+        <Title>Wishlist - {currentUser.displayName}</Title>
       </Link>
     </Section>
     <Section align="end" toolbar
@@ -35,7 +31,6 @@
             >archive</IconButton
           >
         </Link>
-
         <Tooltip>Archive</Tooltip>
       </Wrapper>
       <Wrapper>
@@ -44,7 +39,6 @@
             >settings</IconButton
           >
         </Link>
-
         <Tooltip>Paramètres</Tooltip>
       </Wrapper>
       <Wrapper>
@@ -54,11 +48,15 @@
         <Tooltip>Déconnexion</Tooltip>
       </Wrapper>
     </Section>
-  </Row>
+  </nav>
 </TopAppBar>
 
 <style>
-  .cursor-pointer {
-    cursor: pointer;
+  :global(#navTitle) {
+    color: white;
+    margin-right: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>

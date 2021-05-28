@@ -1,6 +1,6 @@
 <script>
   import Dialog, { Content, Actions } from "@smui/dialog"
-  import IconButton, { Icon } from "@smui/icon-button"
+  import IconButton from "@smui/icon-button"
 
   export let image
   export let index
@@ -20,9 +20,9 @@
         >close</IconButton
       >
     </Actions>
-    <Content id="default-focus-content">
+    <Content>
       <div class="flex center" on:click={() => (open = false)}>
-        <img src={image} alt={"item-" + index} class="image-dialog" />
+        <img src={image} alt={"item " + index} class="image-dialog" />
       </div>
     </Content>
   </Dialog>

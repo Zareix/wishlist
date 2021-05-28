@@ -66,22 +66,19 @@
 </script>
 
 <TopBar />
-<main>
+<main id="archive">
   <h1>Archive</h1>
-
-  <section id="archive">
-    {#if loading}
-      <Loading />
-    {:else if items.length === 0}
-      <p>Aucun item archivé</p>
-    {:else}
-      {#each items as item}
-        <ul>
-          <Item {item} {restoreItem} permanentDeleteItem={deleteItem} />
-        </ul>
+  {#if loading}
+    <Loading />
+  {:else if items.length === 0}
+    <p>Aucun item archivé</p>
+  {:else}
+    <ul>
+      {#each items as item, index}
+        <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
       {/each}
-    {/if}
-  </section>
+    </ul>
+  {/if}
   <Snackbar bind:this={snackbar} id="snackbarArchive">
     <LabelSnack>{snackbarText}</LabelSnack>
     <Actions>

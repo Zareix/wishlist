@@ -60,17 +60,17 @@
 </svelte:head>
 
 <TopBar />
+<div id="fabAdd" class="fab" transition:scale={{ easing: cubicIn }}>
+  <Wrapper>
+    <Link to="/add">
+      <Fab color="primary" class="green-button">
+        <Icon class="material-icons">add</Icon>
+      </Fab>
+    </Link>
+    <Tooltip>Ajouter un item</Tooltip>
+  </Wrapper>
+</div>
 <main id="home">
-  <div id="fab-add" class="fab" transition:scale={{ easing: cubicIn }}>
-    <Wrapper>
-      <Link to="/add">
-        <Fab color="primary" class="green-button">
-          <Icon class="material-icons">add</Icon>
-        </Fab>
-      </Link>
-      <Tooltip>Ajouter un item</Tooltip>
-    </Wrapper>
-  </div>
   <div id="selectWishlistSection" class="flex center">
     <Select
       bind:value={choosenUser}

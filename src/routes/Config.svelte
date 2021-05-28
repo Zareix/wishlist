@@ -5,7 +5,7 @@
   import { user } from "../stores"
 
   import TextField from "@smui/textfield"
-  import Button, { Icon } from "@smui/button"
+  import Button from "@smui/button"
   import Snackbar, { Actions, Label } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
   import Card, { Content } from "@smui/card"
@@ -51,36 +51,34 @@
 <TopBar />
 <main id="settings">
   <BackButton />
-  <div id="permissions" class="flex center">
-    <Card>
-      <Content>
-        <div class="padding">
-          <h2>Qui peut voir votre Wishlist ?</h2>
-          <div class="permissions-inputs">
-            {#each canWatch as email, i}
-              <TextField label={"Email " + (i + 1)} bind:value={email} />
-              <br />
-            {/each}
-          </div>
-          <Button on:click={addPermission}>Ajouter un email</Button>
-          <br />
-          <div class="spacer" />
-          <div class="flex center">
-            <Button variant="raised" on:click={updatePermissions}
-              >Mettre à jour</Button
-            >
-          </div>
+  <Card id="permissions" class="m-auto">
+    <Content>
+      <div class="padding">
+        <h2>Qui peut voir votre Wishlist ?</h2>
+        <div class="permissions-inputs">
+          {#each canWatch as email, i}
+            <TextField label={"Email " + (i + 1)} bind:value={email} />
+            <br />
+          {/each}
         </div>
+        <Button on:click={addPermission}>Ajouter un email</Button>
+        <br />
+        <div class="spacer" />
+        <div class="flex center">
+          <Button variant="raised" on:click={updatePermissions}
+            >Mettre à jour</Button
+          >
+        </div>
+      </div>
 
-        <Snackbar bind:this={snackbar}>
-          <Label>{snackbarText}</Label>
-          <Actions>
-            <IconButton class="material-icons" title="Fermer">close</IconButton>
-          </Actions>
-        </Snackbar>
-      </Content>
-    </Card>
-  </div>
+      <Snackbar bind:this={snackbar}>
+        <Label>{snackbarText}</Label>
+        <Actions>
+          <IconButton class="material-icons" title="Fermer">close</IconButton>
+        </Actions>
+      </Snackbar>
+    </Content>
+  </Card>
 </main>
 
 <style>
@@ -88,8 +86,9 @@
     margin-bottom: 0.75em;
   }
 
-  #permissions {
+  :global(#permissions) {
     margin-top: 2em;
+    width: fit-content;
   }
 
   .padding {

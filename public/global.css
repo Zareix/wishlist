@@ -169,19 +169,6 @@ a:hover {
   text-decoration: underline;
 }
 
-#back-btn {
-  margin-left: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-#navTitle {
-  color: white;
-  margin-right: 1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .mdc-chip {
   background-color: var(--mdc-theme-primary-attenuated);
   color: white;
@@ -190,4 +177,15 @@ a:hover {
 .mdc-chip:hover {
   background-color: var(--mdc-theme-primary);
   color: white;
+}
+
+.chips-set {
+  overflow-y: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: block;
+}
+
+.mdc-dialog .mdc-dialog__content{
+  padding-top: 0;
 }

@@ -51,17 +51,22 @@
     items = items.filter((i) => i !== item)
     snackbarOpen('"' + item.title + '" supprimé')
   }
+
+  const categoryToID = () => {
+    let c = category.replace(" ", "")
+    return "category" + c.charAt(0).toUpperCase() + c.slice(1)
+  }
 </script>
 
 {#if items.length !== 0}
-  <div id={"category-" + category.replace(" ", "")} class="flex center">
+  <div id={categoryToID()} class="flex center">
     <div class="list">
       <Card padded>
         <Content>
           <h2>{category}</h2>
           <ul>
-            {#each items as item}
-              <Item {item} {removeItem} {canModif} />
+            {#each items as item, index}
+              <Item {index} {item} {removeItem} {canModif} />
             {/each}
           </ul>
         </Content>

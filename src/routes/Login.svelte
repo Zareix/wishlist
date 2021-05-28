@@ -26,7 +26,7 @@
       .then(() => navigate("/", { replace: false }))
 </script>
 
-<main id="login" class="connect">
+<main id="login">
   {#if loading}
     <Loading />
   {:else}
