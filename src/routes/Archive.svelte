@@ -9,6 +9,7 @@
   import TopBar from "../components/TopBar.svelte"
   import Loading from "../components/Loading.svelte"
   import Item from "../components/Item.svelte"
+  import BackButton from "../components/BackButton.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -67,6 +68,7 @@
 
 <TopBar />
 <main id="archive">
+  <BackButton />
   <h1>Archive</h1>
   {#if loading}
     <Loading />
