@@ -15,6 +15,7 @@
   export let canModif = undefined
   export let restoreItem = undefined
   export let permanentDeleteItem = undefined
+  export let index = 0
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -44,7 +45,7 @@
   }
 </script>
 
-<li>
+<li id={"item" + index}>
   <Card padded variant="outlined">
     <Content>
       <h3>
@@ -53,20 +54,27 @@
       {#if item.description && item.description !== ""}
         <p>{item.description}</p>
       {/if}
-      <div class="separator" />
-      <div class="flex image-list">
-        {#each item.images as image, index}
-          <ItemImage {image} {index} />
-        {/each}
-      </div>
-      {#if item.references.length === 0}
-        <div />
-      {:else}
-        <Set chips={item.references} let:chip>
-          <a href={chip} target="_blank" rel="noopener noreferrer">
+      {#if item.references.length > 0 || item.images.length > 0}
+        <div class="separator" />
+      {/if}
+      {#if item.references.length > 0}
+        <Set chips={item.references} let:chip class="chips-set">
+          <a
+            href={chip}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="chip-link"
+          >
             <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
           </a>
         </Set>
+      {/if}
+      {#if item.images.length > 0}
+        <div class="flex image-list">
+          {#each item.images as image, index}
+            <ItemImage {image} {index} />
+          {/each}
+        </div>
       {/if}
     </Content>
     {#if restoreItem}
@@ -116,6 +124,10 @@
     margin-top: 0.5em;
   }
 
+  .separator:nth-last-child(3) {
+    margin-bottom: 0;
+  }
+
   .image-list {
     width: 100%;
     flex-wrap: wrap;
@@ -129,12 +141,5 @@
     .image-list {
       justify-content: center;
     }
-  }
-
-  a {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 </style>
