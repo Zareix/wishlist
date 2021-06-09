@@ -10,27 +10,28 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
-    "@smui/button": "^4.1.0",
-    "@smui/circular-progress": "^4.1.0",
-    "@smui/fab": "^4.1.0",
-    "@smui/image-list": "^4.1.0",
-    "@smui/snackbar": "^4.1.0",
-    "@smui/textfield": "^4.1.0",
-    "@smui/tooltip": "^4.1.0",
-    "@smui/top-app-bar": "^4.1.0",
-    "rollup": "^2.3.4",
+    "@smui/button": "^4.2.0",
+    "@smui/circular-progress": "^4.2.0",
+    "@smui/fab": "^4.2.0",
+    "@smui/image-list": "^4.2.0",
+    "@smui/snackbar": "^4.2.0",
+    "@smui/textfield": "^4.2.0",
+    "@smui/tooltip": "^4.2.0",
+    "@smui/top-app-bar": "^4.2.0",
+    "rollup": "^2.51.1",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-terser": "^7.0.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.38.2"
   },
   "dependencies": {
-    "firebase": "^8.4.1",
+    "firebase": "^8.6.5",
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
-    "sirv-cli": "^1.0.0",
-    "svelte-material-ui": "^4.1.0",
+    "sirv-cli": "^1.0.12",
+    "svelte-material-ui": "^4.2.0",
     "svelte-routing": "^1.6.0"
   }
 }
