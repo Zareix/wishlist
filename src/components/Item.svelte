@@ -26,13 +26,16 @@
     return ref
   }
 
-  const deleteItem = async () => {
+  const moveToArchive = async (validated) => {
     await db
       .collection(currentUser.email)
       .doc("items")
       .collection("_archive")
       .doc(item.id)
-      .set(item)
+      .set({
+        ...item,
+        validated,
+      })
 
     db.collection(currentUser.email)
       .doc("items")
@@ -47,16 +50,22 @@
 
 <li id={"item" + index}>
   <Card padded variant="outlined">
-    <Content>
-      <h3>
+    <div
+      class={"item-header" +
+        (restoreItem && item.validated ? " item-header--grid" : "")}
+    >
+      <h3 class="title">
         {item.title}
       </h3>
       {#if item.description && item.description !== ""}
-        <p>{item.description}</p>
+        <p class="subtitle text-gray">{item.description}</p>
       {/if}
-      {#if item.references.length > 0 || item.images.length > 0}
-        <div class="separator" />
+      {#if item.validated}
+        <div class="material-icons check">check</div>
       {/if}
+    </div>
+    <div class="separator" />
+    <Content>
       {#if item.references.length > 0}
         <Set chips={item.references} let:chip class="chips-set">
           <a
@@ -72,7 +81,7 @@
       {#if item.images.length > 0}
         <div class="flex image-list">
           {#each item.images as image, index}
-            <ItemImage {image} {index} />
+            <ItemImage title={item.title} {image} {index} />
           {/each}
         </div>
       {/if}
@@ -103,7 +112,14 @@
         </Wrapper>
         <Wrapper>
           <IconButton
-            on:click={deleteItem}
+            on:click={() => moveToArchive(true)}
+            class="material-icons green-icon-button">check</IconButton
+          >
+          <Tooltip>Valider</Tooltip>
+        </Wrapper>
+        <Wrapper>
+          <IconButton
+            on:click={() => moveToArchive(false)}
             class="material-icons red-icon-button">delete</IconButton
           >
           <Tooltip>Supprimer</Tooltip>
@@ -119,13 +135,49 @@
     padding-bottom: 0.5em;
   }
 
-  p {
-    margin: 0;
-    margin-top: 0.5em;
+  h3 {
+    font-weight: 500;
   }
 
-  .separator:nth-last-child(3) {
+  p {
+    margin: 0;
+    margin-top: 0.25em;
+    font-weight: 500;
+  }
+
+  .item-header {
+    margin: 0.5rem 1rem;
     margin-bottom: 0;
+  }
+
+  .separator {
+    width: 90%;
+    margin: 0.75 1rem;
+    margin-bottom: -0.25em;
+  }
+
+  .item-header--grid {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "title check"
+      "subtitle check";
+  }
+
+  .check {
+    grid-area: check;
+    align-self: center;
+    justify-self: center;
+    color: var(--green);
+    font-size: 2em;
+  }
+  .title {
+    grid-area: title;
+  }
+  .subtitle {
+    grid-area: subtitle;
   }
 
   .image-list {

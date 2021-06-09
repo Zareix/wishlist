@@ -7,6 +7,9 @@
   import Loading from "../components/Loading.svelte"
   import TopBar from "../components/TopBar.svelte"
   import BackButton from "../components/BackButton.svelte"
+  import Footer from "../components/Footer.svelte"
+
+  import itemNotFoundSvg from "../assets/item-not-found.svg"
 
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
@@ -22,6 +25,7 @@
   export let modifId = undefined
   export let oldCategorie
 
+  let error = false
   let title = ""
   let loading = false
   let description = ""
@@ -49,13 +53,15 @@
         .doc(modifId)
         .get()
         .then((i) => {
+          let data = i.data()
           categorie = oldCategorie
-          title = i.data().title
-          refs = i.data().references
-          images = i.data().images
-          createdAt = i.data().createdAt
-          description = i.data().description ? i.data().description : ""
+          title = data.title
+          refs = data.references
+          images = data.images
+          createdAt = data.createdAt
+          description = data.description ? data.description : ""
         })
+        .catch((e) => (error = true))
     }
   })
 
@@ -145,68 +151,75 @@
     <Loading />
   {:else}
     <BackButton />
-    <Card padded id="addCard">
-      <Content>
-        <h1>Ajouter un objet</h1>
-        <form on:submit={addItem}>
-          <Select bind:value={categorie} label="Catégorie">
-            {#each categories as cat}
-              <Option value={cat}>{cat.toUpperCase()}</Option>
-            {/each}
-          </Select>
-          <br />
-          <div class="spacer" />
+    {#if error}
+      <div class="error">
+        {@html itemNotFoundSvg}
+        <h2>Oups, impossible de trouver cet objet</h2>
+      </div>
+    {:else}
+      <Card padded id="addCard">
+        <Content>
+          <h1>Ajouter un objet</h1>
+          <form on:submit={addItem}>
+            <Select bind:value={categorie} label="Catégorie">
+              {#each categories as cat}
+                <Option value={cat}>{cat.toUpperCase()}</Option>
+              {/each}
+            </Select>
+            <br />
+            <div class="spacer" />
 
-          <TextField label="Titre" bind:value={title} />
-          <br />
-          <div class="spacer" />
+            <TextField label="Titre" bind:value={title} />
+            <br />
+            <div class="spacer" />
 
-          <TextField label="Description/Remarques" bind:value={description} />
-          <br />
-          <div class="spacer" />
+            <TextField label="Description/Remarques" bind:value={description} />
+            <br />
+            <div class="spacer" />
 
-          {#if refs.length > 0}
-            <div class="separator" />
-            <h4>Réferences :</h4>
-          {/if}
-          <div class="group">
-            {#each refs as ref, i}
-              <TextField label={"Réference " + (i + 1)} bind:value={ref} />
-              <br />
-            {/each}
-          </div>
-          <Button type="button" on:click={addRef}
-            ><Icon class="material-icons">add</Icon>
-            <Label>Ajouter une ref</Label></Button
-          >
-          <br />
-          <div class="spacer" />
+            {#if refs.length > 0}
+              <div class="separator" />
+              <h4>Réferences :</h4>
+            {/if}
+            <div class="group">
+              {#each refs as ref, i}
+                <TextField label={"Réference " + (i + 1)} bind:value={ref} />
+                <br />
+              {/each}
+            </div>
+            <Button type="button" on:click={addRef}
+              ><Icon class="material-icons">add</Icon>
+              <Label>Ajouter une ref</Label></Button
+            >
+            <br />
+            <div class="spacer" />
 
-          {#if images.length > 0}
-            <div class="separator" />
-            <h4>Images :</h4>
-          {/if}
-          <div class="group">
-            {#each images as img, i}
-              <TextField label={"Image " + (i + 1)} bind:value={img} />
-              <br />
-            {/each}
-          </div>
-          <Button type="button" on:click={addImage}
-            ><Icon class="material-icons">add</Icon>
-            <Label>Ajouter une image</Label></Button
-          >
-          <br />
-          <div class="spacer" />
+            {#if images.length > 0}
+              <div class="separator" />
+              <h4>Images :</h4>
+            {/if}
+            <div class="group">
+              {#each images as img, i}
+                <TextField label={"Image " + (i + 1)} bind:value={img} />
+                <br />
+              {/each}
+            </div>
+            <Button type="button" on:click={addImage}
+              ><Icon class="material-icons">add</Icon>
+              <Label>Ajouter une image</Label></Button
+            >
+            <br />
+            <div class="spacer" />
 
-          <div class="flex center">
-            <Button variant="raised" type="submit" class="add-button">
-              {#if modifId}Mettre à jour{:else}Ajouter{/if}
-            </Button>
-          </div>
-        </form>
-      </Content>
-    </Card>
+            <div class="flex center">
+              <Button variant="raised" type="submit" class="add-button">
+                {#if modifId}Mettre à jour{:else}Ajouter{/if}
+              </Button>
+            </div>
+          </form>
+        </Content>
+      </Card>
+    {/if}
   {/if}
   <Snackbar
     bind:this={snackbar}
@@ -219,6 +232,7 @@
     </Actions>
   </Snackbar>
 </main>
+<Footer />
 
 <style>
   h1 {
@@ -241,9 +255,19 @@
     margin-top: 2em;
   }
 
+  .error {
+    width: 20vw;
+    margin: 2em auto;
+    text-align: center;
+  }
+
   @media (max-width: 768px) {
     :global(#addCard) {
       width: 80vw;
+    }
+
+    .error {
+      width: 60vw;
     }
   }
 </style>

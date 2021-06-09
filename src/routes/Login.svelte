@@ -1,12 +1,15 @@
 <script>
+  import { onMount } from "svelte"
+
   import { auth, googleProvider } from "../firebase"
   import { user } from "../stores"
 
   import { authState } from "rxfire/auth"
   import Button, { Icon, Label } from "@smui/button"
   import { navigate } from "svelte-routing"
+
   import Loading from "../components/Loading.svelte"
-  import { onMount } from "svelte"
+  import Footer from "../components/Footer.svelte"
 
   let loading = true
 
@@ -37,6 +40,7 @@
     </Button>
   {/if}
 </main>
+<Footer />
 
 <style>
   main {

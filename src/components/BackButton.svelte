@@ -13,7 +13,7 @@
 </Link>
 
 <style>
-  :global(#back-btn) {
+  :global(#backButton) {
     margin-left: 1rem;
     margin-bottom: 0.75rem;
   }

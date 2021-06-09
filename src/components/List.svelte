@@ -3,8 +3,6 @@
   import { db } from "../firebase"
   import { user } from "../stores"
 
-  import Card, { Content } from "@smui/card"
-
   import Item from "./Item.svelte"
 
   let currentUser
@@ -49,7 +47,7 @@
 
   const removeItem = (item) => {
     items = items.filter((i) => i !== item)
-    snackbarOpen('"' + item.title + '" supprimé')
+    snackbarOpen('"' + item.title + '" placé dans les archives')
   }
 
   const categoryToID = () => {
@@ -59,20 +57,17 @@
 </script>
 
 {#if items.length !== 0}
-  <div id={categoryToID()} class="flex center">
+  <section id={categoryToID()} class="flex center">
     <div class="list">
-      <Card padded>
-        <Content>
-          <h2>{category}</h2>
-          <ul>
-            {#each items as item, index}
-              <Item {index} {item} {removeItem} {canModif} />
-            {/each}
-          </ul>
-        </Content>
-      </Card>
+      <h2>{category}</h2>
+      <div class="separator separator--title" />
+      <ul>
+        {#each items as item, index}
+          <Item {index} {item} {removeItem} {canModif} />
+        {/each}
+      </ul>
     </div>
-  </div>
+  </section>
 {/if}
 
 <style>

@@ -1,9 +1,14 @@
 :root {
   --mdc-shape-medium: 16px;
   --mdc-theme-primary: #6002ee;
+  --mdc-theme-primary-dark: #021aee;
   --mdc-theme-primary-attenuated: #7e3ff2;
-  --mdc-theme-primary-light: #9965f4;
+  --mdc-theme-primary-light: #9c47ff;
+  --mdc-theme-secondary: #7e3ff2;
   --mdc-shape-medium: 16px;
+  --green: #00c853;
+  --red: #f44336;
+  --gray: #757575;
 }
 
 noscript {
@@ -50,13 +55,17 @@ header {
   top: 0;
 }
 
-main {
-  padding-bottom: 5rem;
+main, footer {
   position: relative;
   top: 5rem;
 }
 
-main#login {
+main{
+  margin-bottom: 5rem;
+  min-height: 100vh;
+}
+
+main#login, main#page404 {
   top: 0;
 }
 
@@ -104,11 +113,15 @@ input:disabled {
 }
 
 .green-button {
-  background-color: #00c853 !important;
+  background-color: var(--green) !important;
+}
+
+.green-icon-button {
+  color: var(--green) !important;
 }
 
 .red-icon-button {
-  color: #f44336 !important;
+  color: var(--red) !important;
 }
 
 h1,
@@ -136,10 +149,25 @@ ul {
 
 .separator {
   width: 100%;
-  border-bottom: lightgray solid 1px;
-  margin: auto;
-  margin-top: 0.75em;
-  margin-bottom: 0.75em;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin: 0.75em auto;
+}
+
+.separator--title {
+  margin-top: 0.3em;
+}
+
+.separator--main {
+  width: 40vw;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+@media (max-width: 768px) {
+  .separator--main {
+    width: 60vw;
+  }
 }
 
 .spacer {
@@ -186,6 +214,10 @@ a:hover {
   display: block;
 }
 
-.mdc-dialog .mdc-dialog__content{
+.mdc-dialog .mdc-dialog__content {
   padding-top: 0;
+}
+
+.text-gray {
+  color: var(--gray);
 }

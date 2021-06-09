@@ -12,6 +12,7 @@
 
   import TopBar from "../components/TopBar.svelte"
   import BackButton from "../components/BackButton.svelte"
+  import Footer from "../components/Footer.svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -80,6 +81,7 @@
     </Content>
   </Card>
 </main>
+<Footer />
 
 <style>
   h2 {

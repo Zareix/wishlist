@@ -7,6 +7,7 @@
   import AddItem from "./routes/AddItem.svelte"
   import ProtectedRoutes from "./routes/ProtectedRoutes.svelte"
   import Archive from "./routes/Archive.svelte"
+  import Page404 from "./routes/Page404.svelte"
 
   export let url = ""
 </script>
@@ -18,6 +19,7 @@
   <ProtectedRoutes path="add" component={AddItem} />
   <ProtectedRoutes path="item/:oldCategorie/:modifId" component={AddItem} />
   <ProtectedRoutes path="/" component={Home} />
+  <Route component={Page404} />
 </Router>
 
 <style>
