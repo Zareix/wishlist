@@ -6,7 +6,7 @@
   <div class="content">
     <p>
       Find this project on
-      <a href="https://github.com/Zareix/raphael-wishlist"> my Github</a><br />
+      <a href="https://github.com/Zareix/raphael-wishlist"> Github</a><br />
       Made by <em>Raphaël Catarino</em><br />
       Learn more about me <a href="https://www.raphael-catarino.fr/">here</a>
     </p>
