@@ -50,18 +50,18 @@
 
 <li id={"item" + index}>
   <Card padded variant="outlined">
-    <div
-      class={"item-header" +
-        (restoreItem && item.validated ? " item-header--grid" : "")}
-    >
+    <div class={"item-header" + (restoreItem ? " item-header--grid" : "")}>
       <h3 class="title">
         {item.title}
       </h3>
       {#if item.description && item.description !== ""}
         <p class="subtitle text-gray">{item.description}</p>
       {/if}
-      {#if item.validated}
-        <div class="material-icons check">check</div>
+      {#if restoreItem && item.validated}
+        <div class="material-icons green-icon-button check">check</div>
+      {/if}
+      {#if restoreItem && !item.validated}
+        <div class="material-icons red-icon-button check">close</div>
       {/if}
     </div>
     <div class="separator" />
@@ -170,7 +170,6 @@
     grid-area: check;
     align-self: center;
     justify-self: center;
-    color: var(--green);
     font-size: 2em;
   }
   .title {
