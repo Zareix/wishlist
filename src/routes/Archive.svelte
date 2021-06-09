@@ -5,20 +5,27 @@
 
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
+  import Radio from "@smui/radio"
+  import FormField from "@smui/form-field"
 
   import TopBar from "../components/TopBar.svelte"
   import Loading from "../components/Loading.svelte"
   import Item from "../components/Item.svelte"
   import BackButton from "../components/BackButton.svelte"
+  import NoContent from "../components/NoContent.svelte"
+  import Footer from "../components/Footer.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   let loading = true
   let items = []
+  let selectedType = "all"
 
   let snackbar
   let snackbarText = ""
+
+  $: filteredItems = loading ? [] : filterItems(items, selectedType)
 
   onMount(() => {
     loading = true
@@ -37,12 +44,29 @@
     items = [...items, i]
   }
 
+  const filterItems = (items, type) => {
+    console.log(type)
+    switch (type) {
+      case "all":
+        return items
+      case "validated":
+        return items.filter((i) => i.validated)
+      case "notValidated":
+        return items.filter((i) => !i.validated)
+      default:
+        return items
+    }
+  }
+
   const restoreItem = (item) => {
     db.collection(currentUser.email)
       .doc("items")
       .collection(item.categorie)
       .doc(item.id)
-      .set(item)
+      .set({
+        ...item,
+        validated: false,
+      })
       .then(() => {
         snackbarText = 'Item "' + item.title + '" restauré'
         snackbar.open()
@@ -73,12 +97,36 @@
   {#if loading}
     <Loading />
   {:else if items.length === 0}
-    <p>Aucun item archivé</p>
+    <NoContent subtitle="Les objets supprimés ou validés apparaitront ici !" />
   {:else}
+    <div class="separator separator--main" />
+    <div id="selectType">
+      <FormField>
+        <Radio bind:group={selectedType} value={"all"} />
+        <span slot="label">
+          {"Tous les objets"}
+        </span>
+      </FormField>
+
+      <FormField>
+        <Radio bind:group={selectedType} value={"validated"} />
+        <span slot="label">
+          {"Validés seulement"}
+        </span>
+      </FormField>
+
+      <FormField>
+        <Radio bind:group={selectedType} value={"notValidated"} />
+        <span slot="label">
+          {"Non validés seulement"}
+        </span>
+      </FormField>
+    </div>
     <ul>
-      {#each items as item, index}
+      {#each filteredItems as item, index}
         <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
       {/each}
+      <NoContent title="Aucun objet de ce type" />
     </ul>
   {/if}
   <Snackbar bind:this={snackbar} id="snackbarArchive">
@@ -88,18 +136,45 @@
     </Actions>
   </Snackbar>
 </main>
+<Footer />
 
 <style>
   h1 {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-top: 1em;
   }
 
   ul {
     list-style: none;
+    width: 60%;
+    margin: auto;
   }
 
-  p {
+  #selectType {
     text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  #selectType > :global(*) {
+    margin: 0 0.5em;
+  }
+
+  #archive > ul > :global(#noContent:not(:only-child)) {
+    display: none;
+  }
+
+  #archive > ul > :global(#noContent:only-child) {
+    width: 50%;
+    margin: auto;
+  }
+
+  @media (max-width: 768px) {
+    ul {
+      width: 100%;
+    }
+
+    #archive > ul > :global(#noContent:only-child) {
+      width: 80%;
+    }
   }
 </style>
