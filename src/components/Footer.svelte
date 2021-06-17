@@ -2,7 +2,7 @@
 </script>
 
 <footer>
-  <img src="icons/icon-512x512.png" alt="wishlist logo" />
+  <img src="/icons/icon-512x512.png" alt="wishlist logo" />
   <div class="content">
     <p>
       Find this project on
