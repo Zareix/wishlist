@@ -13,11 +13,11 @@
 </script>
 
 <Router {url}>
-  <Route path="login" component={Login} />
-  <ProtectedRoutes path="settings" component={Config} />
-  <ProtectedRoutes path="archive" component={Archive} />
-  <ProtectedRoutes path="add" component={AddItem} />
-  <ProtectedRoutes path="item/:oldCategorie/:modifId" component={AddItem} />
+  <Route path="login/" component={Login} />
+  <ProtectedRoutes path="settings/" component={Config} />
+  <ProtectedRoutes path="archive/" component={Archive} />
+  <ProtectedRoutes path="add/" component={AddItem} />
+  <ProtectedRoutes path="item/:oldCategorie/:modifId/" component={AddItem} />
   <ProtectedRoutes path="/" component={Home} />
   <Route component={Page404} />
 </Router>
