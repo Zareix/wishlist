@@ -143,6 +143,10 @@
   const addImage = () => {
     images = [...images, ""]
   }
+
+  const removeRef = (ref) => {
+    refs = refs.filter((r) => r !== ref)
+  }
 </script>
 
 <TopBar />
@@ -184,6 +188,10 @@
             <div class="group">
               {#each refs as ref, i}
                 <TextField label={"Réference " + (i + 1)} bind:value={ref} />
+                <IconButton
+                  class="material-icons"
+                  on:click={() => removeRef(ref)}>delete</IconButton
+                >
                 <br />
               {/each}
             </div>
