@@ -7,8 +7,8 @@
     <p>
       Find this project on
       <a href="https://github.com/Zareix/raphael-wishlist"> Github</a><br />
-      Made by <em>Raphaël Catarino</em><br />
-      Learn more about me <a href="https://www.raphael-catarino.fr/">here</a>
+      Made by
+      <a href="https://www.raphael-catarino.fr/"><em>Raphaël Catarino</em></a>
     </p>
   </div>
 </footer>
@@ -46,5 +46,16 @@
 
   .content {
     width: 100%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    footer {
+      background-color: #1f2937;
+      color: white;
+    }
+
+    a {
+      color: var(--gray-light);
+    }
   }
 </style>

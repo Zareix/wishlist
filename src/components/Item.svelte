@@ -64,18 +64,21 @@
         <div class="material-icons red-icon-button check">close</div>
       {/if}
     </div>
-    <div class="separator" />
     <Content>
       {#if item.references.length > 0}
         <Set chips={item.references} let:chip class="chips-set">
-          <a
-            href={chip}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="chip-link"
-          >
+          {#if chip.startsWith("http")}
+            <a
+              href={chip}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="chip-link"
+            >
+              <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
+            </a>
+          {:else}
             <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
-          </a>
+          {/if}
         </Set>
       {/if}
       {#if item.images.length > 0}
@@ -106,7 +109,8 @@
       <ActionIcons>
         <Wrapper>
           <Link to={"/item/" + item.categorie + "/" + item.id}>
-            <IconButton class="material-icons">edit</IconButton>
+            <IconButton class="material-icons edit-icon-button">edit</IconButton
+            >
           </Link>
           <Tooltip>Modifier</Tooltip>
         </Wrapper>
@@ -148,12 +152,8 @@
   .item-header {
     margin: 0.5rem 1rem;
     margin-bottom: 0;
-  }
-
-  .separator {
-    width: 90%;
-    margin: 0.75 1rem;
-    margin-bottom: -0.25em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-light);
   }
 
   .item-header--grid {

@@ -140,12 +140,16 @@
     refs = [...refs, ""]
   }
 
+  const removeRef = (ref) => {
+    refs = refs.filter((r) => r !== ref)
+  }
+
   const addImage = () => {
     images = [...images, ""]
   }
 
-  const removeRef = (ref) => {
-    refs = refs.filter((r) => r !== ref)
+  const removeImg = (img) => {
+    images = images.filter((i) => i !== img)
   }
 </script>
 
@@ -190,6 +194,7 @@
                 <TextField label={"Réference " + (i + 1)} bind:value={ref} />
                 <IconButton
                   class="material-icons"
+                  type="button"
                   on:click={() => removeRef(ref)}>delete</IconButton
                 >
                 <br />
@@ -209,6 +214,11 @@
             <div class="group">
               {#each images as img, i}
                 <TextField label={"Image " + (i + 1)} bind:value={img} />
+                <IconButton
+                  class="material-icons"
+                  type="button"
+                  on:click={() => removeImg(img)}>delete</IconButton
+                >
                 <br />
               {/each}
             </div>

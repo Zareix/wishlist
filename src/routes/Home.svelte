@@ -87,7 +87,7 @@
         {/each}
       </Select>
     </div>
-    <div class="separator separator--main" />
+    <hr />
     <div id="wishlist">
       {#each categories as c}
         <List
@@ -126,6 +126,10 @@
     right: 15px;
   }
 
+  hr {
+    width: 40vw;
+  }
+
   #wishlist > :global(#noContent:not(:only-child)) {
     display: none;
   }
@@ -138,6 +142,10 @@
   @media (max-width: 768px) {
     #wishlist > :global(#noContent:only-child) {
       width: 70%;
+    }
+
+    hr {
+      width: 60vw;
     }
   }
 </style>

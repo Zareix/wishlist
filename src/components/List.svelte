@@ -60,7 +60,7 @@
   <section id={categoryToID()} class="flex center">
     <div class="list">
       <h2>{category}</h2>
-      <div class="separator separator--title" />
+      <hr />
       <ul>
         {#each items as item, index}
           <Item {index} {item} {removeItem} {canModif} />
