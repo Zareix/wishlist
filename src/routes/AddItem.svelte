@@ -14,7 +14,7 @@
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
   import Card, { Content } from "@smui/card"
-  import TextField from "@smui/textfield"
+  import Textfield from "@smui/textfield"
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
@@ -29,6 +29,7 @@
   let title = ""
   let loading = false
   let description = ""
+  let price = 0
   let categorie = ""
   let categories = []
   let refs = []
@@ -36,6 +37,10 @@
   let createdAt
   let snackbar
   let snackbarText
+  let inputErrors = {
+    title: false,
+    categorie: false,
+  }
 
   onMount(async () => {
     await db
@@ -60,6 +65,7 @@
           images = data.images
           createdAt = data.createdAt
           description = data.description ? data.description : ""
+          price = data.price ? data.price : 0
         })
         .catch((e) => (error = true))
     }
@@ -68,13 +74,18 @@
   const addItem = (e) => {
     e.preventDefault()
 
+    inputErrors = [false, false]
     snackbar.close()
     snackbarText = ""
 
-    if (title === undefined || title.trim() === "")
-      snackbarText = "Merci d'entrer un titre"
-    if (categorie === undefined || categorie.trim() === "")
+    if (categorie === undefined || categorie.trim() === "") {
+      inputErrors.categorie = true
       snackbarText = "Merci de choisir une catégorie"
+    }
+    if (title === undefined || title.trim() === "") {
+      inputErrors.title = true
+      snackbarText = "Merci de choisir un titre"
+    }
 
     if (snackbarText !== "") {
       snackbar.open()
@@ -98,6 +109,7 @@
               .add({
                 title,
                 description,
+                price,
                 createdAt,
                 references: refs.filter((r) => r !== ""),
                 images: images.filter((i) => i !== ""),
@@ -112,6 +124,7 @@
           .update({
             title,
             description,
+            price,
             references: refs.filter((r) => r !== ""),
             images: images.filter((i) => i !== ""),
           })
@@ -124,6 +137,7 @@
         .add({
           title,
           description,
+          price,
           createdAt: Date.now(),
           references: refs.filter((r) => r !== ""),
           images: images.filter((i) => i !== ""),
@@ -169,19 +183,28 @@
         <Content>
           <h1>Ajouter un objet</h1>
           <form on:submit={addItem}>
-            <Select bind:value={categorie} label="Catégorie">
+            <Select
+              bind:value={categorie}
+              label="Catégorie"
+              bind:invalid={inputErrors.categorie}
+            >
               {#each categories as cat}
                 <Option value={cat}>{cat.toUpperCase()}</Option>
               {/each}
             </Select>
-            <br />
-            <div class="spacer" />
 
-            <TextField label="Titre" bind:value={title} />
-            <br />
-            <div class="spacer" />
+            <Textfield
+              label="Titre"
+              bind:value={title}
+              bind:invalid={inputErrors.title}
+            />
 
-            <TextField label="Description/Remarques" bind:value={description} />
+            <Textfield label="Description/Remarques" bind:value={description} />
+
+            <Textfield label="Prix" bind:value={price} type="number">
+              <svelte:fragment slot="trailingIcon">€</svelte:fragment>
+            </Textfield>
+
             <br />
             <div class="spacer" />
 
@@ -191,13 +214,14 @@
             {/if}
             <div class="group">
               {#each refs as ref, i}
-                <TextField label={"Réference " + (i + 1)} bind:value={ref} />
-                <IconButton
-                  class="material-icons"
-                  type="button"
-                  on:click={() => removeRef(ref)}>delete</IconButton
-                >
-                <br />
+                <div class="flex">
+                  <Textfield label={"Réference " + (i + 1)} bind:value={ref} />
+                  <IconButton
+                    class="material-icons"
+                    type="button"
+                    on:click={() => removeRef(ref)}>delete</IconButton
+                  >
+                </div>
               {/each}
             </div>
             <Button type="button" on:click={addRef}
@@ -213,13 +237,14 @@
             {/if}
             <div class="group">
               {#each images as img, i}
-                <TextField label={"Image " + (i + 1)} bind:value={img} />
-                <IconButton
-                  class="material-icons"
-                  type="button"
-                  on:click={() => removeImg(img)}>delete</IconButton
-                >
-                <br />
+                <div class="flex">
+                  <Textfield label={"Image " + (i + 1)} bind:value={img} />
+                  <IconButton
+                    class="material-icons"
+                    type="button"
+                    on:click={() => removeImg(img)}>delete</IconButton
+                  >
+                </div>
               {/each}
             </div>
             <Button type="button" on:click={addImage}
@@ -258,6 +283,10 @@
     margin-bottom: 1em;
   }
 
+  :global(.euro-icon) {
+    font-size: large;
+  }
+
   :global(.snackbar-warning-container > .mdc-snackbar__surface) {
     background-color: #b00020;
   }
@@ -279,6 +308,11 @@
     text-align: center;
   }
 
+  :global(.smui-text-field--standard),
+  :global(.mdc-select) {
+    width: 70%;
+  }
+
   @media (max-width: 768px) {
     :global(#addCard) {
       width: 80vw;
@@ -286,6 +320,11 @@
 
     .error {
       width: 60vw;
+    }
+
+    :global(.smui-text-field--standard),
+    :global(.mdc-select) {
+      width: 85%;
     }
   }
 </style>

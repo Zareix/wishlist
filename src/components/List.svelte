@@ -14,6 +14,7 @@
 
   let oldUser
   let items = []
+  let catPrice = 0
 
   onMount(() => {
     oldUser = choosenUser
@@ -35,9 +36,11 @@
       .orderBy("createdAt")
       .get()
       .then((data) =>
-        data.forEach((i) =>
+        data.forEach((i) => {
+          let price = i.data().price
+          if (price) catPrice += price
           addItems({ id: i.id, categorie: category, ...i.data() })
-        )
+        })
       )
   }
 
@@ -59,7 +62,12 @@
 {#if items.length !== 0}
   <section id={categoryToID()} class="flex center">
     <div class="list">
-      <h2>{category}</h2>
+      <div class="flex">
+        <h2>{category}</h2>
+        {#if catPrice !== 0}
+          <span class="text-gray">Prix total : {catPrice} €</span>
+        {/if}
+      </div>
       <hr />
       <ul>
         {#each items as item, index}
@@ -77,6 +85,17 @@
 
   h2 {
     text-transform: capitalize;
+    flex-grow: 1;
+  }
+
+  .flex {
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  span {
+    font-weight: 500;
+    font-size: large;
   }
 
   .list {
@@ -87,6 +106,12 @@
   @media (max-width: 768px) {
     .list {
       width: 90vw;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    span {
+      color: var(--gray-light);
     }
   }
 </style>

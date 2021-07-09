@@ -33,6 +33,7 @@
     db.collection(currentUser.email)
       .doc("items")
       .collection("_archive")
+      .orderBy("createdAt", "desc")
       .get()
       .then((data) => {
         data.forEach((i) => addItems({ id: i.id, ...i.data() }))

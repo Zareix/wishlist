@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte"
   import { Route } from "svelte-routing"
 
   import { user } from "../stores"
@@ -9,6 +10,13 @@
   export let component
 
   $: isAuthenticated = $user
+
+  history.pushState = new Proxy(history.pushState, {
+    apply(target, thisArg, argumentsList) {
+      scrollTo(0, 0)
+      Reflect.apply(target, thisArg, argumentsList)
+    },
+  })
 </script>
 
 {#if isAuthenticated}

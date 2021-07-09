@@ -50,18 +50,23 @@
 
 <li id={"item" + index}>
   <Card padded variant="outlined">
-    <div class={"item-header" + (restoreItem ? " item-header--grid" : "")}>
-      <h3 class="title">
-        {item.title}
-      </h3>
-      {#if item.description && item.description !== ""}
-        <p class="subtitle text-gray">{item.description}</p>
-      {/if}
+    <div class={"item-header"}>
       {#if restoreItem && item.validated}
         <div class="material-icons green-icon-button check">check</div>
       {/if}
       {#if restoreItem && !item.validated}
         <div class="material-icons red-icon-button check">close</div>
+      {/if}
+      <div class="flex-grow">
+        <h3 class="title">
+          {item.title}
+        </h3>
+        {#if item.description && item.description !== ""}
+          <p class="description text-gray">{item.description}</p>
+        {/if}
+      </div>
+      {#if item.price && item.price !== 0}
+        <p class="price text-gray">{item.price.toLocaleString()} €</p>
       {/if}
     </div>
     <Content>
@@ -92,8 +97,9 @@
     {#if restoreItem}
       <ActionIcons>
         <Wrapper>
-          <IconButton on:click={() => restoreItem(item)} class="material-icons"
-            >restore_from_trash</IconButton
+          <IconButton
+            on:click={() => restoreItem(item)}
+            class="material-icons restore">restore_from_trash</IconButton
           >
           <Tooltip>Restaurer</Tooltip>
         </Wrapper>
@@ -143,40 +149,30 @@
     font-weight: 500;
   }
 
-  p {
-    margin: 0;
-    margin-top: 0.25em;
-    font-weight: 500;
-  }
-
   .item-header {
     margin: 0.5rem 1rem;
     margin-bottom: 0;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .item-header--grid {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-      "title check"
-      "subtitle check";
+  .description {
+    margin: 0;
+    margin-top: 0.25em;
+    font-weight: 500;
+  }
+
+  .flex-grow {
+    flex-grow: 1;
   }
 
   .check {
-    grid-area: check;
     align-self: center;
     justify-self: center;
     font-size: 2em;
-  }
-  .title {
-    grid-area: title;
-  }
-  .subtitle {
-    grid-area: subtitle;
   }
 
   .image-list {
@@ -191,6 +187,14 @@
   @media (max-width: 768px) {
     .image-list {
       justify-content: center;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .price,
+    .description,
+    :global(.restore) {
+      color: var(--gray-light);
     }
   }
 </style>

@@ -130,6 +130,10 @@
     width: 40vw;
   }
 
+  :global(#selectWishlist) {
+    width: auto;
+  }
+
   #wishlist > :global(#noContent:not(:only-child)) {
     display: none;
   }
