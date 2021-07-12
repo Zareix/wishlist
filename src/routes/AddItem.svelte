@@ -46,9 +46,17 @@
   }
 
   onMount(async () => {
-    if (urlParams.has("ref")) refs[0] = urlParams.get("ref")
     if (urlParams.has("title")) title = urlParams.get("title")
-    if (urlParams.has("body")) description = urlParams.get("body")
+    if (urlParams.has("ref")) refs[0] = urlParams.get("ref")
+    if (urlParams.has("body")) {
+      let body = urlParams.get("body")
+      if (
+        refs.length === 0 &&
+        (body.includes("http://") || body.includes("https://"))
+      )
+        refs[0] = "http" + body.split("http")[1]
+      else description = body
+    }
 
     await db
       .collection("categories")
