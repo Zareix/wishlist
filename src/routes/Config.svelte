@@ -5,7 +5,7 @@
   import { user } from "../stores"
 
   import TextField from "@smui/textfield"
-  import Button from "@smui/button"
+  import Button, { Icon, Label as BtnLabel } from "@smui/button"
   import Snackbar, { Actions, Label } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
   import Card, { Content } from "@smui/card"
@@ -62,7 +62,11 @@
             <br />
           {/each}
         </div>
-        <Button on:click={addPermission}>Ajouter un email</Button>
+        <Button on:click={addPermission}
+          ><Icon class="material-icons">add</Icon><BtnLabel
+            >Ajouter un email</BtnLabel
+          ></Button
+        >
         <br />
         <div class="spacer" />
         <div class="flex center">
@@ -90,7 +94,7 @@
 
   :global(#permissions) {
     margin-top: 2em;
-    width: fit-content;
+    width: 50vw;
   }
 
   .padding {
@@ -100,5 +104,11 @@
   .permissions-inputs {
     margin-left: 0.5em;
     margin-bottom: 0.125em;
+  }
+
+  @media (max-width: 768px) {
+    :global(#permissions) {
+      width: 90vw;
+    }
   }
 </style>

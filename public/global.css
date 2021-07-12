@@ -29,6 +29,8 @@
   --mdc-theme-text-hint-on-dark: hsla(0, 0%, 100%, 0.5);
   --mdc-theme-text-disabled-on-dark: hsla(0, 0%, 100%, 0.5);
   --mdc-theme-text-icon-on-dark: hsla(0, 0%, 100%, 0.5);
+
+  --mdc-shape-small: 8px;
 }
 
 noscript {
@@ -165,7 +167,7 @@ ul {
   .smui-card--padded,
   .smui-card__content,
   .smui-card__primary-action--padded {
-    padding: 8px !important;
+    padding: 12px !important;
   }
 }
 
@@ -215,6 +217,11 @@ a:hover {
 
 .mdc-dialog .mdc-dialog__content {
   padding-top: 0;
+}
+
+.mdc-button--raised {
+  padding: 0px 16px;
+  height: 42px;
 }
 
 .text-gray {

@@ -169,6 +169,10 @@
     flex-grow: 1;
   }
 
+  .price {
+    white-space: nowrap;
+  }
+
   .check {
     align-self: center;
     justify-self: center;

@@ -7,6 +7,15 @@
     "name": "Wishlist",
     "short_name": "Wishlist",
     "description": "A simple wishlist that do what I want",
+    "share_target": {
+        "action": "/add/",
+        "method": "GET",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "url": "ref"
+        }
+    },
     "icons": [
         {
             "src": "/icons/maskable_icon_x512.png",

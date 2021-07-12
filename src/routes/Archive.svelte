@@ -46,7 +46,6 @@
   }
 
   const filterItems = (items, type) => {
-    console.log(type)
     switch (type) {
       case "all":
         return items
@@ -100,8 +99,7 @@
   {:else if items.length === 0}
     <NoContent subtitle="Les objets supprimés ou validés apparaitront ici !" />
   {:else}
-    <div class="separator separator--main" />
-    <div id="selectType">
+    <section id="selectType">
       <FormField>
         <Radio bind:group={selectedType} value={"all"} />
         <span slot="label">
@@ -122,7 +120,7 @@
           {"Non validés seulement"}
         </span>
       </FormField>
-    </div>
+    </section>
     <ul>
       {#each filteredItems as item, index}
         <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />

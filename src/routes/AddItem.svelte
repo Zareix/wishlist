@@ -25,6 +25,9 @@
   export let modifId = undefined
   export let oldCategorie
 
+  export let location
+  const urlParams = new URLSearchParams(location.search)
+
   let error = false
   let title = ""
   let loading = false
@@ -43,6 +46,9 @@
   }
 
   onMount(async () => {
+    if (urlParams.has("ref")) refs[0] = urlParams.get("ref")
+    if (urlParams.has("title")) title = urlParams.get("title")
+
     await db
       .collection("categories")
       .get()
@@ -193,13 +199,22 @@
               {/each}
             </Select>
 
+            <br />
+            <div class="spacer" />
+
             <Textfield
               label="Titre"
               bind:value={title}
               bind:invalid={inputErrors.title}
             />
 
+            <br />
+            <div class="spacer" />
+
             <Textfield label="Description/Remarques" bind:value={description} />
+
+            <br />
+            <div class="spacer" />
 
             <Textfield label="Prix" bind:value={price} type="number">
               <svelte:fragment slot="trailingIcon">€</svelte:fragment>
@@ -315,7 +330,7 @@
 
   @media (max-width: 768px) {
     :global(#addCard) {
-      width: 80vw;
+      width: 90vw;
     }
 
     .error {
