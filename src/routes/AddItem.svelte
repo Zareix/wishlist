@@ -181,6 +181,8 @@
   const removeImg = (img) => {
     images = images.filter((i) => i !== img)
   }
+
+  const switchTitleDesc = () => ([title, description] = [description, title])
 </script>
 
 <TopBar />
@@ -218,8 +220,16 @@
               bind:invalid={inputErrors.title}
             />
 
-            <br />
-            <div class="spacer" />
+            {#if urlParams.has("title") && description !== ""}
+              <IconButton
+                class="material-icons swap-icon"
+                type="button"
+                on:click={switchTitleDesc}>swap_horiz</IconButton
+              >
+            {:else}
+              <br />
+              <div class="spacer" />
+            {/if}
 
             <Textfield label="Description/Remarques" bind:value={description} />
 
@@ -308,8 +318,9 @@
     margin-bottom: 1em;
   }
 
-  :global(.euro-icon) {
-    font-size: large;
+  :global(.swap-icon) {
+    transform: rotate(90deg);
+    padding-right: 6px;
   }
 
   :global(.snackbar-warning-container > .mdc-snackbar__surface) {
