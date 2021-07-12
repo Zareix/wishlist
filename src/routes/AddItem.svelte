@@ -53,9 +53,10 @@
       if (
         refs.length === 0 &&
         (body.includes("http://") || body.includes("https://"))
-      )
+      ) {
+        description = body.split("http")[0]
         refs[0] = "http" + body.split("http")[1]
-      else description = body
+      } else description = body
     }
 
     await db
