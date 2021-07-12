@@ -48,6 +48,7 @@
   onMount(async () => {
     if (urlParams.has("ref")) refs[0] = urlParams.get("ref")
     if (urlParams.has("title")) title = urlParams.get("title")
+    if (urlParams.has("body")) description = urlParams.get("body")
 
     await db
       .collection("categories")
