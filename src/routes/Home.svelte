@@ -96,6 +96,7 @@
             ? choosenUser
             : currentUser.email}
           {snackbarOpen}
+          orderByPosition
         />
       {/each}
       <NoContent
@@ -121,13 +122,14 @@
 
   .fab {
     position: fixed;
-    z-index: 2;
+    z-index: 10000;
     bottom: 15px;
     right: 15px;
   }
 
   hr {
     width: 40vw;
+    margin-top: 1rem;
   }
 
   :global(#selectWishlist) {

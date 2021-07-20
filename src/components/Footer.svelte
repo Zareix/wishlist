@@ -15,15 +15,16 @@
 
 <style>
   footer {
-    background-color: #f3f4f6;
-    color: #4b5563;
     height: 175px;
-    padding-bottom: 1em;
+    z-index: 100;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-end;
-    justify-content: center;
     justify-items: center;
+    justify-content: center;
+    padding-bottom: 1em;
+    color: #4b5563;
+    background-color: #f3f4f6;
   }
 
   img {

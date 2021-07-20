@@ -1,4 +1,8 @@
 :root {
+  --primary-color: #6002ee;
+  --primary-attenuated-color: #7e3ff2;
+  --background-secondary: #f9fafb;
+
   --mdc-theme-background: #fff;
   --mdc-theme-surface: #fff;
   --mdc-shape-medium: 16px;
@@ -198,6 +202,15 @@ a:hover {
   text-decoration: underline;
 }
 
+.card {
+  width: 50vw;
+  margin: auto;
+  margin-top: 2em;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+}
+
 .mdc-chip {
   background-color: var(--mdc-theme-primary-attenuated);
   color: white;
@@ -233,8 +246,16 @@ hr {
   border-bottom: solid var(--gray-light) 1px;
 }
 
+@media (max-width: 768px) {
+  .card {
+    width: 80vw;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
+    --background-secondary: #1f2937;
+
     --mdc-theme-primary: #6d28d9;
     --mdc-theme-primary-dark: #5b21b6;
     --mdc-theme-primary-attenuated: #7e3ff2;
@@ -264,7 +285,11 @@ hr {
 
   body {
     background-color: #111827;
-    color: white;
+    color: #f9fafb;
+  }
+
+  .card {
+    background-color: var(--background-secondary);
   }
 
   .mdc-button {
@@ -273,10 +298,6 @@ hr {
 
   .mdc-button--raised {
     color: var(--mdc-theme-on-primary, #fff) !important;
-  }
-
-  .mdc-card--outlined {
-    border-color: var(--mdc-theme-surface);
   }
 
   .mdc-menu .mdc-deprecated-list {

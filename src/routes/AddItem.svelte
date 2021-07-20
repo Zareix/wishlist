@@ -18,6 +18,8 @@
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
+  import { flip } from "svelte/animate"
+  import { dndzone } from "svelte-dnd-action"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -27,6 +29,9 @@
 
   export let location
   const urlParams = new URLSearchParams(location.search)
+
+  const flipDurationMs = 300
+  const dropTargetClasses = ["dnd-active"]
 
   let error = false
   let title = ""
@@ -47,7 +52,7 @@
 
   onMount(async () => {
     if (urlParams.has("title")) title = urlParams.get("title")
-    if (urlParams.has("ref")) refs[0] = urlParams.get("ref")
+    if (urlParams.has("ref")) addRef(urlParams.get("ref"))
     if (urlParams.has("body")) {
       let body = urlParams.get("body")
       if (
@@ -55,7 +60,7 @@
         (body.includes("http://") || body.includes("https://"))
       ) {
         description = body.split("http")[0]
-        refs[0] = "http" + body.split("http")[1]
+        addRef("http" + body.split("http")[1])
       } else description = body
     }
 
@@ -77,8 +82,8 @@
           let data = i.data()
           categorie = oldCategorie
           title = data.title
-          refs = data.references
-          images = data.images
+          data.references.forEach((r) => addRef(r))
+          data.images.forEach((i) => addImg(i))
           createdAt = data.createdAt
           description = data.description ? data.description : ""
           price = data.price ? data.price : 0
@@ -127,8 +132,12 @@
                 description,
                 price,
                 createdAt,
-                references: refs.filter((r) => r !== ""),
-                images: images.filter((i) => i !== ""),
+                references: refs
+                  .filter((r) => r.value !== "")
+                  .map((r) => r.value),
+                images: images
+                  .filter((i) => i.value !== "")
+                  .map((i) => i.value),
               })
           })
           .then(() => back())
@@ -141,8 +150,8 @@
             title,
             description,
             price,
-            references: refs.filter((r) => r !== ""),
-            images: images.filter((i) => i !== ""),
+            references: refs.filter((r) => r.value !== "").map((r) => r.value),
+            images: images.filter((i) => i.value !== "").map((i) => i.value),
           })
           .then(() => back())
       }
@@ -151,38 +160,45 @@
         .doc("items")
         .collection(categorie)
         .add({
+          position: 0,
           title,
           description,
           price,
           createdAt: Date.now(),
-          references: refs.filter((r) => r !== ""),
-          images: images.filter((i) => i !== ""),
+          references: refs.filter((r) => r.value !== "").map((r) => r.value),
+          images: images.filter((i) => i.value !== "").map((i) => i.value),
         })
         .then(() => back())
     }
   }
 
-  const back = () => {
-    navigate("/")
+  const back = () => navigate("/")
+
+  const imageExists = (image_url) => {
+    return image_url.startsWith("http")
   }
 
-  const addRef = () => {
-    refs = [...refs, ""]
-  }
+  const addNewRef = () =>
+    (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: "" }])
+  const addRef = (ref) =>
+    (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: ref }])
+  const removeRef = (ref) => (refs = refs.filter((r) => r !== ref))
 
-  const removeRef = (ref) => {
-    refs = refs.filter((r) => r !== ref)
-  }
-
-  const addImage = () => {
-    images = [...images, ""]
-  }
-
-  const removeImg = (img) => {
-    images = images.filter((i) => i !== img)
-  }
+  const addNewImg = () =>
+    (images = [...images, { id: Math.floor(Math.random() * 1000), value: "" }])
+  const addImg = (img) =>
+    (images = [...images, { id: Math.floor(Math.random() * 1000), value: img }])
+  const removeImg = (img) => (images = images.filter((i) => i !== img))
 
   const switchTitleDesc = () => ([title, description] = [description, title])
+
+  const handleDndConsiderRefs = (e) => (refs = e.detail.items)
+  const handleDndFinalizeRefs = (e) => (refs = e.detail.items)
+
+  const handleDndConsiderImages = (e) => (images = e.detail.items)
+  const handleDndFinalizeImages = (e) => (images = e.detail.items)
+
+  const transformDraggedElement = (e) => (e.className = "dnd-item-active")
 </script>
 
 <TopBar />
@@ -197,7 +213,7 @@
         <h2>Oups, impossible de trouver cet objet</h2>
       </div>
     {:else}
-      <Card padded id="addCard">
+      <section id="addCard" class="card">
         <Content>
           <h1>Ajouter un objet</h1>
           <form on:submit={addItem}>
@@ -247,22 +263,39 @@
               <div class="separator" />
               <h4>Réferences :</h4>
             {/if}
-            <div class="group">
-              {#each refs as ref, i}
-                <div class="flex">
-                  <Textfield label={"Réference " + (i + 1)} bind:value={ref} />
-                  <IconButton
-                    class="material-icons"
-                    type="button"
-                    on:click={() => removeRef(ref)}>delete</IconButton
+            <section
+              class="group"
+              use:dndzone={{
+                items: refs,
+                flipDurationMs,
+                type: "references",
+                dropTargetClasses,
+                dropFromOthersDisabled: true,
+                transformDraggedElement,
+              }}
+              on:consider={handleDndConsiderRefs}
+              on:finalize={handleDndFinalizeRefs}
+            >
+              {#each refs as ref (ref.id)}
+                <div class="flex" animate:flip={{ duration: flipDurationMs }}>
+                  <Icon class="material-icons drag-icon">drag_indicator</Icon>
+                  <Textfield
+                    label={"Réference " + (refs.indexOf(ref) + 1)}
+                    bind:value={ref.value}
                   >
+                    <IconButton
+                      class="material-icons delete-ref-btn"
+                      slot="trailingIcon"
+                      on:click={() => removeRef(ref)}>delete</IconButton
+                    >
+                  </Textfield>
                 </div>
               {/each}
-            </div>
-            <Button type="button" on:click={addRef}
-              ><Icon class="material-icons">add</Icon>
-              <Label>Ajouter une ref</Label></Button
-            >
+            </section>
+            <Button type="button" on:click={addNewRef}>
+              <Icon class="material-icons">add</Icon>
+              <Label>Ajouter une ref</Label>
+            </Button>
             <br />
             <div class="spacer" />
 
@@ -270,22 +303,46 @@
               <div class="separator" />
               <h4>Images :</h4>
             {/if}
-            <div class="group">
-              {#each images as img, i}
-                <div class="flex">
-                  <Textfield label={"Image " + (i + 1)} bind:value={img} />
-                  <IconButton
-                    class="material-icons"
-                    type="button"
-                    on:click={() => removeImg(img)}>delete</IconButton
+            <section
+              class="group"
+              use:dndzone={{
+                items: images,
+                flipDurationMs,
+                type: "images",
+                dropTargetClasses,
+                dropFromOthersDisabled: true,
+                transformDraggedElement,
+              }}
+              on:consider={handleDndConsiderImages}
+              on:finalize={handleDndFinalizeImages}
+            >
+              {#each images as img (img.id)}
+                <div class="flex" animate:flip={{ duration: flipDurationMs }}>
+                  <Icon class="material-icons drag-icon">drag_indicator</Icon>
+                  <Textfield
+                    label={"Image " + (images.indexOf(img) + 1)}
+                    bind:value={img.value}
                   >
+                    <IconButton
+                      class="material-icons delete-image-btn"
+                      slot="trailingIcon"
+                      on:click={() => removeImg(img)}>delete</IconButton
+                    >
+                  </Textfield>
+                  {#if imageExists(img.value)}
+                    <img
+                      src={img.value}
+                      alt={"thumbnail " + images.indexOf(img)}
+                      class="thumbnail"
+                    />
+                  {/if}
                 </div>
               {/each}
-            </div>
-            <Button type="button" on:click={addImage}
-              ><Icon class="material-icons">add</Icon>
-              <Label>Ajouter une image</Label></Button
-            >
+            </section>
+            <Button type="button" on:click={addNewImg}>
+              <Icon class="material-icons">add</Icon>
+              <Label>Ajouter une image</Label>
+            </Button>
             <br />
             <div class="spacer" />
 
@@ -296,7 +353,7 @@
             </div>
           </form>
         </Content>
-      </Card>
+      </section>
     {/if}
   {/if}
   <Snackbar
@@ -332,10 +389,26 @@
     margin-bottom: 0.125em;
   }
 
-  :global(#addCard) {
-    width: 50vw;
-    margin: auto;
-    margin-top: 2em;
+  :global(.dnd-active) {
+    outline: none !important;
+  }
+
+  :global(.dnd-item-active) {
+    outline: none !important;
+  }
+
+  .flex {
+    align-items: center;
+  }
+
+  .thumbnail {
+    max-width: 25%;
+    max-height: 5rem;
+    margin-left: 0.5rem;
+  }
+
+  :global(.drag-icon) {
+    cursor: grab;
   }
 
   .error {
@@ -350,10 +423,6 @@
   }
 
   @media (max-width: 768px) {
-    :global(#addCard) {
-      width: 90vw;
-    }
-
     .error {
       width: 60vw;
     }
@@ -361,6 +430,14 @@
     :global(.smui-text-field--standard),
     :global(.mdc-select) {
       width: 85%;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(.drag-icon),
+    :global(.delete-image-btn),
+    :global(.delete-ref-btn) {
+      color: #f9fafb;
     }
   }
 </style>

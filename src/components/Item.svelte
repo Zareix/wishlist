@@ -48,101 +48,100 @@
   }
 </script>
 
-<li id={"item" + index}>
-  <Card padded variant="outlined">
-    <div class={"item-header"}>
-      {#if restoreItem && item.validated}
-        <div class="material-icons green-icon-button check">check</div>
-      {/if}
-      {#if restoreItem && !item.validated}
-        <div class="material-icons red-icon-button check">close</div>
-      {/if}
-      <div class="flex-grow">
-        <h3 class="title">
-          {item.title}
-        </h3>
-        {#if item.description && item.description !== ""}
-          <p class="description text-gray">{item.description}</p>
-        {/if}
-      </div>
-      {#if item.price && item.price !== 0}
-        <p class="price text-gray">{item.price.toLocaleString()} €</p>
+<li id={"item" + index} class="item">
+  <div class={"item-header"}>
+    {#if restoreItem && item.validated}
+      <div class="material-icons green-icon-button check">check</div>
+    {/if}
+    {#if restoreItem && !item.validated}
+      <div class="material-icons red-icon-button check">close</div>
+    {/if}
+    <div class="flex-grow">
+      <h3 class="title">
+        {item.title}
+      </h3>
+      {#if item.description && item.description !== ""}
+        <p class="description text-gray">{item.description}</p>
       {/if}
     </div>
-    <Content>
-      {#if item.references.length > 0}
-        <Set chips={item.references} let:chip class="chips-set">
-          {#if chip.startsWith("http")}
-            <a
-              href={chip}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="chip-link"
-            >
-              <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
-            </a>
-          {:else}
-            <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
-          {/if}
-        </Set>
-      {/if}
-      {#if item.images.length > 0}
-        <div class="flex image-list">
-          {#each item.images as image, index}
-            <ItemImage title={item.title} {image} {index} />
-          {/each}
-        </div>
-      {/if}
-    </Content>
-    {#if restoreItem}
-      <ActionIcons>
-        <Wrapper>
-          <IconButton
-            on:click={() => restoreItem(item)}
-            class="material-icons restore">restore_from_trash</IconButton
-          >
-          <Tooltip>Restaurer</Tooltip>
-        </Wrapper>
-        <Wrapper>
-          <IconButton
-            on:click={() => permanentDeleteItem(item)}
-            class="material-icons red-icon-button">delete</IconButton
-          >
-          <Tooltip>Supprimer définitivement</Tooltip>
-        </Wrapper>
-      </ActionIcons>
-    {:else if canModif}
-      <ActionIcons>
-        <Wrapper>
-          <Link to={"/item/" + item.categorie + "/" + item.id}>
-            <IconButton class="material-icons edit-icon-button">edit</IconButton
-            >
-          </Link>
-          <Tooltip>Modifier</Tooltip>
-        </Wrapper>
-        <Wrapper>
-          <IconButton
-            on:click={() => moveToArchive(true)}
-            class="material-icons green-icon-button">check</IconButton
-          >
-          <Tooltip>Valider</Tooltip>
-        </Wrapper>
-        <Wrapper>
-          <IconButton
-            on:click={() => moveToArchive(false)}
-            class="material-icons red-icon-button">delete</IconButton
-          >
-          <Tooltip>Supprimer</Tooltip>
-        </Wrapper>
-      </ActionIcons>
+    {#if item.price && item.price !== 0}
+      <p class="price text-gray">{item.price.toLocaleString()} €</p>
     {/if}
-  </Card>
+  </div>
+  <section class="item-content">
+    {#if item.references.length > 0}
+      <Set chips={item.references} let:chip class="chips-set">
+        {#if chip.startsWith("http")}
+          <a
+            href={chip}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="chip-link"
+          >
+            <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
+          </a>
+        {:else}
+          <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
+        {/if}
+      </Set>
+    {/if}
+    {#if item.images.length > 0}
+      <div class="image-list">
+        {#each item.images as image, index}
+          <ItemImage title={item.title} {image} {index} />
+        {/each}
+      </div>
+    {/if}
+  </section>
+  {#if restoreItem}
+    <ActionIcons>
+      <Wrapper>
+        <IconButton
+          on:click={() => restoreItem(item)}
+          class="material-icons restore">restore_from_trash</IconButton
+        >
+        <Tooltip>Restaurer</Tooltip>
+      </Wrapper>
+      <Wrapper>
+        <IconButton
+          on:click={() => permanentDeleteItem(item)}
+          class="material-icons red-icon-button">delete</IconButton
+        >
+        <Tooltip>Supprimer définitivement</Tooltip>
+      </Wrapper>
+    </ActionIcons>
+  {:else if canModif}
+    <ActionIcons>
+      <Wrapper>
+        <Link to={"/item/" + item.categorie + "/" + item.id}>
+          <IconButton class="material-icons edit-icon-button">edit</IconButton>
+        </Link>
+        <Tooltip>Modifier</Tooltip>
+      </Wrapper>
+      <Wrapper>
+        <IconButton
+          on:click={() => moveToArchive(true)}
+          class="material-icons green-icon-button">check</IconButton
+        >
+        <Tooltip>Valider</Tooltip>
+      </Wrapper>
+      <Wrapper>
+        <IconButton
+          on:click={() => moveToArchive(false)}
+          class="material-icons red-icon-button">delete</IconButton
+        >
+        <Tooltip>Supprimer</Tooltip>
+      </Wrapper>
+    </ActionIcons>
+  {/if}
 </li>
 
 <style>
-  li {
+  .item {
     margin: 0 1.5em;
-    padding-bottom: 0.5em;
+    padding: 0.5rem;
+    background-color: var(--background-secondary);
+    border-radius: 16px;
   }
 
   h3 {
@@ -157,6 +156,10 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  .item-content {
+    margin: 0 1rem;
   }
 
   .description {
@@ -181,6 +184,7 @@
 
   .image-list {
     width: 100%;
+    display: flex;
     flex-wrap: wrap;
     gap: 0.5em 1em;
     margin-bottom: 0.25em;

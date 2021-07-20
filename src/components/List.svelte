@@ -3,18 +3,26 @@
   import { db } from "../firebase"
   import { user } from "../stores"
 
+  import { flip } from "svelte/animate"
+  import { dndzone } from "svelte-dnd-action"
+
   import Item from "./Item.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
+  const flipDurationMs = 300
+  const dropTargetClasses = ["dnd-active"]
+
   export let category
   export let choosenUser
   export let snackbarOpen
+  export let orderByPosition
 
   let oldUser
   let items = []
   let catPrice = 0
+  let upPosTimeoutId
 
   onMount(() => {
     oldUser = choosenUser
@@ -33,7 +41,7 @@
       .collection(choosenUser)
       .doc("items")
       .collection(category)
-      .orderBy("createdAt")
+      .orderBy(orderByPosition ? "position" : "createdAt")
       .get()
       .then((data) =>
         data.forEach((i) => {
@@ -44,9 +52,7 @@
       )
   }
 
-  const addItems = (i) => {
-    items = [...items, i]
-  }
+  const addItems = (i) => (items = [...items, i])
 
   const removeItem = (item) => {
     items = items.filter((i) => i !== item)
@@ -57,60 +63,115 @@
     let c = category.replace(" ", "")
     return "category" + c.charAt(0).toUpperCase() + c.slice(1)
   }
+
+  const updatePosition = () => {
+    const batch = db.batch()
+    items.forEach((item, index) =>
+      batch.update(
+        db
+          .collection(choosenUser)
+          .doc("items")
+          .collection(category)
+          .doc(item.id),
+        { position: index }
+      )
+    )
+    batch.commit()
+  }
+
+  const handleDndConsider = (e) => {
+    items = e.detail.items
+    if (upPosTimeoutId) {
+      clearTimeout(upPosTimeoutId)
+      upPosTimeoutId = undefined
+    }
+  }
+  const handleDndFinalize = (e) => {
+    items = e.detail.items
+
+    upPosTimeoutId = setTimeout(updatePosition, 3000)
+  }
+
+  const transformDraggedElement = (e) => (e.className = "dnd-item-active")
 </script>
 
 {#if items.length !== 0}
-  <section id={categoryToID()} class="flex center">
-    <div class="list">
-      <div class="flex">
-        <h2>{category}</h2>
-        {#if catPrice !== 0}
-          <span class="text-gray">Prix total : {catPrice} €</span>
-        {/if}
-      </div>
-      <hr />
-      <ul>
-        {#each items as item, index}
-          <Item {index} {item} {removeItem} {canModif} />
+  <section id={categoryToID()} class="category">
+    <div class="category-header">
+      <h2>{category}</h2>
+      {#if catPrice !== 0}
+        <p class="text-gray price">Prix total : {catPrice} €</p>
+      {/if}
+    </div>
+    {#if canModif}
+      <ul
+        class="item-list"
+        use:dndzone={{
+          items,
+          flipDurationMs,
+          type: category,
+          dropTargetClasses,
+          dropFromOthersDisabled: true,
+          transformDraggedElement: transformDraggedElement,
+        }}
+        on:consider={handleDndConsider}
+        on:finalize={handleDndFinalize}
+      >
+        {#each items as item (item.id)}
+          <div animate:flip={{ duration: flipDurationMs }}>
+            <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
+          </div>
         {/each}
       </ul>
-    </div>
+    {:else}
+      <ul>
+        {#each items as item (item.id)}
+          <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
+        {/each}
+      </ul>
+    {/if}
   </section>
 {/if}
 
 <style>
-  ul {
-    list-style: none;
+  .category {
+    width: 80vw;
+    margin: 2rem auto 3rem auto;
+  }
+
+  .category-header {
+    text-align: center;
+    margin: 0 auto;
   }
 
   h2 {
     text-transform: capitalize;
-    flex-grow: 1;
   }
 
-  .flex {
-    align-items: flex-end;
-    flex-wrap: wrap;
-  }
-
-  span {
+  .price {
     font-weight: 500;
     font-size: large;
+    margin: 0;
   }
 
-  .list {
-    width: 80vw;
-    margin: 1rem;
+  ul {
+    list-style: none;
+  }
+
+  .item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   @media (max-width: 768px) {
-    .list {
+    .category {
       width: 90vw;
     }
   }
 
   @media (prefers-color-scheme: dark) {
-    span {
+    .price {
       color: var(--gray-light);
     }
   }

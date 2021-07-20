@@ -147,6 +147,9 @@
     list-style: none;
     width: 60%;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   #selectType {

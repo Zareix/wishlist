@@ -52,38 +52,34 @@
 <TopBar />
 <main id="settings">
   <BackButton />
-  <Card id="permissions" class="m-auto">
-    <Content>
-      <div class="padding">
-        <h2>Qui peut voir votre Wishlist ?</h2>
-        <div class="permissions-inputs">
-          {#each canWatch as email, i}
-            <TextField label={"Email " + (i + 1)} bind:value={email} />
-            <br />
-          {/each}
-        </div>
-        <Button on:click={addPermission}
-          ><Icon class="material-icons">add</Icon><BtnLabel
-            >Ajouter un email</BtnLabel
-          ></Button
-        >
+  <section id="permissions" class="card">
+    <h2>Qui peut voir votre Wishlist ?</h2>
+    <div class="permissions-inputs">
+      {#each canWatch as email, i}
+        <TextField label={"Email " + (i + 1)} bind:value={email} />
         <br />
-        <div class="spacer" />
-        <div class="flex center">
-          <Button variant="raised" on:click={updatePermissions}
-            >Mettre à jour</Button
-          >
-        </div>
-      </div>
+      {/each}
+    </div>
+    <Button on:click={addPermission}
+      ><Icon class="material-icons">add</Icon><BtnLabel
+        >Ajouter un email</BtnLabel
+      ></Button
+    >
+    <br />
+    <div class="spacer" />
+    <div class="flex center">
+      <Button variant="raised" on:click={updatePermissions}
+        >Mettre à jour</Button
+      >
+    </div>
 
-      <Snackbar bind:this={snackbar}>
-        <Label>{snackbarText}</Label>
-        <Actions>
-          <IconButton class="material-icons" title="Fermer">close</IconButton>
-        </Actions>
-      </Snackbar>
-    </Content>
-  </Card>
+    <Snackbar bind:this={snackbar}>
+      <Label>{snackbarText}</Label>
+      <Actions>
+        <IconButton class="material-icons" title="Fermer">close</IconButton>
+      </Actions>
+    </Snackbar>
+  </section>
 </main>
 <Footer />
 
@@ -92,23 +88,12 @@
     margin-bottom: 0.75em;
   }
 
-  :global(#permissions) {
-    margin-top: 2em;
-    width: 50vw;
-  }
-
-  .padding {
-    padding: 1em;
+  .card {
+    padding: 1.5rem;
   }
 
   .permissions-inputs {
     margin-left: 0.5em;
-    margin-bottom: 0.125em;
-  }
-
-  @media (max-width: 768px) {
-    :global(#permissions) {
-      width: 90vw;
-    }
+    margin-bottom: 0.25em;
   }
 </style>
