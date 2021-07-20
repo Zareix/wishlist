@@ -138,7 +138,6 @@
 
 <style>
   .item {
-    margin: 0 1.5em;
     padding: 0.5rem;
     background-color: var(--background-secondary);
     border-radius: 16px;

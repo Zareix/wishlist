@@ -162,6 +162,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding: 0 1.5rem;
   }
 
   @media (max-width: 768px) {
