@@ -6,6 +6,8 @@
   import { flip } from "svelte/animate"
   import { dndzone } from "svelte-dnd-action"
 
+  import IconButton from "@smui/icon-button"
+
   import Item from "./Item.svelte"
 
   let currentUser
@@ -43,13 +45,13 @@
       .collection(category)
       .orderBy(orderByPosition ? "position" : "createdAt")
       .get()
-      .then((data) =>
+      .then((data) => {
         data.forEach((i) => {
           let price = i.data().price
           if (price) catPrice += price
           addItems({ id: i.id, categorie: category, ...i.data() })
         })
-      )
+      })
   }
 
   const addItems = (i) => (items = [...items, i])
@@ -59,14 +61,9 @@
     snackbarOpen('"' + item.title + '" placé dans les archives')
   }
 
-  const categoryToID = () => {
-    let c = category.replace(" ", "")
-    return "category" + c.charAt(0).toUpperCase() + c.slice(1)
-  }
-
   const updatePosition = () => {
     const batch = db.batch()
-    items.forEach((item, index) =>
+    items.forEach((item, index) => {
       batch.update(
         db
           .collection(choosenUser)
@@ -75,7 +72,7 @@
           .doc(item.id),
         { position: index }
       )
-    )
+    })
     batch.commit()
   }
 
@@ -88,24 +85,53 @@
   }
   const handleDndFinalize = (e) => {
     items = e.detail.items
-
     upPosTimeoutId = setTimeout(updatePosition, 3000)
   }
 
   const transformDraggedElement = (e) => (e.className = "dnd-item-active")
+
+  const categoryToID = () => {
+    let c = category.replace(" ", "")
+    return "category" + c.charAt(0).toUpperCase() + c.slice(1)
+  }
+
+  const collapsible = "collapsibleContainer-" + categoryToID()
+  let collapsed = true
+
+  const collapse = () => {
+    const element = document.getElementById(collapsible)
+
+    if (!collapsed) element.style.maxHeight = null
+    else element.style.maxHeight = element.scrollHeight + "px"
+
+    collapsed = !collapsed
+  }
 </script>
 
 {#if items.length !== 0}
-  <section id={categoryToID()} class="category">
+  <section
+    id={categoryToID()}
+    class={"category" + (collapsed ? " collapsed" : "")}
+  >
     <div class="category-header">
-      <h2>{category}</h2>
-      {#if catPrice !== 0}
-        <p class="text-gray price">Prix total : {catPrice} €</p>
-      {/if}
+      <IconButton
+        on:click={collapse}
+        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
+        >expand_more</IconButton
+      >
+      <div class="category-header-content">
+        <h2>{category}</h2>
+        {#if catPrice !== 0}
+          <p class="text-gray price">Prix total : {catPrice} €</p>
+        {/if}
+      </div>
+      <div class="dummy" />
     </div>
+
     {#if canModif}
       <ul
-        class="item-list"
+        class="item-list collapsible"
+        id={collapsible}
         use:dndzone={{
           items,
           flipDurationMs,
@@ -137,11 +163,24 @@
   .category {
     width: 80vw;
     margin: 2rem auto 3rem auto;
+    transition: all 1s ease;
+    border-bottom: solid 1px;
+    border-color: rgba(163, 163, 163, 0);
   }
 
   .category-header {
-    text-align: center;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .category-header-content {
+    text-align: center;
+  }
+
+  .category.collapsed {
+    border-color: rgba(163, 163, 163, 1);
   }
 
   h2 {
@@ -163,6 +202,26 @@
     flex-direction: column;
     gap: 1rem;
     padding: 0 1.5rem;
+  }
+
+  .collapsible {
+    transition: max-height 1s ease;
+    overflow: hidden;
+    max-height: 0;
+  }
+
+  .dummy {
+    width: 24px;
+    height: 24px;
+    margin: 12px;
+  }
+
+  :global(.chevron) {
+    transition: transform 500ms ease;
+  }
+
+  :global(.chevron-active) {
+    transform: rotate(180deg);
   }
 
   @media (max-width: 768px) {
