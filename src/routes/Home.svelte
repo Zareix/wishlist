@@ -50,11 +50,10 @@
       .collection("permissions")
       .where("canWatch", "array-contains", currentUser.email)
       .get()
-    if (res2.exists)
-      res2.docs.forEach((u) => {
-        allUsers = [...allUsers, u.id]
-        authorizedCat[u.id] = u.data().authorizedCat
-      })
+    res2.docs.forEach((u) => {
+      allUsers = [...allUsers, u.id]
+      authorizedCat[u.id] = u.data().authorizedCat
+    })
 
     loading = false
   })
