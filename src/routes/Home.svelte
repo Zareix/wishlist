@@ -27,6 +27,7 @@
   let categories = []
   let choosenUser
   let allUsers = []
+  let authorizedCat = {}
   let snackbar
   let snackbarText
   let loading = true
@@ -35,17 +36,27 @@
     allUsers = [currentUser.email]
     choosenUser = currentUser.email
 
-    Promise.all([
-      db.collection("categories").get(),
-      db
-        .collection("permissions")
-        .where("canWatch", "array-contains", currentUser.email)
-        .get(),
-    ]).then((values) => {
-      values[0].forEach((cat) => (categories = [...categories, cat.id]))
-      values[1].docs.forEach((u) => (allUsers = [...allUsers, u.id]))
-      loading = false
-    })
+    const res = await db.collection(currentUser.email).doc("categories").get()
+    if (res.exists) categories = res.data().categories
+    else
+      await db
+        .collection("categories")
+        .get()
+        .then((data) =>
+          data.forEach((cat) => (categories = [...categories, cat.id]))
+        )
+
+    const res2 = await db
+      .collection("permissions")
+      .where("canWatch", "array-contains", currentUser.email)
+      .get()
+    if (res2.exists)
+      res2.docs.forEach((u) => {
+        allUsers = [...allUsers, u.id]
+        authorizedCat[u.id] = u.data().authorizedCat
+      })
+
+    loading = false
   })
 
   const snackbarOpen = (message) => {
@@ -90,14 +101,16 @@
     <hr />
     <div id="wishlist">
       {#each categories as c}
-        <List
-          category={c}
-          choosenUser={choosenUser !== undefined
-            ? choosenUser
-            : currentUser.email}
-          {snackbarOpen}
-          orderByPosition
-        />
+        {#if choosenUser === currentUser.email || authorizedCat[choosenUser].includes(c)}
+          <List
+            category={c}
+            choosenUser={choosenUser !== undefined
+              ? choosenUser
+              : currentUser.email}
+            {snackbarOpen}
+            orderByPosition
+          />
+        {/if}
       {/each}
       <NoContent
         subtitle={currentUser.email === choosenUser

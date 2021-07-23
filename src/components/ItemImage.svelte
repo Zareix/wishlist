@@ -1,5 +1,5 @@
 <script>
-  import Dialog, { Content, Actions, Title } from "@smui/dialog"
+  import Dialog, { Content, Actions } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
 
   export let image
@@ -32,8 +32,8 @@
 </div>
 
 <style>
-  h2{
-    margin : 0.75em 1em;
+  h2 {
+    margin: 0.75em 1em;
   }
 
   img {

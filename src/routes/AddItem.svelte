@@ -8,12 +8,13 @@
   import TopBar from "../components/TopBar.svelte"
   import BackButton from "../components/BackButton.svelte"
   import Footer from "../components/Footer.svelte"
+  import NewCatPopup from "../components/NewCatPopup.svelte"
 
   import itemNotFoundSvg from "../assets/item-not-found.svg"
 
   import Select, { Option } from "@smui/select"
   import Button, { Label, Icon } from "@smui/button"
-  import Card, { Content } from "@smui/card"
+  import { Content } from "@smui/card"
   import Textfield from "@smui/textfield"
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
@@ -49,6 +50,7 @@
     title: false,
     categorie: false,
   }
+  let newCatPopupOpen
 
   onMount(async () => {
     if (urlParams.has("title")) title = urlParams.get("title")
@@ -64,12 +66,8 @@
       } else description = body
     }
 
-    await db
-      .collection("categories")
-      .get()
-      .then((cat) => {
-        cat.docs.forEach((d) => (categories = [...categories, d.id]))
-      })
+    const res = await db.collection(currentUser.email).doc("categories").get()
+    if (res.exists) categories = res.data().categories
 
     if (modifId) {
       await db
@@ -199,6 +197,14 @@
   const handleDndFinalizeImages = (e) => (images = e.detail.items)
 
   const transformDraggedElement = (e) => (e.className = "dnd-item-active")
+
+  const toggleNewCat = async () => {
+    newCatPopupOpen = !newCatPopupOpen
+    if (!newCatPopupOpen) {
+      const res = await db.collection(currentUser.email).doc("categories").get()
+      if (res.exists) categories = res.data().categories
+    }
+  }
 </script>
 
 <TopBar />
@@ -217,17 +223,29 @@
         <Content>
           <h1>Ajouter un objet</h1>
           <form on:submit={addItem}>
-            <Select
-              bind:value={categorie}
-              label="Catégorie"
-              bind:invalid={inputErrors.categorie}
-            >
-              {#each categories as cat}
-                <Option value={cat}>{cat.toUpperCase()}</Option>
-              {/each}
-            </Select>
+            <div class="flex">
+              <Select
+                bind:value={categorie}
+                label="Catégorie"
+                bind:invalid={inputErrors.categorie}
+              >
+                {#each categories as cat}
+                  <Option value={cat}>{cat.toUpperCase()}</Option>
+                {/each}
+              </Select>
 
-            <br />
+              <IconButton
+                class="material-icons"
+                type="button"
+                on:click={toggleNewCat}>add</IconButton
+              >
+              <NewCatPopup
+                toggleDialog={toggleNewCat}
+                allCategories={categories}
+                open={newCatPopupOpen}
+              />
+            </div>
+
             <div class="spacer" />
 
             <Textfield

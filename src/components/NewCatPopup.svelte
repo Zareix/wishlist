@@ -1,0 +1,85 @@
+<script>
+  import Dialog, { Content, Actions } from "@smui/dialog"
+  import Button, { Label } from "@smui/button"
+  import Textfield from "@smui/textfield"
+
+  import { db } from "../firebase"
+  import { user } from "../stores"
+
+  let currentUser
+  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+
+  export let toggleDialog
+  export let allCategories
+  export let open
+
+  let category = ""
+  let error = ""
+
+  const closeDialog = () => {
+    category = ""
+    error = ""
+    toggleDialog()
+  }
+
+  const checkErrors = () => {
+    if (category === "") {
+      error = "Merci d'entrer l'intitulé de la catégorie"
+      return true
+    }
+    if (allCategories.some((c) => category.toLowerCase() === c.toLowerCase())) {
+      error = "Cette catégorie existe déjà !"
+      return true
+    }
+    return false
+  }
+
+  const addNewCat = (e) => {
+    e.preventDefault()
+
+    if (checkErrors()) return
+
+    db.collection(currentUser.email)
+      .doc("categories")
+      .set({
+        categories: [...allCategories, category],
+      })
+      .then(() => closeDialog())
+  }
+</script>
+
+<Dialog bind:open>
+  <h2>Ajouté une catégorie</h2>
+  <Content>
+    <form on:submit={addNewCat}>
+      <Textfield
+        label="Intitulé"
+        bind:value={category}
+        on:focus={() => (error = "")}
+        on:blur{checkErrors}
+      />
+      {#if error !== ""}
+        <p class="error">{error}</p>
+      {/if}
+      <Button type="submit">
+        <Label>Ajouter</Label>
+      </Button>
+    </form>
+  </Content>
+  <Actions>
+    <Button on:click={closeDialog}>
+      <Label>Fermer</Label>
+    </Button>
+  </Actions>
+</Dialog>
+
+<style>
+  h2 {
+    margin: 0.75em 1em;
+  }
+
+  .error {
+    margin-top: 0.5rem;
+    color: var(--red);
+  }
+</style>
