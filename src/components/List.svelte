@@ -113,19 +113,19 @@
     id={categoryToID()}
     class={"category" + (collapsed ? " collapsed" : "")}
   >
-    <div class="category-header">
-      <IconButton
-        on:click={collapse}
-        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
-        >expand_more</IconButton
-      >
+    <div class="category-header" on:click={collapse}>
+      <div class="dummy" />
       <div class="category-header-content">
         <h2>{category}</h2>
         {#if catPrice !== 0}
           <p class="text-gray price">Prix total : {catPrice} €</p>
         {/if}
       </div>
-      <div class="dummy" />
+      <IconButton
+        on:click={collapse}
+        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
+        >expand_more</IconButton
+      >
     </div>
 
     {#if canModif}
@@ -173,6 +173,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    cursor: pointer;
   }
 
   .category-header-content {
