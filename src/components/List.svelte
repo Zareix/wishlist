@@ -122,7 +122,6 @@
         {/if}
       </div>
       <IconButton
-        on:click={collapse}
         class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
         >expand_more</IconButton
       >

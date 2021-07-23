@@ -121,7 +121,7 @@
         </span>
       </FormField>
     </section>
-    <ul>
+    <ul class="item-list">
       {#each filteredItems as item, index}
         <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
       {/each}
@@ -145,6 +145,9 @@
 
   ul {
     list-style: none;
+  }
+
+  .item-list {
     width: 60%;
     margin: auto;
     display: flex;
@@ -171,8 +174,8 @@
   }
 
   @media (max-width: 768px) {
-    ul {
-      width: 100%;
+    .item-list {
+      width: 70%;
     }
 
     #archive > ul > :global(#noContent:only-child) {
