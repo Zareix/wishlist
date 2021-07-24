@@ -159,38 +159,51 @@
     </div>
 
     {#if canModif}
-      <ul
-        class="item-list collapsible"
-        id={collapsible}
-        use:dndzone={{
-          items,
-          flipDurationMs,
-          type: category,
-          dropTargetClasses,
-          dropFromOthersDisabled: true,
-          transformDraggedElement: transformDraggedElement,
-          dragDisabled,
-        }}
-        on:consider={handleDndConsider}
-        on:finalize={handleDndFinalize}
-      >
-        {#each items as item (item.id)}
-          <div animate:flip={{ duration: flipDurationMs }}>
-            <div class="drag-icon-item-wrapper">
-              <Icon
-                class="material-icons drag-icon-item"
-                tabindex={dragDisabled ? 0 : -1}
-                aria-label="drag-handle"
-                style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
-                on:mousedown={startDrag}
-                on:touchstart={startDrag}
-                on:keydown={handleKeyDown}>drag_indicator</Icon
-              >
+      {#if items.length > 1}
+        <ul
+          class="item-list collapsible"
+          id={collapsible}
+          use:dndzone={{
+            items,
+            flipDurationMs,
+            type: category,
+            dropTargetClasses,
+            dropFromOthersDisabled: true,
+            transformDraggedElement: transformDraggedElement,
+            dragDisabled,
+          }}
+          on:consider={handleDndConsider}
+          on:finalize={handleDndFinalize}
+        >
+          {#each items as item (item.id)}
+            <div animate:flip={{ duration: flipDurationMs }}>
+              <div class="drag-icon-item-wrapper">
+                <Icon
+                  class="material-icons drag-icon-item"
+                  tabindex={dragDisabled ? 0 : -1}
+                  aria-label="drag-handle"
+                  style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+                  on:mousedown={startDrag}
+                  on:touchstart={startDrag}
+                  on:keydown={handleKeyDown}>drag_indicator</Icon
+                >
+              </div>
+              <Item
+                index={items.indexOf(item)}
+                {item}
+                {removeItem}
+                {canModif}
+              />
             </div>
+          {/each}
+        </ul>
+      {:else}
+        <ul class="item-list collapsible" id={collapsible}>
+          {#each items as item (item.id)}
             <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
-          </div>
-        {/each}
-      </ul>
+          {/each}
+        </ul>
+      {/if}
     {:else}
       <ul>
         {#each items as item (item.id)}

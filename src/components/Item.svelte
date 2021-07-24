@@ -68,31 +68,33 @@
       <p class="price text-gray">{item.price.toLocaleString()} €</p>
     {/if}
   </div>
-  <section class="item-content">
-    {#if item.references.length > 0}
-      <Set chips={item.references} let:chip class="chips-set">
-        {#if chip.startsWith("http")}
-          <a
-            href={chip}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="chip-link"
-          >
+  {#if item.references.length > 0 && item.images.length > 0}
+    <section class="item-content">
+      {#if item.references.length > 0}
+        <Set chips={item.references} let:chip class="chips-set">
+          {#if chip.startsWith("http")}
+            <a
+              href={chip}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="chip-link"
+            >
+              <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
+            </a>
+          {:else}
             <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
-          </a>
-        {:else}
-          <Chip {chip}><Text>{formatRef(chip)}</Text></Chip>
-        {/if}
-      </Set>
-    {/if}
-    {#if item.images.length > 0}
-      <div class="image-list">
-        {#each item.images as image, index}
-          <ItemImage title={item.title} {image} {index} />
-        {/each}
-      </div>
-    {/if}
-  </section>
+          {/if}
+        </Set>
+      {/if}
+      {#if item.images.length > 0}
+        <div class="image-list">
+          {#each item.images as image, index}
+            <ItemImage title={item.title} {image} {index} />
+          {/each}
+        </div>
+      {/if}
+    </section>
+  {/if}
   {#if restoreItem}
     <ActionIcons>
       <Wrapper>
@@ -152,7 +154,6 @@
     margin: 1rem;
     margin-bottom: 0;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray-light);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -160,6 +161,7 @@
 
   .item-content {
     margin: 0 1rem;
+    border-top: 1px solid var(--gray-light);
   }
 
   .description {
