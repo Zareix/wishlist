@@ -4,9 +4,10 @@
   import { user } from "../stores"
 
   import { flip } from "svelte/animate"
-  import { dndzone } from "svelte-dnd-action"
+  import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action"
 
   import IconButton from "@smui/icon-button"
+  import { Icon } from "@smui/button"
 
   import Item from "./Item.svelte"
 
@@ -15,6 +16,7 @@
 
   const flipDurationMs = 300
   const dropTargetClasses = ["dnd-active"]
+  let dragDisabled = true
 
   export let category
   export let choosenUser
@@ -77,15 +79,40 @@
   }
 
   const handleDndConsider = (e) => {
-    items = e.detail.items
+    const {
+      items: newItems,
+      info: { source, trigger },
+    } = e.detail
+    items = newItems
     if (upPosTimeoutId) {
       clearTimeout(upPosTimeoutId)
       upPosTimeoutId = undefined
     }
+    if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
+      dragDisabled = true
+    }
   }
+
   const handleDndFinalize = (e) => {
-    items = e.detail.items
+    const {
+      items: newItems,
+      info: { source },
+    } = e.detail
+    items = newItems
     upPosTimeoutId = setTimeout(updatePosition, 3000)
+    if (source === SOURCES.POINTER) {
+      dragDisabled = true
+    }
+  }
+
+  const startDrag = (e) => {
+    e.preventDefault()
+    dragDisabled = false
+  }
+
+  const handleKeyDown = (e) => {
+    if ((e.key === "Enter" || e.key === " ") && dragDisabled)
+      dragDisabled = false
   }
 
   const transformDraggedElement = (e) => (e.className = "dnd-item-active")
@@ -114,17 +141,21 @@
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div class="category-header" on:click={collapse}>
-      <div class="dummy" />
+      {#if canModif}
+        <div class="dummy" />
+      {/if}
       <div class="category-header-content">
         <h2>{category}</h2>
         {#if catPrice !== 0}
           <p class="text-gray price">Prix total : {catPrice} €</p>
         {/if}
       </div>
-      <IconButton
-        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
-        >expand_more</IconButton
-      >
+      {#if canModif}
+        <IconButton
+          class={"material-icons chevron" +
+            (collapsed ? " chevron-active" : "")}>expand_more</IconButton
+        >
+      {/if}
     </div>
 
     {#if canModif}
@@ -138,12 +169,24 @@
           dropTargetClasses,
           dropFromOthersDisabled: true,
           transformDraggedElement: transformDraggedElement,
+          dragDisabled,
         }}
         on:consider={handleDndConsider}
         on:finalize={handleDndFinalize}
       >
         {#each items as item (item.id)}
           <div animate:flip={{ duration: flipDurationMs }}>
+            <div class="drag-icon-item-wrapper">
+              <Icon
+                class="material-icons drag-icon-item"
+                tabindex={dragDisabled ? 0 : -1}
+                aria-label="drag-handle"
+                style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+                on:mousedown={startDrag}
+                on:touchstart={startDrag}
+                on:keydown={handleKeyDown}>drag_indicator</Icon
+              >
+            </div>
             <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
           </div>
         {/each}
@@ -159,10 +202,22 @@
 {/if}
 
 <style>
+  .drag-icon-item-wrapper {
+    position: relative;
+    margin-bottom: -24px;
+    top: 0.5rem;
+    left: calc(50% - 12px);
+    width: fit-content;
+  }
+
+  :global(.drag-icon-item) {
+    transform: rotate(90deg);
+  }
+
   .category {
     width: 80vw;
     margin: 2rem auto 3rem auto;
-    transition: all 1s ease;
+    transition: border 1s ease;
     border-bottom: solid 1px;
     border-color: rgba(163, 163, 163, 0);
   }
@@ -179,7 +234,7 @@
     text-align: center;
   }
 
-  .category.collapsed {
+  .category.collapsed:not(:nth-last-child(2)) {
     border-color: rgba(163, 163, 163, 1);
   }
 

@@ -9,18 +9,17 @@
   import BackButton from "../components/BackButton.svelte"
   import Footer from "../components/Footer.svelte"
   import NewCatPopup from "../components/NewCatPopup.svelte"
+  import LinkInputList from "../components/LinksInputList.svelte"
 
   import itemNotFoundSvg from "../assets/item-not-found.svg"
 
   import Select, { Option } from "@smui/select"
-  import Button, { Label, Icon } from "@smui/button"
+  import Button from "@smui/button"
   import { Content } from "@smui/card"
   import Textfield from "@smui/textfield"
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
-  import { flip } from "svelte/animate"
-  import { dndzone } from "svelte-dnd-action"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -30,9 +29,6 @@
 
   export let location
   const urlParams = new URLSearchParams(location.search)
-
-  const flipDurationMs = 300
-  const dropTargetClasses = ["dnd-active"]
 
   let error = false
   let title = ""
@@ -172,10 +168,6 @@
 
   const back = () => navigate("/")
 
-  const imageExists = (image_url) => {
-    return image_url.startsWith("http")
-  }
-
   const addNewRef = () =>
     (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: "" }])
   const addRef = (ref) =>
@@ -189,14 +181,6 @@
   const removeImg = (img) => (images = images.filter((i) => i !== img))
 
   const switchTitleDesc = () => ([title, description] = [description, title])
-
-  const handleDndConsiderRefs = (e) => (refs = e.detail.items)
-  const handleDndFinalizeRefs = (e) => (refs = e.detail.items)
-
-  const handleDndConsiderImages = (e) => (images = e.detail.items)
-  const handleDndFinalizeImages = (e) => (images = e.detail.items)
-
-  const transformDraggedElement = (e) => (e.className = "dnd-item-active")
 
   const toggleNewCat = async () => {
     newCatPopupOpen = !newCatPopupOpen
@@ -277,90 +261,24 @@
             <br />
             <div class="spacer" />
 
-            {#if refs.length > 0}
-              <div class="separator" />
-              <h4>Réferences :</h4>
-            {/if}
-            <section
-              class="group"
-              use:dndzone={{
-                items: refs,
-                flipDurationMs,
-                type: "references",
-                dropTargetClasses,
-                dropFromOthersDisabled: true,
-                transformDraggedElement,
-              }}
-              on:consider={handleDndConsiderRefs}
-              on:finalize={handleDndFinalizeRefs}
-            >
-              {#each refs as ref (ref.id)}
-                <div class="flex" animate:flip={{ duration: flipDurationMs }}>
-                  <Icon class="material-icons drag-icon">drag_indicator</Icon>
-                  <Textfield
-                    label={"Réference " + (refs.indexOf(ref) + 1)}
-                    bind:value={ref.value}
-                  >
-                    <IconButton
-                      class="material-icons delete-ref-btn"
-                      slot="trailingIcon"
-                      on:click={() => removeRef(ref)}>delete</IconButton
-                    >
-                  </Textfield>
-                </div>
-              {/each}
-            </section>
-            <Button type="button" on:click={addNewRef}>
-              <Icon class="material-icons">add</Icon>
-              <Label>Ajouter une ref</Label>
-            </Button>
+            <LinkInputList
+              links={refs}
+              addNewLink={addNewRef}
+              removeLink={removeRef}
+              placeholder="Référence"
+              title="Références"
+            />
             <br />
             <div class="spacer" />
 
-            {#if images.length > 0}
-              <div class="separator" />
-              <h4>Images :</h4>
-            {/if}
-            <section
-              class="group"
-              use:dndzone={{
-                items: images,
-                flipDurationMs,
-                type: "images",
-                dropTargetClasses,
-                dropFromOthersDisabled: true,
-                transformDraggedElement,
-              }}
-              on:consider={handleDndConsiderImages}
-              on:finalize={handleDndFinalizeImages}
-            >
-              {#each images as img (img.id)}
-                <div class="flex" animate:flip={{ duration: flipDurationMs }}>
-                  <Icon class="material-icons drag-icon">drag_indicator</Icon>
-                  <Textfield
-                    label={"Image " + (images.indexOf(img) + 1)}
-                    bind:value={img.value}
-                  >
-                    <IconButton
-                      class="material-icons delete-image-btn"
-                      slot="trailingIcon"
-                      on:click={() => removeImg(img)}>delete</IconButton
-                    >
-                  </Textfield>
-                  {#if imageExists(img.value)}
-                    <img
-                      src={img.value}
-                      alt={"thumbnail " + images.indexOf(img)}
-                      class="thumbnail"
-                    />
-                  {/if}
-                </div>
-              {/each}
-            </section>
-            <Button type="button" on:click={addNewImg}>
-              <Icon class="material-icons">add</Icon>
-              <Label>Ajouter une image</Label>
-            </Button>
+            <LinkInputList
+              links={images}
+              addNewLink={addNewImg}
+              removeLink={removeImg}
+              placeholder="Image"
+              title="Images"
+              showThumbnail
+            />
             <br />
             <div class="spacer" />
 
@@ -402,31 +320,8 @@
     background-color: #b00020;
   }
 
-  .group {
-    margin-left: 0.5em;
-    margin-bottom: 0.125em;
-  }
-
-  :global(.dnd-active) {
-    outline: none !important;
-  }
-
-  :global(.dnd-item-active) {
-    outline: none !important;
-  }
-
   .flex {
     align-items: center;
-  }
-
-  .thumbnail {
-    max-width: 25%;
-    max-height: 5rem;
-    margin-left: 0.5rem;
-  }
-
-  :global(.drag-icon) {
-    cursor: grab;
   }
 
   .error {
@@ -448,14 +343,6 @@
     :global(.smui-text-field--standard),
     :global(.mdc-select) {
       width: 85%;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(.drag-icon),
-    :global(.delete-image-btn),
-    :global(.delete-ref-btn) {
-      color: #f9fafb;
     }
   }
 </style>

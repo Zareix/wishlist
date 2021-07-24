@@ -141,6 +141,7 @@
     padding: 0.5rem;
     background-color: var(--background-secondary);
     border-radius: 16px;
+    cursor: default;
   }
 
   h3 {
@@ -148,7 +149,7 @@
   }
 
   .item-header {
-    margin: 0.5rem 1rem;
+    margin: 1rem;
     margin-bottom: 0;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--gray-light);
@@ -173,6 +174,7 @@
 
   .price {
     white-space: nowrap;
+    margin: 0;
   }
 
   .check {
