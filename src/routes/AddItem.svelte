@@ -223,11 +223,6 @@
                 type="button"
                 on:click={toggleNewCat}>add</IconButton
               >
-              <NewCatPopup
-                toggleDialog={toggleNewCat}
-                allCategories={categories}
-                open={newCatPopupOpen}
-              />
             </div>
 
             <div class="spacer" />
@@ -302,6 +297,11 @@
       <IconButton class="material-icons" title="Dismiss">close</IconButton>
     </Actions>
   </Snackbar>
+  <NewCatPopup
+    toggleDialog={toggleNewCat}
+    allCategories={categories}
+    open={newCatPopupOpen}
+  />
 </main>
 <Footer />
 

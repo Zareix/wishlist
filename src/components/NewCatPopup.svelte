@@ -23,11 +23,15 @@
   }
 
   const checkErrors = () => {
-    if (category === "") {
+    if (category.trim() === "") {
       error = "Merci d'entrer l'intitulé de la catégorie"
       return true
     }
-    if (allCategories.some((c) => category.toLowerCase() === c.toLowerCase())) {
+    if (
+      allCategories.some(
+        (c) => category.trim().toLowerCase() === c.trim().toLowerCase()
+      )
+    ) {
       error = "Cette catégorie existe déjà !"
       return true
     }
@@ -42,7 +46,7 @@
     db.collection(currentUser.email)
       .doc("categories")
       .set({
-        categories: [...allCategories, category],
+        categories: [...allCategories, category.trim()],
       })
       .then(() => closeDialog())
   }
@@ -67,7 +71,7 @@
     </form>
   </Content>
   <Actions>
-    <Button on:click={closeDialog}>
+    <Button on:click={closeDialog} type="button">
       <Label>Fermer</Label>
     </Button>
   </Actions>
