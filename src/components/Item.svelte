@@ -68,7 +68,7 @@
       <p class="price text-gray">{item.price.toLocaleString()} €</p>
     {/if}
   </div>
-  {#if item.references.length > 0 && item.images.length > 0}
+  {#if item.references.length > 0 || item.images.length > 0}
     <section class="item-content">
       {#if item.references.length > 0}
         <Set chips={item.references} let:chip class="chips-set">
