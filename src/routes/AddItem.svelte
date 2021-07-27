@@ -20,6 +20,7 @@
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
+  import Item from "../components/Item.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -35,7 +36,7 @@
   let loading = false
   let description = ""
   let price = 0
-  let categorie = ""
+  let category = ""
   let categories = []
   let refs = []
   let images = []
@@ -74,7 +75,7 @@
         .get()
         .then((i) => {
           let data = i.data()
-          categorie = oldCategorie
+          category = oldCategorie
           title = data.title
           data.references.forEach((r) => addRef(r))
           data.images.forEach((i) => addImg(i))
@@ -93,7 +94,7 @@
     snackbar.close()
     snackbarText = ""
 
-    if (categorie === undefined || categorie.trim() === "") {
+    if (category === undefined || category.trim() === "") {
       inputErrors.categorie = true
       snackbarText = "Merci de choisir une catégorie"
     }
@@ -110,7 +111,7 @@
     loading = true
 
     if (modifId) {
-      if (oldCategorie !== categorie) {
+      if (oldCategorie !== category) {
         db.collection(currentUser.email)
           .doc("items")
           .collection(oldCategorie)
@@ -120,7 +121,7 @@
             return db
               .collection(currentUser.email)
               .doc("items")
-              .collection(categorie)
+              .collection(category)
               .add({
                 title,
                 description,
@@ -138,7 +139,7 @@
       } else {
         db.collection(currentUser.email)
           .doc("items")
-          .collection(categorie)
+          .collection(category)
           .doc(modifId)
           .update({
             title,
@@ -152,7 +153,7 @@
     } else {
       db.collection(currentUser.email)
         .doc("items")
-        .collection(categorie)
+        .collection(category)
         .add({
           position: 0,
           title,
@@ -166,7 +167,13 @@
     }
   }
 
-  const back = () => navigate("/")
+  const back = () =>
+    navigate(
+      "/#" +
+        "category" +
+        category.charAt(0).toUpperCase() +
+        category.slice(1).replace(" ", "")
+    )
 
   const addNewRef = () =>
     (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: "" }])
@@ -209,7 +216,7 @@
           <form on:submit={addItem}>
             <div class="flex">
               <Select
-                bind:value={categorie}
+                bind:value={category}
                 label="Catégorie"
                 bind:invalid={inputErrors.categorie}
               >

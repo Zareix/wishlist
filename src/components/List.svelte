@@ -27,6 +27,11 @@
   let items = []
   let catPrice = 0
   let upPosTimeoutId
+  const collapsible =
+    "collapsibleContainer" +
+    category.charAt(0).toUpperCase() +
+    category.slice(1).replace(" ", "")
+  let collapsed = true
 
   onMount(() => {
     oldUser = choosenUser
@@ -117,14 +122,6 @@
 
   const transformDraggedElement = (e) => (e.className = "dnd-item-active")
 
-  const categoryToID = () => {
-    let c = category.replace(" ", "")
-    return "category" + c.charAt(0).toUpperCase() + c.slice(1)
-  }
-
-  const collapsible = "collapsibleContainer-" + categoryToID()
-  let collapsed = true
-
   const collapse = () => {
     const element = document.getElementById(collapsible)
 
@@ -137,7 +134,9 @@
 
 {#if items.length !== 0}
   <section
-    id={categoryToID()}
+    id={"category" +
+      category.charAt(0).toUpperCase() +
+      category.slice(1).replace(" ", "")}
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div class="category-header" on:click={collapse}>
@@ -193,6 +192,7 @@
                 {item}
                 {removeItem}
                 {canModif}
+                {category}
               />
             </div>
           {/each}

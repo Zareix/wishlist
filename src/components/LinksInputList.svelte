@@ -50,7 +50,8 @@
       dragDisabled = false
   }
 
-  const transformDraggedElement = (e) => (e.className = "dnd-item-active")
+  const transformDraggedElement = (e) =>
+    (e.className = "dnd-item-active dnd-ref")
 
   const imageExists = (image_url) => image_url.startsWith("http")
 </script>
@@ -127,14 +128,6 @@
     max-width: 25%;
     max-height: 5rem;
     margin-left: 0.5rem;
-  }
-
-  :global(.dnd-active) {
-    outline: none !important;
-  }
-
-  :global(.dnd-item-active) {
-    outline: none !important;
   }
 
   @media (prefers-color-scheme: dark) {

@@ -134,7 +134,7 @@
 
   .fab {
     position: fixed;
-    z-index: 10000;
+    z-index: 20;
     bottom: 15px;
     right: 15px;
   }

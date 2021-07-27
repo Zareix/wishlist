@@ -16,7 +16,6 @@
 <style>
   footer {
     height: 175px;
-    z-index: 100;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-end;

@@ -16,6 +16,7 @@
   export let restoreItem = undefined
   export let permanentDeleteItem = undefined
   export let index = 0
+  export let category = ""
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -48,7 +49,7 @@
   }
 </script>
 
-<li id={"item" + index} class="item">
+<li id={category.replace(" ", "") + "Item" + index} class="item">
   <div class={"item-header"}>
     {#if restoreItem && item.validated}
       <div class="material-icons green-icon-button check">check</div>
