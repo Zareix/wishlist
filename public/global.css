@@ -259,7 +259,7 @@ a:hover {
 
 hr {
   border: none;
-  border-bottom: solid var(--gray-light) 1px;
+  border-bottom: solid rgba(163, 163, 163, 0.6) 1px;
 }
 
 @media (max-width: 768px) {

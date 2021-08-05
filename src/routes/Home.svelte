@@ -123,13 +123,6 @@
     height: 80vh;
   }
 
-  .fab {
-    position: fixed;
-    z-index: 20;
-    bottom: 15px;
-    right: 15px;
-  }
-
   hr {
     width: 40vw;
     margin-top: 1rem;

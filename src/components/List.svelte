@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onMount, onDestroy } from "svelte"
   import { db } from "../firebase"
   import { user } from "../stores"
 
@@ -248,7 +248,7 @@
   }
 
   .category.collapsed:not(:nth-last-child(2)) {
-    border-color: rgba(163, 163, 163, 1);
+    border-color: rgba(163, 163, 163, 0.6);
   }
 
   h2 {
