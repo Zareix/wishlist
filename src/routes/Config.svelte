@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
 
-  import { auth, db } from "../firebase"
+  import { db } from "../firebase"
   import { user } from "../stores"
 
   import TextField from "@smui/textfield"
@@ -11,10 +11,9 @@
   import Switch from "@smui/switch"
   import FormField from "@smui/form-field"
 
-  import TopBar from "../components/TopBar.svelte"
-  import BackButton from "../components/BackButton.svelte"
+  import TopBar from "../components/Layout.svelte"
   import Footer from "../components/Footer.svelte"
-  import { dndzone } from "svelte-dnd-action"
+  import Layout from "../components/Layout.svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -77,53 +76,52 @@
   }
 </script>
 
-<TopBar />
-<main id="settings">
-  <BackButton />
-  <form id="permissions" class="card" on:submit={submit}>
-    <h2>Qui peut voir votre Wishlist ?</h2>
-    <div class="permissions-inputs">
-      {#each canWatch as email, i}
-        <TextField label={"Email " + (i + 1)} bind:value={email} />
-        <br />
-      {/each}
-    </div>
-    <Button on:click={addPermission} type="button"
-      ><Icon class="material-icons">add</Icon><BtnLabel
-        >Ajouter un email</BtnLabel
-      ></Button
-    >
+<Layout active="settings">
+  <main id="settings">
+    <form id="permissions" class="card" on:submit={submit}>
+      <h2>Qui peut voir votre Wishlist ?</h2>
+      <div class="permissions-inputs">
+        {#each canWatch as email, i}
+          <TextField label={"Email " + (i + 1)} bind:value={email} />
+          <br />
+        {/each}
+      </div>
+      <Button on:click={addPermission} type="button"
+        ><Icon class="material-icons">add</Icon><BtnLabel
+          >Ajouter un email</BtnLabel
+        ></Button
+      >
 
-    <br />
-    <hr />
+      <br />
+      <hr />
 
-    <h2>Quelles catégories sont visibles par les autres ?</h2>
-    <div class="categories">
-      {#each categories as c, i}
-        <FormField
-          align={i % 2 === 0 ? "end" : "start"}
-          class={i % 2 === 0 ? "justify-self-end" : ""}
-        >
-          <Switch bind:checked={categories[i].checked} />
-          <span slot="label" class="category">{c.name}</span>
-        </FormField>
-      {/each}
-    </div>
+      <h2>Quelles catégories sont visibles par les autres ?</h2>
+      <div class="categories">
+        {#each categories as c, i}
+          <FormField
+            align={i % 2 === 0 ? "end" : "start"}
+            class={i % 2 === 0 ? "justify-self-end" : ""}
+          >
+            <Switch bind:checked={categories[i].checked} />
+            <span slot="label" class="category">{c.name}</span>
+          </FormField>
+        {/each}
+      </div>
 
-    <br />
+      <br />
 
-    <div class="validate">
-      <Button variant="raised" type="submit">Tout mettre à jour</Button>
-    </div>
-  </form>
-</main>
-<Snackbar bind:this={snackbar}>
-  <Label>{snackbarText}</Label>
-  <Actions>
-    <IconButton class="material-icons" title="Fermer">close</IconButton>
-  </Actions>
-</Snackbar>
-<Footer />
+      <div class="validate">
+        <Button variant="raised" type="submit">Tout mettre à jour</Button>
+      </div>
+    </form>
+  </main>
+  <Snackbar bind:this={snackbar}>
+    <Label>{snackbarText}</Label>
+    <Actions>
+      <IconButton class="material-icons" title="Fermer">close</IconButton>
+    </Actions>
+  </Snackbar>
+</Layout>
 
 <style>
   h2 {

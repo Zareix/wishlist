@@ -5,11 +5,9 @@
   import { user } from "../stores.js"
 
   import Loading from "../components/Loading.svelte"
-  import TopBar from "../components/TopBar.svelte"
-  import BackButton from "../components/BackButton.svelte"
-  import Footer from "../components/Footer.svelte"
   import NewCatPopup from "../components/NewCatPopup.svelte"
   import LinkInputList from "../components/LinksInputList.svelte"
+  import Layout from "../components/Layout.svelte"
 
   import itemNotFoundSvg from "../assets/item-not-found.svg"
 
@@ -20,7 +18,6 @@
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
-  import Item from "../components/Item.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -198,13 +195,11 @@
   }
 </script>
 
-<TopBar />
-<main id="addItem">
-  {#if loading}
-    <Loading />
-  {:else}
-    <BackButton />
-    {#if error}
+<Layout active="add">
+  <main id="addItem">
+    {#if loading}
+      <Loading />
+    {:else if error}
       <div class="error">
         {@html itemNotFoundSvg}
         <h2>Oups, impossible de trouver cet objet</h2>
@@ -293,24 +288,23 @@
         </Content>
       </section>
     {/if}
-  {/if}
-  <Snackbar
-    bind:this={snackbar}
-    class="snackbar-warning-container"
-    id="snackbarAddItem"
-  >
-    <LabelSnack>{snackbarText}</LabelSnack>
-    <Actions>
-      <IconButton class="material-icons" title="Dismiss">close</IconButton>
-    </Actions>
-  </Snackbar>
-  <NewCatPopup
-    toggleDialog={toggleNewCat}
-    allCategories={categories}
-    open={newCatPopupOpen}
-  />
-</main>
-<Footer />
+    <Snackbar
+      bind:this={snackbar}
+      class="snackbar-warning-container"
+      id="snackbarAddItem"
+    >
+      <LabelSnack>{snackbarText}</LabelSnack>
+      <Actions>
+        <IconButton class="material-icons" title="Dismiss">close</IconButton>
+      </Actions>
+    </Snackbar>
+    <NewCatPopup
+      toggleDialog={toggleNewCat}
+      allCategories={categories}
+      open={newCatPopupOpen}
+    />
+  </main>
+</Layout>
 
 <style>
   h1 {

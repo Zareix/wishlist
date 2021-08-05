@@ -81,6 +81,10 @@
     margin-right: 0.5rem;
   }
 
+  :global(.illustration) {
+    max-width: 20rem;
+  }
+
   :global(.illustration > svg) {
     width: 100%;
     height: fit-content;

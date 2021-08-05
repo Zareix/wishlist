@@ -1,6 +1,7 @@
 :root {
   --primary-color: #6002ee;
   --primary-attenuated-color: #7e3ff2;
+  --text-color: #333;
   --background-secondary: #f3f4f6;
 
   --mdc-theme-background: #fff;
@@ -72,7 +73,7 @@ body {
 }
 
 body {
-  color: #333;
+  color: var(--text-color);
   margin: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -142,10 +143,6 @@ input:disabled {
   margin: auto;
 }
 
-.green-button {
-  background-color: var(--green) !important;
-}
-
 .green-icon-button {
   color: var(--green) !important;
 }
@@ -182,12 +179,12 @@ ul {
 }
 
 a {
-  color: #333;
+  color: var(--text-color);
   text-decoration: none;
 }
 
 a:hover {
-  color: #333;
+  color: var(--text-color);
   text-decoration: none;
 }
 
@@ -273,6 +270,7 @@ hr {
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --text-color: #f9fafb;
     --background-secondary: #1f2937;
 
     --mdc-theme-primary: #6d28d9;
@@ -304,7 +302,6 @@ hr {
 
   body {
     background-color: #111827;
-    color: #f9fafb;
   }
 
   .card {

@@ -14,10 +14,11 @@
   import { Link, navigate } from "svelte-routing"
 
   import List from "../components/List.svelte"
-  import TopBar from "../components/TopBar.svelte"
+  import TopBar from "../components/Layout.svelte"
   import NoContent from "../components/NoContent.svelte"
   import Loading from "../components/Loading.svelte"
   import Footer from "../components/Footer.svelte"
+  import Layout from "../components/Layout.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -68,64 +69,54 @@
   <title>Wishlist - {currentUser.displayName}</title>
 </svelte:head>
 
-<TopBar />
-<div id="fabAdd" class="fab" transition:scale={{ easing: cubicIn }}>
-  <Wrapper>
-    <Link to="/add">
-      <Fab color="primary" class="green-button">
-        <Icon class="material-icons">add</Icon>
-      </Fab>
-    </Link>
-    <Tooltip>Ajouter un item</Tooltip>
-  </Wrapper>
-</div>
-<main id="home">
-  {#if loading}
-    <div class="loading-container">
-      <Loading />
-    </div>
-  {:else}
-    <div id="selectWishlistSection" class="flex center">
-      <Select
-        bind:value={choosenUser}
-        label="Wishlist de"
-        variant="filled"
-        id="selectWishlist"
-      >
-        {#each allUsers as email}
-          <Option value={email}>{email}</Option>
+<Layout active="home">
+  <main id="home">
+    {#if loading}
+      <div class="loading-container">
+        <Loading />
+      </div>
+    {:else}
+      <div id="selectWishlistSection" class="flex center">
+        <Select
+          bind:value={choosenUser}
+          label="Wishlist de"
+          variant="filled"
+          id="selectWishlist"
+        >
+          {#each allUsers as email}
+            <Option value={email}>{email}</Option>
+          {/each}
+        </Select>
+      </div>
+      <hr />
+      <div id="wishlist">
+        {#each categories as c}
+          {#if choosenUser === currentUser.email || authorizedCat[choosenUser].includes(c)}
+            <List
+              category={c}
+              choosenUser={choosenUser !== undefined
+                ? choosenUser
+                : currentUser.email}
+              {snackbarOpen}
+              orderByPosition
+            />
+          {/if}
         {/each}
-      </Select>
-    </div>
-    <hr />
-    <div id="wishlist">
-      {#each categories as c}
-        {#if choosenUser === currentUser.email || authorizedCat[choosenUser].includes(c)}
-          <List
-            category={c}
-            choosenUser={choosenUser !== undefined
-              ? choosenUser
-              : currentUser.email}
-            {snackbarOpen}
-            orderByPosition
-          />
-        {/if}
-      {/each}
-      <NoContent
-        subtitle={currentUser.email === choosenUser
-          ? "Ajoutez des objets à l'aide du bouton + en bas à droite !"
-          : "Cet utilisateur n'a encore rien ajouté dans sa wishlist"}
-      />
-    </div>
-    <Snackbar bind:this={snackbar} id="snackbarHome">
-      <Label>{snackbarText}</Label>
-      <Actions>
-        <IconButton class="material-icons" title="Dismiss">close</IconButton>
-      </Actions>
-    </Snackbar>
-  {/if}
-</main>
-<Footer />
+        <NoContent
+          subtitle={currentUser.email === choosenUser
+            ? "Ajoutez des objets à l'aide du bouton + en bas à droite !"
+            : "Cet utilisateur n'a encore rien ajouté dans sa wishlist"}
+        />
+      </div>
+      <Snackbar bind:this={snackbar} id="snackbarHome">
+        <Label>{snackbarText}</Label>
+        <Actions>
+          <IconButton class="material-icons" title="Dismiss">close</IconButton>
+        </Actions>
+      </Snackbar>
+    {/if}
+  </main>
+</Layout>
 
 <style>
   .loading-container {

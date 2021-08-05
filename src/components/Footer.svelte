@@ -21,7 +21,7 @@
     align-content: flex-end;
     justify-items: center;
     justify-content: center;
-    padding-bottom: 1em;
+    padding-bottom: 5rem;
     color: #4b5563;
     background-color: #f3f4f6;
   }

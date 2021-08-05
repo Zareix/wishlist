@@ -8,12 +8,12 @@
   import Radio from "@smui/radio"
   import FormField from "@smui/form-field"
 
-  import TopBar from "../components/TopBar.svelte"
+  import TopBar from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
   import Item from "../components/Item.svelte"
-  import BackButton from "../components/BackButton.svelte"
   import NoContent from "../components/NoContent.svelte"
   import Footer from "../components/Footer.svelte"
+  import Layout from "../components/Layout.svelte"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -90,57 +90,57 @@
   }
 </script>
 
-<TopBar />
-<main id="archive">
-  <BackButton />
-  <h1>Archive</h1>
-  {#if loading}
-    <Loading />
-  {:else if items.length === 0}
-    <NoContent subtitle="Les objets supprimés ou validés apparaitront ici !" />
-  {:else}
-    <section id="selectType">
-      <FormField>
-        <Radio bind:group={selectedType} value={"all"} />
-        <span slot="label">
-          {"Tous les objets"}
-        </span>
-      </FormField>
+<Layout active="archive">
+  <main id="archive">
+    <h1>Archive</h1>
+    {#if loading}
+      <Loading />
+    {:else if items.length === 0}
+      <NoContent
+        subtitle="Les objets supprimés ou validés apparaitront ici !"
+      />
+    {:else}
+      <section id="selectType">
+        <FormField>
+          <Radio bind:group={selectedType} value={"all"} />
+          <span slot="label">
+            {"Tous les objets"}
+          </span>
+        </FormField>
 
-      <FormField>
-        <Radio bind:group={selectedType} value={"validated"} />
-        <span slot="label">
-          {"Validés seulement"}
-        </span>
-      </FormField>
+        <FormField>
+          <Radio bind:group={selectedType} value={"validated"} />
+          <span slot="label">
+            {"Validés seulement"}
+          </span>
+        </FormField>
 
-      <FormField>
-        <Radio bind:group={selectedType} value={"notValidated"} />
-        <span slot="label">
-          {"Non validés seulement"}
-        </span>
-      </FormField>
-    </section>
-    <ul class="item-list">
-      {#each filteredItems as item, index}
-        <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
-      {/each}
-      <NoContent title="Aucun objet de ce type" />
-    </ul>
-  {/if}
-  <Snackbar bind:this={snackbar} id="snackbarArchive">
-    <LabelSnack>{snackbarText}</LabelSnack>
-    <Actions>
-      <IconButton class="material-icons" title="Dismiss">close</IconButton>
-    </Actions>
-  </Snackbar>
-</main>
-<Footer />
+        <FormField>
+          <Radio bind:group={selectedType} value={"notValidated"} />
+          <span slot="label">
+            {"Non validés seulement"}
+          </span>
+        </FormField>
+      </section>
+      <ul class="item-list">
+        {#each filteredItems as item, index}
+          <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
+        {/each}
+        <NoContent title="Aucun objet de ce type" />
+      </ul>
+    {/if}
+    <Snackbar bind:this={snackbar} id="snackbarArchive">
+      <LabelSnack>{snackbarText}</LabelSnack>
+      <Actions>
+        <IconButton class="material-icons" title="Dismiss">close</IconButton>
+      </Actions>
+    </Snackbar>
+  </main>
+</Layout>
 
 <style>
   h1 {
     text-align: center;
-    margin-top: 1em;
   }
 
   ul {
