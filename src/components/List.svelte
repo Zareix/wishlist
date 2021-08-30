@@ -139,7 +139,10 @@
       category.slice(1).replace(" ", "")}
     class={"category" + (collapsed ? " collapsed" : "")}
   >
-    <div class="category-header" on:click={collapse}>
+    <div
+      class={"category-header" + (collapsed ? "" : " sticky")}
+      on:click={collapse}
+    >
       {#if canModif}
         <div class="dummy" />
       {/if}
@@ -229,18 +232,25 @@
 
   .category {
     width: 80%;
-    margin: 2rem auto 3rem auto;
+    margin: 1rem auto 2.5rem auto;
     transition: border 1s ease;
     border-bottom: solid 1px;
     border-color: rgba(163, 163, 163, 0);
   }
 
   .category-header {
+    z-index: 25;
+    width: max-content;
     margin: 0 auto;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
     cursor: pointer;
+    border-radius: 12px;
+    background-color: var(--mdc-theme-background);
+    transition: box-shadow 250ms ease;
+
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -248,6 +258,12 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+
+  .category-header.sticky {
+    position: sticky;
+    top: 5rem;
+    box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.05);
   }
 
   .category-header-content {
