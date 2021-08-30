@@ -140,12 +140,11 @@
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div
-      class={"category-header" + (collapsed ? "" : " sticky")}
+      class={"category-header" +
+        (collapsed ? "" : " sticky") +
+        (canModif ? " can-modif" : "")}
       on:click={collapse}
     >
-      {#if canModif}
-        <div class="dummy" />
-      {/if}
       <div class="category-header-content">
         <h2>{category}</h2>
         {#if catPrice !== 0}
@@ -270,6 +269,13 @@
     text-align: center;
   }
 
+  .category-header.can-modif::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    margin: 12px;
+  }
+
   .category.collapsed:not(:nth-last-child(2)) {
     border-color: rgba(163, 163, 163, 0.6);
   }
@@ -299,12 +305,6 @@
     transition: max-height 1s ease;
     overflow: hidden;
     max-height: 0;
-  }
-
-  .dummy {
-    width: 24px;
-    height: 24px;
-    margin: 12px;
   }
 
   :global(.chevron) {
