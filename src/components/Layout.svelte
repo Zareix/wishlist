@@ -69,12 +69,14 @@
 
 <style>
   :global(#navTitle) {
-    color: white;
+    max-width: 90%;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: white;
   }
 
   .logo {
