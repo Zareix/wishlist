@@ -240,6 +240,10 @@ a:hover {
   display: block;
 }
 
+.mdc-dialog {
+  z-index: 120;
+}
+
 .mdc-dialog .mdc-dialog__content {
   padding-top: 0;
 }
