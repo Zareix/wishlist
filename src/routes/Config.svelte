@@ -14,6 +14,7 @@
   import TopBar from "../components/Layout.svelte"
   import Footer from "../components/Footer.svelte"
   import Layout from "../components/Layout.svelte"
+  import Loading from "../components/Loading.svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -22,6 +23,8 @@
   let snackbar
   let snackbarText = ""
   let categories = []
+  let loadingCanWatch = true
+  let loadingVisibleCat = true
 
   onMount(async () => {
     let authorizedCat = []
@@ -31,20 +34,23 @@
       .then((res) => {
         canWatch = res.data().canWatch
         if (res.data().authorizedCat) authorizedCat = res.data().authorizedCat
+        loadingCanWatch = false
       })
 
     const res = await db.collection(currentUser.email).doc("categories").get()
-    if (res.exists)
+    if (res.exists) {
       categories = res
         .data()
         .categories.map((c) => ({ name: c, checked: false }))
-    else
+      loadingVisibleCat = false
+    } else
       await db
         .collection("categories")
         .get()
-        .then((data) =>
+        .then((data) => {
           data.forEach((cat) => (categories = [...categories, cat.id]))
-        )
+          loadingVisibleCat = false
+        })
 
     authorizedCat.forEach(
       (ac) => (categories.find((c) => c.name === ac).checked = true)
@@ -80,38 +86,51 @@
   <main id="settings">
     <form id="permissions" class="card" on:submit={submit}>
       <h2>Qui peut voir votre Wishlist ?</h2>
-      <div class="permissions-inputs">
-        {#each canWatch as email, i}
-          <TextField label={"Email " + (i + 1)} bind:value={email} />
-          <br />
-        {/each}
-      </div>
-      <Button on:click={addPermission} type="button"
-        ><Icon class="material-icons">add</Icon><BtnLabel
-          >Ajouter un email</BtnLabel
-        ></Button
-      >
+      {#if loadingCanWatch}
+        <Loading />
+      {:else}
+        <div class="permissions-inputs">
+          {#each canWatch as email, i}
+            <TextField label={"Email " + (i + 1)} bind:value={email} />
+            <br />
+          {/each}
+        </div>
+        <Button
+          on:click={addPermission}
+          type="button"
+          class="perm-add-email-btn"
+          ><Icon class="material-icons">add</Icon><BtnLabel
+            >Ajouter un email</BtnLabel
+          ></Button
+        >
+      {/if}
 
       <br />
       <hr />
 
       <h2>Quelles catégories sont visibles par les autres ?</h2>
-      <div class="categories">
-        {#each categories as c, i}
-          <FormField
-            align={i % 2 === 0 ? "end" : "start"}
-            class={i % 2 === 0 ? "justify-self-end" : ""}
-          >
-            <Switch bind:checked={categories[i].checked} />
-            <span slot="label" class="category">{c.name}</span>
-          </FormField>
-        {/each}
-      </div>
+      {#if loadingVisibleCat}
+        <Loading />
+      {:else}
+        <div class="categories">
+          {#each categories as c, i}
+            <FormField
+              align={i % 2 === 0 ? "end" : "start"}
+              class="perm-category-input"
+            >
+              <Switch bind:checked={categories[i].checked} />
+              <span slot="label" class="category">{c.name}</span>
+            </FormField>
+          {/each}
+        </div>
+      {/if}
 
       <br />
 
       <div class="validate">
-        <Button variant="raised" type="submit">Tout mettre à jour</Button>
+        {#if !loadingCanWatch && !loadingVisibleCat}
+          <Button variant="raised" type="submit">Tout mettre à jour</Button>
+        {/if}
       </div>
     </form>
   </main>
@@ -142,6 +161,10 @@
     margin-bottom: 0.25em;
   }
 
+  :global(.perm-add-email-btn) {
+    margin-top: 0.5rem;
+  }
+
   .categories {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -152,7 +175,7 @@
     text-transform: capitalize;
   }
 
-  :global(.justify-self-end) {
+  :global(.perm-category-input:nth-child(2n + 1)) {
     justify-self: end;
   }
 
