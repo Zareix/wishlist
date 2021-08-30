@@ -257,6 +257,10 @@ a:hover {
   z-index: 30;
 }
 
+.mdc-snackbar {
+  bottom: 5.5rem;
+}
+
 .text-gray {
   color: var(--gray);
 }
