@@ -83,18 +83,21 @@
   }
 
   .bottom-navbar {
-    position: fixed;
     z-index: 100;
-    bottom: -10px;
-    width: 100%;
+    position: fixed;
+    inset: 0;
+    top: auto;
+    bottom: 14px;
+    margin: 0 auto;
+    width: 40%;
     height: 3rem;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     justify-items: center;
     align-content: center;
-    padding-top: 0.25rem;
-    padding-bottom: calc(0.25rem + 10px);
-    border-top: 1px solid rgba(163, 163, 163, 0.2);
+    padding: 0.25rem 0;
+    box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     background-color: var(--mdc-theme-background);
   }
 
@@ -149,5 +152,11 @@
 
   :global(.navlink-active) :global(.fab-icon) {
     font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .bottom-navbar {
+      width: 90%;
+    }
   }
 </style>

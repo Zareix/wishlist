@@ -132,6 +132,11 @@
     width: auto;
   }
 
+  #wishlist {
+    margin: 0 auto;
+    width: clamp(280px, 100%, 768px);
+  }
+
   #wishlist > :global(#noContent:not(:only-child)) {
     display: none;
   }

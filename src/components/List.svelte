@@ -228,7 +228,7 @@
   }
 
   .category {
-    width: 80vw;
+    width: 80%;
     margin: 2rem auto 3rem auto;
     transition: border 1s ease;
     border-bottom: solid 1px;

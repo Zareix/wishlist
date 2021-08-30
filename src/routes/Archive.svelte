@@ -149,6 +149,7 @@
 
   .item-list {
     width: 60%;
+    max-width: 600px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -175,7 +176,7 @@
 
   @media (max-width: 768px) {
     .item-list {
-      width: 70%;
+      width: 80%;
     }
 
     #archive > ul > :global(#noContent:only-child) {
