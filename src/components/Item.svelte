@@ -147,7 +147,8 @@
     cursor: default;
   }
 
-  h3 {
+  .title {
+    cursor: text;
     font-weight: 500;
   }
 
@@ -169,6 +170,7 @@
     margin: 0;
     margin-top: 0.25em;
     font-weight: 500;
+    cursor: text;
   }
 
   .flex-grow {
@@ -176,8 +178,9 @@
   }
 
   .price {
-    white-space: nowrap;
     margin: 0;
+    cursor: text;
+    white-space: nowrap;
   }
 
   .check {
