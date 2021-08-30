@@ -74,6 +74,7 @@ body {
 
 body {
   color: var(--text-color);
+  background-color: var(--mdc-theme-background);
   margin: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -300,8 +301,8 @@ hr {
     --mdc-theme-primary-attenuated: #7e3ff2;
     --mdc-theme-primary-light: #9c47ff;
     --mdc-theme-secondary: #7e3ff2;
-    --mdc-theme-background: #1f2937;
-    --mdc-theme-surface: #1f2937;
+    --mdc-theme-background: #111827;
+    --mdc-theme-surface: #111827;
     --mdc-theme-on-surface: white;
     --mdc-theme-text-primary-on-background: rgba(255, 255, 255, 0.87);
     --mdc-theme-text-secondary-on-background: rgba(255, 255, 255, 0.54);
@@ -320,10 +321,6 @@ hr {
     --mdc-theme-text-hint-on-dark: hsla(0, 0%, 100%, 0.5);
     --mdc-theme-text-disabled-on-dark: hsla(0, 0%, 100%, 0.5);
     --mdc-theme-text-icon-on-dark: hsla(0, 0%, 100%, 0.5);
-  }
-
-  body {
-    background-color: #111827;
   }
 
   .card {
