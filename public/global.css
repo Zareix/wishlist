@@ -213,7 +213,7 @@ a:hover {
 }
 
 .dnd-ref {
-  background-color: var(--mdc-theme-background) !important;
+  background-color: var(--background-secondary) !important;
 }
 
 .white {
