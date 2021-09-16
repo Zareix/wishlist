@@ -30,7 +30,8 @@
   const collapsible =
     "collapsibleContainer" +
     category.charAt(0).toUpperCase() +
-    category.slice(1).replace(" ", "")
+    category.slice(1).replace(" ", "") +
+    Math.random() * 100
   let collapsed = true
 
   onMount(() => {
@@ -298,7 +299,6 @@
   .collapsible {
     transition: max-height 1s ease;
     overflow: hidden;
-    max-height: 9999px;
   }
 
   .collapsed .item-list {
