@@ -195,6 +195,7 @@
 
   :global(.perm-category-input:nth-child(2n + 1)) {
     justify-self: end;
+    text-align: right;
   }
 
   .validate {
