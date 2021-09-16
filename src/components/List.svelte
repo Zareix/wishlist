@@ -140,9 +140,7 @@
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div
-      class={"category-header" +
-        (collapsed ? "" : " sticky") +
-        (canModif ? " can-modif" : "")}
+      class={"category-header" + (collapsed ? "" : " sticky")}
       on:click={collapse}
     >
       <div class="category-header-content">
@@ -265,7 +263,7 @@
     text-align: center;
   }
 
-  .category-header.can-modif::before {
+  .category-header::before {
     content: "";
     width: 24px;
     height: 24px;

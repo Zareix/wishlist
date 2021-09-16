@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
 
   import { db } from "../firebase"
+  import { user } from "../stores"
 
   import TextField from "@smui/textfield"
   import Button, { Icon, Label as BtnLabel } from "@smui/button"
@@ -59,8 +60,19 @@
         })
 
     authorizedCat.forEach(
-      (ac) => (categories.find((c) => c.name === ac).checked = true)
+      (ac) =>
+        (categories.find(
+          (c) => c.name.toLowerCase() === ac.toLowerCase()
+        ).checked = true)
     )
+
+    categories = categories.sort((a, b) => {
+      a.name = a.name.toLowerCase()
+      b.name = b.name.toLowerCase()
+      if (a.name < b.name) return -1
+      if (a.name > b.name) return 1
+      return 0
+    })
   })
 
   const addPermission = () => {
