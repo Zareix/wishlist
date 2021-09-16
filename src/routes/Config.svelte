@@ -2,7 +2,6 @@
   import { onMount } from "svelte"
 
   import { db } from "../firebase"
-  import { user } from "../stores"
 
   import TextField from "@smui/textfield"
   import Button, { Icon, Label as BtnLabel } from "@smui/button"
@@ -11,8 +10,6 @@
   import Switch from "@smui/switch"
   import FormField from "@smui/form-field"
 
-  import TopBar from "../components/Layout.svelte"
-  import Footer from "../components/Footer.svelte"
   import Layout from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
 
@@ -32,9 +29,15 @@
       .doc(currentUser.email)
       .get()
       .then((res) => {
-        canWatch = res.data().canWatch
-        if (res.data().authorizedCat) authorizedCat = res.data().authorizedCat
+        if (res.exists) {
+          canWatch = res.data().canWatch
+          if (res.data().authorizedCat) authorizedCat = res.data().authorizedCat
+        }
         loadingCanWatch = false
+      })
+      .catch((error) => {
+        loadingCanWatch = false
+        console.log(error)
       })
 
     const res = await db.collection(currentUser.email).doc("categories").get()
@@ -48,7 +51,10 @@
         .collection("categories")
         .get()
         .then((data) => {
-          data.forEach((cat) => (categories = [...categories, cat.id]))
+          data.forEach(
+            (cat) =>
+              (categories = [...categories, { name: cat.id, checked: false }])
+          )
           loadingVisibleCat = false
         })
 

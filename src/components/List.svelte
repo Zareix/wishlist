@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy } from "svelte"
+  import { onMount } from "svelte"
   import { db } from "../firebase"
   import { user } from "../stores"
 
@@ -151,65 +151,61 @@
           <p class="text-gray price">Prix total : {catPrice} €</p>
         {/if}
       </div>
-      {#if canModif}
-        <IconButton
-          class={"material-icons chevron" +
-            (collapsed ? " chevron-active" : "")}>expand_more</IconButton
-        >
-      {/if}
+      <IconButton
+        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
+        >expand_more</IconButton
+      >
     </div>
 
-    {#if canModif}
-      {#if items.length > 1}
-        <ul
-          class="item-list collapsible"
-          id={collapsible}
-          use:dndzone={{
-            items,
-            flipDurationMs,
-            type: category,
-            dropTargetClasses,
-            dropFromOthersDisabled: true,
-            transformDraggedElement: transformDraggedElement,
-            dragDisabled,
-          }}
-          on:consider={handleDndConsider}
-          on:finalize={handleDndFinalize}
-        >
-          {#each items as item (item.id)}
-            <div animate:flip={{ duration: flipDurationMs }}>
-              <div class="drag-icon-item-wrapper">
-                <Icon
-                  class="material-icons drag-icon-item"
-                  tabindex={dragDisabled ? 0 : -1}
-                  aria-label="drag-handle"
-                  style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
-                  on:mousedown={startDrag}
-                  on:touchstart={startDrag}
-                  on:keydown={handleKeyDown}>drag_indicator</Icon
-                >
-              </div>
-              <Item
-                index={items.indexOf(item)}
-                {item}
-                {removeItem}
-                {canModif}
-                {category}
-              />
-            </div>
-          {/each}
-        </ul>
-      {:else}
-        <ul class="item-list collapsible" id={collapsible}>
-          {#each items as item (item.id)}
-            <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
-          {/each}
-        </ul>
-      {/if}
-    {:else}
-      <ul>
+    {#if items.length > 1 && canModif}
+      <ul
+        class="item-list collapsible"
+        id={collapsible}
+        use:dndzone={{
+          items,
+          flipDurationMs,
+          type: category,
+          dropTargetClasses,
+          dropFromOthersDisabled: true,
+          transformDraggedElement: transformDraggedElement,
+          dragDisabled,
+        }}
+        on:consider={handleDndConsider}
+        on:finalize={handleDndFinalize}
+      >
         {#each items as item (item.id)}
-          <Item index={items.indexOf(item)} {item} {removeItem} {canModif} />
+          <div animate:flip={{ duration: flipDurationMs }}>
+            <div class="drag-icon-item-wrapper">
+              <Icon
+                class="material-icons drag-icon-item"
+                tabindex={dragDisabled ? 0 : -1}
+                aria-label="drag-handle"
+                style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+                on:mousedown={startDrag}
+                on:touchstart={startDrag}
+                on:keydown={handleKeyDown}>drag_indicator</Icon
+              >
+            </div>
+            <Item
+              index={items.indexOf(item)}
+              {item}
+              {removeItem}
+              {canModif}
+              {category}
+            />
+          </div>
+        {/each}
+      </ul>
+    {:else}
+      <ul class="item-list collapsible" id={collapsible}>
+        {#each items as item (item.id)}
+          <Item
+            index={items.indexOf(item)}
+            {item}
+            {removeItem}
+            {canModif}
+            {category}
+          />
         {/each}
       </ul>
     {/if}

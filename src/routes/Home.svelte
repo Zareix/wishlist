@@ -1,23 +1,17 @@
 <script>
   import { onMount } from "svelte"
-  import { scale } from "svelte/transition"
-  import { cubicIn } from "svelte/easing"
 
   import { db } from "../firebase"
   import { user } from "../stores"
 
-  import Fab, { Icon } from "@smui/fab"
-  import Tooltip, { Wrapper } from "@smui/tooltip"
   import Select, { Option } from "@smui/select"
   import Snackbar, { Actions, Label } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
-  import { Link, navigate } from "svelte-routing"
+  import { navigate } from "svelte-routing"
 
   import List from "../components/List.svelte"
-  import TopBar from "../components/Layout.svelte"
   import NoContent from "../components/NoContent.svelte"
   import Loading from "../components/Loading.svelte"
-  import Footer from "../components/Footer.svelte"
   import Layout from "../components/Layout.svelte"
 
   let currentUser
@@ -32,6 +26,9 @@
   let snackbar
   let snackbarText
   let loading = true
+
+  $: displayCategories =
+    choosenUser === currentUser.email ? categories : authorizedCat[choosenUser]
 
   onMount(async () => {
     allUsers = [currentUser.email]
@@ -54,8 +51,16 @@
     res2.docs.forEach((u) => {
       allUsers = [...allUsers, u.id]
       authorizedCat[u.id] = u.data().authorizedCat
+      authorizedCat[u.id].sort()
     })
 
+    categories = categories.sort((a, b) => {
+      a = a.toLowerCase()
+      b = b.toLowerCase()
+      if (a < b) return -1
+      if (a > b) return 1
+      return 0
+    })
     loading = false
   })
 
@@ -90,17 +95,15 @@
       </div>
       <hr />
       <div id="wishlist">
-        {#each categories as c}
-          {#if choosenUser === currentUser.email || authorizedCat[choosenUser].includes(c)}
-            <List
-              category={c}
-              choosenUser={choosenUser !== undefined
-                ? choosenUser
-                : currentUser.email}
-              {snackbarOpen}
-              orderByPosition
-            />
-          {/if}
+        {#each displayCategories as c}
+          <List
+            category={c}
+            choosenUser={choosenUser !== undefined
+              ? choosenUser
+              : currentUser.email}
+            {snackbarOpen}
+            orderByPosition
+          />
         {/each}
         <NoContent
           subtitle={currentUser.email === choosenUser

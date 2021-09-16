@@ -8,11 +8,9 @@
   import Radio from "@smui/radio"
   import FormField from "@smui/form-field"
 
-  import TopBar from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
   import Item from "../components/Item.svelte"
   import NoContent from "../components/NoContent.svelte"
-  import Footer from "../components/Footer.svelte"
   import Layout from "../components/Layout.svelte"
 
   let currentUser
