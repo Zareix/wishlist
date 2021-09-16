@@ -46,7 +46,7 @@
     db.collection(currentUser.email)
       .doc("categories")
       .set({
-        categories: [...allCategories, category.trim()],
+        categories: [...allCategories, category.trim().toLowerCase()],
       })
       .then(() => closeDialog())
   }
