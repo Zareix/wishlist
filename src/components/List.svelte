@@ -46,6 +46,7 @@
   $: canModif = currentUser.email === choosenUser
 
   const fetchData = async () => {
+    catPrice = 0
     items = []
     await db
       .collection(choosenUser)
