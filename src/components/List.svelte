@@ -126,7 +126,7 @@
     const element = document.getElementById(collapsible)
 
     if (!collapsed) element.style.maxHeight = null
-    else element.style.maxHeight = element.scrollHeight + "px"
+    else element.style.maxHeight = 300 * items.length + "px"
 
     collapsed = !collapsed
   }
@@ -298,7 +298,11 @@
   .collapsible {
     transition: max-height 1s ease;
     overflow: hidden;
-    max-height: 0;
+    max-height: 9999px;
+  }
+
+  .collapsed .item-list {
+    max-height: 0px;
   }
 
   :global(.chevron) {
