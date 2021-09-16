@@ -62,6 +62,11 @@
 
     const res = await db.collection(currentUser.email).doc("categories").get()
     if (res.exists) categories = res.data().categories
+    else {
+      const res2 = await db.collection("categories").get()
+      res2.forEach((cat) => (categories = [...categories, cat.id]))
+    }
+    loadingVisibleCat = false
 
     if (modifId) {
       await db
