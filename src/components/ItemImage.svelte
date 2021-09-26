@@ -12,7 +12,7 @@
 <div class="image">
   <img
     src={image}
-    alt={index + " of item"}
+    alt={"Thumbnail " + index + " of " + title}
     on:click={() => (open = true)}
     class="pointer"
   />
@@ -20,7 +20,11 @@
     <h2>{title}</h2>
     <Content>
       <div class="flex center" on:click={() => (open = false)}>
-        <img src={image} alt={"item " + index} class="image-dialog" />
+        <img
+          src={image}
+          alt={"Image " + index + " de " + title}
+          class="image-dialog"
+        />
       </div>
     </Content>
     <Actions>
@@ -37,9 +41,34 @@
   }
 
   img {
+    display: block;
+    position: relative;
     max-width: 100%;
     max-height: 15rem;
     object-fit: contain;
+  }
+
+  img::before {
+    content: "";
+    position: absolute;
+    background-color: rgb(228, 228, 228);
+    border: 1px hsl(0, 0%, 66.7%);
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  img::after {
+    content: attr(alt);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: rgb(122, 122, 122);
+    font-weight: 400;
+    font-style: italic;
   }
 
   .image {

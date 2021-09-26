@@ -39,9 +39,7 @@
       })
   })
 
-  const addItems = (i) => {
-    items = [...items, i]
-  }
+  const addItems = (i) => (items = [...items, i])
 
   const filterItems = (items, type) => {
     switch (type) {
@@ -95,7 +93,7 @@
       <Loading />
     {:else if items.length === 0}
       <NoContent
-        subtitle="Les objets supprimés ou validés apparaitront ici !"
+        subtitle="Les objets supprimés ou validés apparaîtront ici !"
       />
     {:else}
       <section id="selectType">
@@ -122,7 +120,13 @@
       </section>
       <ul class="item-list">
         {#each filteredItems as item, index}
-          <Item {index} {item} {restoreItem} permanentDeleteItem={deleteItem} />
+          <Item
+            {index}
+            {item}
+            {restoreItem}
+            permanentDeleteItem={deleteItem}
+            category={item.categorie}
+          />
         {/each}
         <NoContent title="Aucun objet de ce type" />
       </ul>

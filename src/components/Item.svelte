@@ -98,12 +98,17 @@
   {/if}
   {#if restoreItem}
     <ActionIcons>
+      <p class="item-category">
+        Supprimé de <span class="capitalize">"{category}"</span>
+      </p>
       <Wrapper>
         <IconButton
           on:click={() => restoreItem(item)}
           class="material-icons restore">restore_from_trash</IconButton
         >
-        <Tooltip>Restaurer</Tooltip>
+        <Tooltip
+          >Restaurer dans <span class="capitalize">"{category}"</span></Tooltip
+        >
       </Wrapper>
       <Wrapper>
         <IconButton
@@ -197,6 +202,15 @@
     margin-bottom: 0.25em;
     align-items: center;
     align-content: center;
+  }
+
+  .item-category {
+    width: 100%;
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   @media (max-width: 768px) {

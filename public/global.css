@@ -216,6 +216,10 @@ a:hover {
   background-color: var(--background-secondary) !important;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .white {
   color: white;
 }
