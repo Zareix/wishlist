@@ -161,4 +161,10 @@
       width: 90%;
     }
   }
+
+  @media (prefers-color-scheme: dark) {
+    .bottom-navbar {
+      box-shadow: 0px 10px 14px 5px rgba(200, 200, 200, 0.05);
+    }
+  }
 </style>
