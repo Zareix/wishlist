@@ -1,6 +1,3 @@
-<script>
-</script>
-
 <footer>
   <img src="/icons/icon-512x512.png" alt="wishlist logo" />
   <div class="content">

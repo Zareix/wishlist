@@ -20,7 +20,7 @@
   if (currentUser == null) navigate("/login", { replace: true })
 
   let categories = []
-  let choosenUser
+  let chosenUser
   let allUsers = []
   let authorizedCat = {}
   let snackbar
@@ -28,11 +28,11 @@
   let loading = true
 
   $: displayCategories =
-    choosenUser === currentUser.email ? categories : authorizedCat[choosenUser]
+    chosenUser === currentUser.email ? categories : authorizedCat[chosenUser]
 
   onMount(async () => {
     allUsers = [currentUser.email]
-    choosenUser = currentUser.email
+    chosenUser = currentUser.email
 
     const res = await db.collection(currentUser.email).doc("categories").get()
     if (res.exists) categories = res.data().categories
@@ -83,7 +83,7 @@
     {:else}
       <div id="selectWishlistSection" class="flex center">
         <Select
-          bind:value={choosenUser}
+          bind:value={chosenUser}
           label="Wishlist de"
           variant="filled"
           id="selectWishlist"
@@ -98,15 +98,15 @@
         {#each displayCategories as c}
           <List
             category={c}
-            choosenUser={choosenUser !== undefined
-              ? choosenUser
+            chosenUser={chosenUser !== undefined
+              ? chosenUser
               : currentUser.email}
             {snackbarOpen}
             orderByPosition
           />
         {/each}
         <NoContent
-          subtitle={currentUser.email === choosenUser
+          subtitle={currentUser.email === chosenUser
             ? "Ajoutez des objets à l'aide du bouton + en bas à droite !"
             : "Cet utilisateur n'a encore rien ajouté dans sa wishlist"}
         />

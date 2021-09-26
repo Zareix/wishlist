@@ -19,7 +19,7 @@
   let dragDisabled = true
 
   export let category
-  export let choosenUser
+  export let chosenUser
   export let snackbarOpen
   export let orderByPosition
 
@@ -35,21 +35,21 @@
   let collapsed = true
 
   onMount(() => {
-    oldUser = choosenUser
+    oldUser = chosenUser
   })
 
-  $: if (oldUser !== choosenUser) {
+  $: if (oldUser !== chosenUser) {
     fetchData()
-    oldUser = choosenUser
+    oldUser = chosenUser
   }
 
-  $: canModif = currentUser.email === choosenUser
+  $: canModif = currentUser.email === chosenUser
 
   const fetchData = async () => {
     catPrice = 0
     items = []
     await db
-      .collection(choosenUser)
+      .collection(chosenUser)
       .doc("items")
       .collection(category)
       .orderBy(orderByPosition ? "position" : "createdAt")
@@ -75,7 +75,7 @@
     items.forEach((item, index) => {
       batch.update(
         db
-          .collection(choosenUser)
+          .collection(chosenUser)
           .doc("items")
           .collection(category)
           .doc(item.id),

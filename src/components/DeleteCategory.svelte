@@ -1,6 +1,4 @@
 <script>
-  import { onMount } from "svelte"
-
   import { db } from "../firebase"
   import { user } from "../stores"
 

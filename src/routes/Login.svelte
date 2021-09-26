@@ -5,7 +5,7 @@
   import { user } from "../stores"
 
   import { authState } from "rxfire/auth"
-  import Button, { Icon, Label } from "@smui/button"
+  import Button, { Label } from "@smui/button"
   import { navigate } from "svelte-routing"
 
   import Loading from "../components/Loading.svelte"
