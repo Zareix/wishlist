@@ -54,7 +54,34 @@
     }
   }
 
-  const restoreItem = (item) => {
+  const addCategory = async (categories, newCategory) => {
+    await db
+      .collection(currentUser.email)
+      .doc("categories")
+      .set({
+        categories: [...categories, newCategory.trim().toLowerCase()],
+      })
+  }
+
+  const restoreItem = async (item) => {
+    let categories = []
+    const res = await db.collection(currentUser.email).doc("categories").get()
+    if (res.exists) categories = res.data().categories
+    else
+      await db
+        .collection("categories")
+        .get()
+        .then((data) =>
+          data.forEach((cat) => (categories = [...categories, cat.id]))
+        )
+
+    if (
+      !categories.some(
+        (c) => c.trim().toLowerCase() === item.categorie.trim().toLowerCase()
+      )
+    )
+      await addCategory(categories, item.categorie)
+
     db.collection(currentUser.email)
       .doc("items")
       .collection(item.categorie)

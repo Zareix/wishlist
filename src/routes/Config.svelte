@@ -68,10 +68,10 @@
     )
 
     categories = categories.sort((a, b) => {
-      a.name = a.name.toLowerCase()
-      b.name = b.name.toLowerCase()
-      if (a.name < b.name) return -1
-      if (a.name > b.name) return 1
+      const tempA = a.name.toLowerCase()
+      const tempB = b.name.toLowerCase()
+      if (tempA < tempB) return -1
+      if (tempA > tempB) return 1
       return 0
     })
   })

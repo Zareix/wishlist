@@ -7,6 +7,7 @@
   import Wrapper from "@smui/tooltip/Wrapper.svelte"
   import Dialog, { Content, Actions, InitialFocus } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
+  import { onMount } from "svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -44,6 +45,7 @@
           .doc(doc.id)
         batch.set(ref, {
           ...doc.data(),
+          categorie: selectedCat,
           validated: false,
         })
 
