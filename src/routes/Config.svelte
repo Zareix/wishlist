@@ -13,6 +13,7 @@
 
   import Layout from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
+  import DeleteCategory from "../components/DeleteCategory.svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -102,55 +103,58 @@
 
 <Layout active="settings">
   <main id="settings">
-    <form id="permissions" class="card" on:submit={submit}>
-      <h2>Qui peut voir votre Wishlist ?</h2>
-      {#if loadingCanWatch}
-        <Loading />
-      {:else}
-        <div class="permissions-inputs">
-          {#each canWatch as email, i}
-            <TextField label={"Email " + (i + 1)} bind:value={email} />
-            <br />
-          {/each}
-        </div>
-        <Button
-          on:click={addPermission}
-          type="button"
-          class="perm-add-email-btn"
-          ><Icon class="material-icons">add</Icon><BtnLabel
-            >Ajouter un email</BtnLabel
-          ></Button
-        >
-      {/if}
-
-      <br />
-      <hr />
-
-      <h2>Quelles catégories sont visibles par les autres ?</h2>
-      {#if loadingVisibleCat}
-        <Loading />
-      {:else}
-        <div class="categories">
-          {#each categories as c, i}
-            <FormField
-              align={i % 2 === 0 ? "end" : "start"}
-              class="perm-category-input"
-            >
-              <Switch bind:checked={categories[i].checked} />
-              <span slot="label" class="category">{c.name}</span>
-            </FormField>
-          {/each}
-        </div>
-      {/if}
-
-      <br />
-
-      <div class="validate">
-        {#if !loadingCanWatch && !loadingVisibleCat}
-          <Button variant="raised" type="submit">Tout mettre à jour</Button>
+    <div id="permissions" class="card">
+      <form on:submit={submit}>
+        <h2>Qui peut voir votre Wishlist ?</h2>
+        {#if loadingCanWatch}
+          <Loading />
+        {:else}
+          <div class="permissions-inputs">
+            {#each canWatch as email, i}
+              <TextField label={"Email " + (i + 1)} bind:value={email} />
+              <br />
+            {/each}
+          </div>
+          <Button
+            on:click={addPermission}
+            type="button"
+            class="perm-add-email-btn"
+            ><Icon class="material-icons">add</Icon><BtnLabel
+              >Ajouter un email</BtnLabel
+            ></Button
+          >
         {/if}
-      </div>
-    </form>
+
+        <br />
+
+        <h2>Quelles catégories sont visibles par les autres ?</h2>
+        {#if loadingVisibleCat}
+          <Loading />
+        {:else}
+          <div class="categories">
+            {#each categories as c, i}
+              <FormField
+                align={i % 2 === 0 ? "end" : "start"}
+                class="perm-category-input"
+              >
+                <Switch bind:checked={categories[i].checked} />
+                <span slot="label" class="category">{c.name}</span>
+              </FormField>
+            {/each}
+          </div>
+        {/if}
+
+        <br />
+
+        <div class="validate">
+          {#if !loadingCanWatch && !loadingVisibleCat}
+            <Button variant="raised" type="submit">Tout mettre à jour</Button>
+          {/if}
+        </div>
+      </form>
+      <hr />
+      <DeleteCategory {categories} />
+    </div>
   </main>
   <Snackbar bind:this={snackbar}>
     <Label>{snackbarText}</Label>
@@ -162,6 +166,7 @@
 
 <style>
   h2 {
+    margin-top: 0.5rem;
     margin-bottom: 0.75em;
     text-align: center;
   }

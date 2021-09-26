@@ -2,7 +2,7 @@
   import { db } from "../firebase"
   import { user } from "../stores"
 
-  import Card, { Content, ActionIcons } from "@smui/card"
+  import { ActionIcons } from "@smui/card"
   import IconButton from "@smui/icon-button"
   import Tooltip, { Wrapper } from "@smui/tooltip"
   import Chip, { Set, Text } from "@smui/chips"

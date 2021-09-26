@@ -66,7 +66,6 @@
       const res2 = await db.collection("categories").get()
       res2.forEach((cat) => (categories = [...categories, cat.id]))
     }
-    loadingVisibleCat = false
 
     if (modifId) {
       await db
