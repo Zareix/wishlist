@@ -28,18 +28,6 @@
   }
 
   const deleteCat = async () => {
-    const defCat = [
-      "art toys",
-      "clothing",
-      "divers",
-      "maison",
-      "Pour chez Lola",
-      "Pour Lola",
-      "tech",
-      "test1",
-      "test2",
-    ]
-
     const snapshot = await db
       .collection(currentUser.email)
       .doc("items")
@@ -82,20 +70,24 @@
 
 <section>
   <h1>Supprimer des catégories</h1>
-  <ul class="list">
-    {#each categories as cat}
-      <li class="list-item">
-        <Wrapper>
-          <IconButton
-            on:click={() => promptDeleteCat(cat)}
-            class="material-icons red-icon-button">delete</IconButton
-          >
-          <Tooltip>Supprimer la catégorie</Tooltip>
-        </Wrapper>
-        {cat.name}
-      </li>
-    {/each}
-  </ul>
+  {#if categories.length > 0}
+    <ul class="list">
+      {#each categories as cat}
+        <li class="list-item">
+          <Wrapper>
+            <IconButton
+              on:click={() => promptDeleteCat(cat)}
+              class="material-icons red-icon-button">delete</IconButton
+            >
+            <Tooltip>Supprimer la catégorie</Tooltip>
+          </Wrapper>
+          {cat.name}
+        </li>
+      {/each}
+    </ul>
+  {:else}
+    <p class="empty">Aucune catégorie</p>
+  {/if}
 
   <Dialog bind:open={prompt}>
     <h2 class="dialog-title">Supprimer {selectedCat}</h2>
@@ -126,6 +118,11 @@
 <style>
   h1 {
     text-align: center;
+  }
+
+  .empty {
+    margin-left: 0.75rem;
+    font-style: italic;
   }
 
   .list {

@@ -130,7 +130,7 @@
         <h2>Quelles catégories sont visibles par les autres ?</h2>
         {#if loadingVisibleCat}
           <Loading />
-        {:else}
+        {:else if categories.length > 0}
           <div class="categories">
             {#each categories as c, i}
               <FormField
@@ -142,15 +142,17 @@
               </FormField>
             {/each}
           </div>
+        {:else}
+          <p class="empty">Aucune catégorie</p>
         {/if}
 
         <br />
 
-        <div class="validate">
-          {#if !loadingCanWatch && !loadingVisibleCat}
+        {#if !loadingCanWatch && !loadingVisibleCat}
+          <div class="validate">
             <Button variant="raised" type="submit">Tout mettre à jour</Button>
-          {/if}
-        </div>
+          </div>
+        {/if}
       </form>
       <hr />
       <DeleteCategory {categories} />
@@ -166,13 +168,17 @@
 
 <style>
   h2 {
-    margin-top: 0.5rem;
-    margin-bottom: 0.75em;
+    margin: 0.75rem auto;
     text-align: center;
   }
 
   hr {
-    margin: 2rem auto;
+    margin: 1.5rem auto;
+  }
+
+  .empty {
+    margin-left: 0.75rem;
+    font-style: italic;
   }
 
   .card {
