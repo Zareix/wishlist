@@ -120,6 +120,10 @@
     text-align: center;
   }
 
+  p {
+    color: var(--text-color);
+  }
+
   .empty {
     margin-left: 0.75rem;
     font-style: italic;

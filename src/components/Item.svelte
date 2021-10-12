@@ -98,8 +98,8 @@
   {/if}
   {#if restoreItem}
     <ActionIcons>
-      <p class="item-category">
-        Supprimé de <span class="capitalize">"{category}"</span>
+      <p class="item-deleted-from">
+        Supprimé de <span class="category-name">"{category}"</span>
       </p>
       <Wrapper>
         <IconButton
@@ -204,13 +204,19 @@
     align-content: center;
   }
 
-  .item-category {
+  .item-deleted-from {
     width: 100%;
     margin-left: 1rem;
     font-size: 0.8rem;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
+    color: var(--text-color);
+  }
+
+  .item-deleted-from .category-name {
+    text-transform: capitalize;
+    font-style: italic;
   }
 
   @media (max-width: 768px) {
