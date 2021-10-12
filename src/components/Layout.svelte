@@ -33,7 +33,7 @@
 <nav class="bottom-navbar">
   <Link to="/" class={"navlink" + (active === "home" ? " navlink-active" : "")}>
     <IconButton class="navlink-icon material-icons-outlined">home</IconButton>
-    <p class="navlink-text">Home</p>
+    <p class="navlink-text">Accueil</p>
   </Link>
   <Link
     to="/archive"
