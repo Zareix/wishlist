@@ -23,7 +23,7 @@
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
 
   export let modifId = undefined
-  export let oldCategorie
+  export let oldCategory = ""
 
   export let location
   const urlParams = new URLSearchParams(location.search)
@@ -42,7 +42,7 @@
   let snackbarText
   let inputErrors = {
     title: false,
-    categorie: false,
+    category: false,
   }
   let newCatPopupOpen
 
@@ -71,12 +71,12 @@
       await db
         .collection(currentUser.email)
         .doc("items")
-        .collection(oldCategorie)
+        .collection(oldCategory)
         .doc(modifId)
         .get()
         .then((i) => {
           let data = i.data()
-          category = oldCategorie
+          category = oldCategory
           title = data.title
           data.references.forEach((r) => addRef(r))
           data.images.forEach((i) => addImg(i))
@@ -96,7 +96,7 @@
     snackbarText = ""
 
     if (category === undefined || category.trim() === "") {
-      inputErrors.categorie = true
+      inputErrors.category = true
       snackbarText = "Merci de choisir une catégorie"
     }
     if (title === undefined || title.trim() === "") {
@@ -112,10 +112,10 @@
     loading = true
 
     if (modifId) {
-      if (oldCategorie !== category) {
+      if (oldCategory !== category) {
         db.collection(currentUser.email)
           .doc("items")
-          .collection(oldCategorie)
+          .collection(oldCategory)
           .doc(modifId)
           .delete()
           .then(() => {
@@ -217,7 +217,7 @@
               <Select
                 bind:value={category}
                 label="Catégorie"
-                bind:invalid={inputErrors.categorie}
+                bind:invalid={inputErrors.category}
               >
                 {#each categories as cat}
                   <Option value={cat}>{cat.toUpperCase()}</Option>

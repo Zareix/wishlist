@@ -91,7 +91,7 @@ header {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--mdc-theme-background);
+  background-color: var(--mdc-theme-background); /* transparent */
   border-radius: 100vw;
   margin-block: 0.25rem;
 }

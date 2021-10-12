@@ -5,7 +5,7 @@
   import IconButton from "@smui/icon-button"
   import Textfield from "@smui/textfield"
 
-  export let showThumbnail
+  export let showThumbnail = false
   export let links = []
   export let addNewLink
   export let removeLink

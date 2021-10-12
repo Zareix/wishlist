@@ -17,7 +17,7 @@
   <ProtectedRoutes path="settings" component={Config} />
   <ProtectedRoutes path="archive" component={Archive} />
   <ProtectedRoutes path="add" component={AddItem} />
-  <ProtectedRoutes path="item/:oldCategorie/:modifId" component={AddItem} />
+  <ProtectedRoutes path="item/:oldCategory/:modifId" component={AddItem} />
   <ProtectedRoutes path="/" component={Home} />
   <Route component={Page404} />
 </Router>
