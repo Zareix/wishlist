@@ -7,6 +7,7 @@
   import IconButton from "@smui/icon-button"
   import Radio from "@smui/radio"
   import FormField from "@smui/form-field"
+  import Button from "@smui/button"
 
   import Loading from "../components/Loading.svelte"
   import Item from "../components/Item.svelte"
@@ -19,11 +20,14 @@
   let loading = true
   let items = []
   let selectedType = "all"
+  let itemsToShow = 10
 
   let snackbar
   let snackbarText = ""
 
-  $: filteredItems = loading ? [] : filterItems(items, selectedType)
+  $: filteredItems = loading
+    ? []
+    : filterItems(items, selectedType, itemsToShow)
 
   onMount(() => {
     loading = true
@@ -41,16 +45,16 @@
 
   const addItems = (i) => (items = [...items, i])
 
-  const filterItems = (items, type) => {
+  const filterItems = (items, type, toShow) => {
     switch (type) {
       case "all":
-        return items
+        return items.slice(0, toShow)
       case "validated":
-        return items.filter((i) => i.validated)
+        return items.slice(0, toShow).filter((i) => i.validated)
       case "notValidated":
-        return items.filter((i) => !i.validated)
+        return items.slice(0, toShow).filter((i) => !i.validated)
       default:
-        return items
+        return items.slice(0, toShow)
     }
   }
 
@@ -91,7 +95,7 @@
         validated: false,
       })
       .then(() => {
-        snackbarText = 'Item "' + item.title + '" restauré'
+        snackbarText = `Item '${item.title}' restauré dans '${item.categorie}'`
         snackbar.open()
         deleteItem(item)
       })
@@ -110,6 +114,11 @@
           snackbar.open()
         }
       })
+  }
+
+  const showMore = () => {
+    if (itemsToShow + 10 > items.length) itemsToShow = items.length
+    else itemsToShow += 10
   }
 </script>
 
@@ -157,6 +166,14 @@
         {/each}
         <NoContent title="Aucun objet de ce type" />
       </ul>
+      {#if itemsToShow < items.length}
+        <Button
+          on:click={showMore}
+          type="button"
+          variant="raised"
+          class="show-more">Voir plus</Button
+        >
+      {/if}
     {/if}
     <Snackbar bind:this={snackbar} id="snackbarArchive">
       <LabelSnack>{snackbarText}</LabelSnack>
@@ -201,6 +218,11 @@
   #archive > ul > :global(#noContent:only-child) {
     width: 50%;
     margin: auto;
+  }
+
+  :global(button.show-more) {
+    margin: 1.5rem auto;
+    display: block;
   }
 
   @media (max-width: 768px) {
