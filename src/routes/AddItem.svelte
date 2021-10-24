@@ -237,6 +237,7 @@
               label="Titre"
               bind:value={title}
               bind:invalid={inputErrors.title}
+              placeholder="Title"
             />
 
             {#if urlParams.has("title") && description !== ""}
