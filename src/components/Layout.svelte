@@ -91,13 +91,13 @@
     top: auto;
     bottom: 14px;
     margin: 0 auto;
-    width: 40%;
+    width: clamp(15rem, 80vw, 30rem);
     height: 3rem;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    justify-items: center;
+    justify-content: space-around;
     align-content: center;
-    padding: 0.25rem 0;
+    padding: 0.25rem 1rem;
     box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     background-color: var(--mdc-theme-background);
@@ -156,15 +156,10 @@
     font-weight: 600;
   }
 
-  @media (max-width: 768px) {
-    .bottom-navbar {
-      width: 90%;
-    }
-  }
-
   @media (prefers-color-scheme: dark) {
     .bottom-navbar {
-      box-shadow: 0px 10px 14px 5px rgba(200, 200, 200, 0.05);
+      background-color: rgb(23, 32, 51);
+      box-shadow: 0px 10px 14px 5px rgba(50, 50, 50, 0.1);
     }
   }
 </style>
