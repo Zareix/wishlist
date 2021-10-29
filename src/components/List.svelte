@@ -128,7 +128,7 @@
     const element = document.getElementById(collapsible)
 
     if (!collapsed) element.style.maxHeight = null
-    else element.style.maxHeight = 300 * items.length + "px"
+    else element.style.maxHeight = 400 * items.length + "px"
 
     collapsed = !collapsed
   }
