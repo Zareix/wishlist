@@ -341,6 +341,10 @@
     width: 70%;
   }
 
+  :global(.mdc-text-field__input) {
+    -webkit-user-select: text;
+  }
+
   @media (max-width: 768px) {
     .error {
       width: 60vw;
