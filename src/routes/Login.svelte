@@ -1,9 +1,10 @@
 <script>
   import { onMount } from "svelte"
 
-  import { auth, googleProvider } from "../firebase"
+  import { auth } from "../firebase"
   import { user } from "../stores"
 
+  import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
   import { authState } from "rxfire/auth"
   import Button, { Label } from "@smui/button"
   import { navigate } from "svelte-routing"
@@ -26,9 +27,9 @@
   })
 
   const login = () =>
-    auth
-      .signInWithPopup(googleProvider)
-      .then(() => navigate("/", { replace: false }))
+    signInWithPopup(auth, new GoogleAuthProvider()).then(() =>
+      navigate("/", { replace: false })
+    )
 </script>
 
 <main id="login">

@@ -7,7 +7,6 @@
   import Wrapper from "@smui/tooltip/Wrapper.svelte"
   import Dialog, { Content, Actions, InitialFocus } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
-  import { onMount } from "svelte"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -35,8 +34,7 @@
 
     // Delete collection
     if (snapshot.size !== 0) {
-      const batch = db.batch()
-      snapshot.docs.forEach((doc) => {
+      const batch = snapshot.docs.forEach((doc) => {
         //Move to archive
         const ref = db
           .collection(currentUser.email)
