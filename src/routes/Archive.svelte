@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte"
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
@@ -13,6 +13,16 @@
   import Item from "../components/Item.svelte"
   import NoContent from "../components/NoContent.svelte"
   import Layout from "../components/Layout.svelte"
+  import {
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    orderBy,
+    query,
+    setDoc,
+  } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -32,15 +42,15 @@
   onMount(() => {
     loading = true
 
-    db.collection(currentUser.email)
-      .doc("items")
-      .collection("_archive")
-      .orderBy("createdAt", "desc")
-      .get()
-      .then((data) => {
-        data.forEach((i) => addItems({ id: i.id, ...i.data() }))
-        loading = false
-      })
+    getDocs(
+      query(
+        collection(db9, currentUser.email, "items", "_archive"),
+        orderBy("createdAt", "desc")
+      )
+    ).then((data) => {
+      data.forEach((i) => addItems({ id: i.id, ...i.data() }))
+      loading = false
+    })
   })
 
   const addItems = (i) => (items = [...items, i])
@@ -59,25 +69,19 @@
   }
 
   const addCategory = async (categories, newCategory) => {
-    await db
-      .collection(currentUser.email)
-      .doc("categories")
-      .set({
-        categories: [...categories, newCategory.trim().toLowerCase()],
-      })
+    await setDoc(doc(db9, currentUser.email, "categories"), {
+      categories: [...categories, newCategory.trim().toLowerCase()],
+    })
   }
 
   const restoreItem = async (item) => {
     let categories = []
-    const res = await db.collection(currentUser.email).doc("categories").get()
+    const res = getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) categories = res.data().categories
-    else
-      await db
-        .collection("categories")
-        .get()
-        .then((data) =>
-          data.forEach((cat) => (categories = [...categories, cat.id]))
-        )
+    else {
+      const res2 = await getDocs(collection(db9, "categories"))
+      res2.forEach((cat) => (categories = [...categories, cat.id]))
+    }
 
     if (
       !categories.some(
@@ -86,34 +90,26 @@
     )
       await addCategory(categories, item.categorie)
 
-    db.collection(currentUser.email)
-      .doc("items")
-      .collection(item.categorie)
-      .doc(item.id)
-      .set({
-        ...item,
-        validated: false,
-      })
-      .then(() => {
-        snackbarText = `Item '${item.title}' restauré dans '${item.categorie}'`
-        snackbar.open()
-        deleteItem(item)
-      })
+    setDoc(doc(db9, currentUser.email, "items", item.categorie, item.id), {
+      ...item,
+      validated: false,
+    }).then(() => {
+      snackbarText = `Item '${item.title}' restauré dans '${item.categorie}'`
+      snackbar.open()
+      deleteItem(item)
+    })
   }
 
   const deleteItem = (item) => {
-    db.collection(currentUser.email)
-      .doc("items")
-      .collection("_archive")
-      .doc(item.id)
-      .delete()
-      .then(() => {
+    deleteDoc(doc(db9, currentUser.email, "items", "_archive", item.id)).then(
+      () => {
         items = items.filter((i) => i !== item)
         if (!snackbarText.includes("restauré")) {
           snackbarText = 'Item "' + item.title + '" supprimé'
           snackbar.open()
         }
-      })
+      }
+    )
   }
 
   const showMore = () => {

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte"
-  import { db } from "../firebase"
+  import { db, db9 } from "../firebase"
   import { user } from "../stores"
 
   import { flip } from "svelte/animate"
@@ -10,6 +10,7 @@
   import { Icon } from "@smui/button"
 
   import Item from "./Item.svelte"
+  import { collection, getDocs, orderBy, query } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -48,19 +49,19 @@
   const fetchData = async () => {
     catPrice = 0
     items = []
-    await db
-      .collection(chosenUser)
-      .doc("items")
-      .collection(category)
-      .orderBy(orderByPosition ? "position" : "createdAt")
-      .get()
-      .then((data) => {
-        data.forEach((i) => {
-          let price = i.data().price
-          if (price) catPrice += price
-          addItems({ id: i.id, categorie: category, ...i.data() })
-        })
-      })
+
+    const res = await getDocs(
+      query(
+        collection(db9, chosenUser, "items", category),
+        orderBy(orderByPosition ? "position" : "createdAt")
+      )
+    )
+
+    res.forEach((i) => {
+      let price = i.data().price
+      if (price) catPrice += price
+      addItems({ id: i.id, categorie: category, ...i.data() })
+    })
   }
 
   const addItems = (i) => (items = [...items, i])

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
 
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores.js"
 
   import Loading from "../components/Loading.svelte"
@@ -18,6 +18,16 @@
   import { navigate } from "svelte-routing"
   import IconButton from "@smui/icon-button"
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
+  import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    updateDoc,
+  } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -60,20 +70,15 @@
       } else description = body
     }
 
-    const res = await db.collection(currentUser.email).doc("categories").get()
+    const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) categories = res.data().categories
     else {
-      const res2 = await db.collection("categories").get()
+      const res2 = await getDocs(collection(db9, "categories"))
       res2.forEach((cat) => (categories = [...categories, cat.id]))
     }
 
     if (modifId) {
-      await db
-        .collection(currentUser.email)
-        .doc("items")
-        .collection(oldCategory)
-        .doc(modifId)
-        .get()
+      await getDoc(doc(db9, currentUser.email, "items", oldCategory, modifId))
         .then((i) => {
           let data = i.data()
           category = oldCategory
@@ -88,7 +93,7 @@
     }
   })
 
-  const addItem = (e) => {
+  const addItem = async (e) => {
     e.preventDefault()
 
     inputErrors = [false, false]
@@ -113,65 +118,44 @@
 
     if (modifId) {
       if (oldCategory !== category) {
-        db.collection(currentUser.email)
-          .doc("items")
-          .collection(oldCategory)
-          .doc(modifId)
-          .delete()
-          .then(() => {
-            return db
-              .collection(currentUser.email)
-              .doc("items")
-              .collection(category)
-              .add({
-                title,
-                description,
-                price,
-                createdAt,
-                references: refs
-                  .filter((r) => r.value !== "")
-                  .map((r) => r.value),
-                images: images
-                  .filter((i) => i.value !== "")
-                  .map((i) => i.value),
-              })
-          })
-          .then(() => back())
-      } else {
-        db.collection(currentUser.email)
-          .doc("items")
-          .collection(category)
-          .doc(modifId)
-          .update({
-            title,
-            description,
-            price,
-            references: refs.filter((r) => r.value !== "").map((r) => r.value),
-            images: images.filter((i) => i.value !== "").map((i) => i.value),
-          })
-          .then(() => back())
-      }
-    } else {
-      db.collection(currentUser.email)
-        .doc("items")
-        .collection(category)
-        .add({
-          position: 0,
+        await deleteDoc(
+          doc(db9, currentUser.email, "items", oldCategory, modifId)
+        )
+        await addDoc(collection(db9, currentUser.email, "items", category), {
           title,
           description,
           price,
-          createdAt: Date.now(),
+          createdAt,
+          position: 0,
           references: refs.filter((r) => r.value !== "").map((r) => r.value),
           images: images.filter((i) => i.value !== "").map((i) => i.value),
         })
-        .then(() => back())
+        back()
+      } else {
+        updateDoc(doc(db9, currentUser.email, "items", category, modifId), {
+          title,
+          description,
+          price,
+          references: refs.filter((r) => r.value !== "").map((r) => r.value),
+          images: images.filter((i) => i.value !== "").map((i) => i.value),
+        }).then(() => back())
+      }
+    } else {
+      addDoc(collection(db9, currentUser.email, "items", category), {
+        position: 0,
+        title,
+        description,
+        price,
+        createdAt: Date.now(),
+        references: refs.filter((r) => r.value !== "").map((r) => r.value),
+        images: images.filter((i) => i.value !== "").map((i) => i.value),
+      }).then(() => back())
     }
   }
 
   const back = () =>
     navigate(
-      "/#" +
-        "category" +
+      "/#category" +
         category.charAt(0).toUpperCase() +
         category.slice(1).replace(" ", "")
     )
@@ -193,7 +177,7 @@
   const toggleNewCat = async () => {
     newCatPopupOpen = !newCatPopupOpen
     if (!newCatPopupOpen) {
-      const res = await db.collection(currentUser.email).doc("categories").get()
+      const res = await getDoc(doc(db9, currentUser.email, "categories"))
       if (res.exists) categories = res.data().categories
     }
   }

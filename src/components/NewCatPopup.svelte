@@ -3,8 +3,9 @@
   import Button, { Label } from "@smui/button"
   import Textfield from "@smui/textfield"
 
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores"
+  import { doc, setDoc } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -43,12 +44,9 @@
 
     if (checkErrors()) return
 
-    db.collection(currentUser.email)
-      .doc("categories")
-      .set({
-        categories: [...allCategories, category.trim().toLowerCase()],
-      })
-      .then(() => closeDialog())
+    setDoc(doc(db9, currentUser.email, "categories"), {
+      categories: [...allCategories, category.trim().toLowerCase()],
+    }).then(() => closeDialog())
   }
 </script>
 

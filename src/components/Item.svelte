@@ -1,5 +1,5 @@
 <script>
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import { ActionIcons } from "@smui/card"
@@ -9,6 +9,7 @@
 
   import ItemImage from "./ItemImage.svelte"
   import { Link } from "svelte-routing"
+  import { deleteDoc, doc, setDoc } from "@firebase/firestore"
 
   export let item = undefined
   export let removeItem = undefined
@@ -28,24 +29,16 @@
   }
 
   const moveToArchive = async (validated) => {
-    await db
-      .collection(currentUser.email)
-      .doc("items")
-      .collection("_archive")
-      .doc(item.id)
-      .set({
-        ...item,
-        validated,
-      })
+    await setDoc(doc(db9, currentUser.email, "items", "_archive", item.id), {
+      ...item,
+      validated,
+    })
 
-    db.collection(currentUser.email)
-      .doc("items")
-      .collection(item.categorie)
-      .doc(item.id)
-      .delete()
-      .then(() => {
-        removeItem(item)
-      })
+    deleteDoc(
+      doc(db9, currentUser.email, "items", item.categorie, item.id)
+    ).then(() => {
+      removeItem(item)
+    })
   }
 </script>
 

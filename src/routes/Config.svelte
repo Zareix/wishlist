@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
 
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import TextField from "@smui/textfield"
@@ -14,6 +14,7 @@
   import Layout from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
   import DeleteCategory from "../components/DeleteCategory.svelte"
+  import { collection, doc, getDoc, getDocs, setDoc } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -27,9 +28,8 @@
 
   onMount(async () => {
     let authorizedCat = []
-    db.collection("permissions")
-      .doc(currentUser.email)
-      .get()
+
+    getDoc(doc(db9, "permissions", currentUser.email))
       .then((res) => {
         if (res.exists) {
           canWatch = res.data().canWatch
@@ -42,23 +42,20 @@
         console.log(error)
       })
 
-    const res = await db.collection(currentUser.email).doc("categories").get()
+    const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) {
       categories = res
         .data()
         .categories.map((c) => ({ name: c, checked: false }))
       loadingVisibleCat = false
-    } else
-      await db
-        .collection("categories")
-        .get()
-        .then((data) => {
-          data.forEach(
-            (cat) =>
-              (categories = [...categories, { name: cat.id, checked: false }])
-          )
-          loadingVisibleCat = false
-        })
+    } else {
+      const res2 = await getDocs(collection(db9, "categories"))
+      res2.forEach(
+        (cat) =>
+          (categories = [...categories, { name: cat.id, checked: false }])
+      )
+      loadingVisibleCat = false
+    }
 
     authorizedCat.forEach(
       (ac) =>
@@ -88,16 +85,13 @@
   const submit = async (e) => {
     e.preventDefault()
 
-    db.collection("permissions")
-      .doc(currentUser.email)
-      .set({
-        canWatch: canWatch.filter((c) => c !== ""),
-        authorizedCat: categories.filter((c) => c.checked).map((c) => c.name),
-      })
-      .then(() => {
-        snackbarText = "Permissions mises à jour"
-        snackbar.open()
-      })
+    setDoc(doc(db9, "permissions", currentUser.email), {
+      canWatch: canWatch.filter((c) => c !== ""),
+      authorizedCat: categories.filter((c) => c.checked).map((c) => c.name),
+    }).then(() => {
+      snackbarText = "Permissions mises à jour"
+      snackbar.open()
+    })
   }
 </script>
 

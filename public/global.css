@@ -268,7 +268,7 @@ a:hover {
 }
 
 .card {
-  width: clamp(20rem, 50vw, 35rem);
+  width: clamp(17rem, 50vw, 35rem);
   margin: auto;
   margin-top: 2em;
   padding: 1rem;

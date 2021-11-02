@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
 
-  import { db } from "../firebase"
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import Select, { Option } from "@smui/select"
@@ -13,6 +13,14 @@
   import NoContent from "../components/NoContent.svelte"
   import Loading from "../components/Loading.svelte"
   import Layout from "../components/Layout.svelte"
+  import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    where,
+  } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe2 = user.subscribe((v) => (currentUser = v))
@@ -34,20 +42,19 @@
     allUsers = [currentUser.email]
     chosenUser = currentUser.email
 
-    const res = await db.collection(currentUser.email).doc("categories").get()
+    const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) categories = res.data().categories
-    else
-      await db
-        .collection("categories")
-        .get()
-        .then((data) =>
-          data.forEach((cat) => (categories = [...categories, cat.id]))
-        )
+    else {
+      const res3 = await getDocs(collection(db9, "categories"))
+      res3.forEach((cat) => (categories = [...categories, cat.id]))
+    }
 
-    const res2 = await db
-      .collection("permissions")
-      .where("canWatch", "array-contains", currentUser.email)
-      .get()
+    const res2 = await getDocs(
+      query(
+        collection(db9, "permissions"),
+        where("canWatch", "array-contains", currentUser.email)
+      )
+    )
     res2.docs.forEach((u) => {
       allUsers = [...allUsers, u.id]
       authorizedCat[u.id] = u.data().authorizedCat

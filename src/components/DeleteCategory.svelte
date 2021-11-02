@@ -1,5 +1,5 @@
 <script>
-  import { db } from "../firebase"
+  import { db, db9 } from "../firebase"
   import { user } from "../stores"
 
   import Tooltip from "@smui/tooltip/Tooltip.svelte"
@@ -7,6 +7,14 @@
   import Wrapper from "@smui/tooltip/Wrapper.svelte"
   import Dialog, { Content, Actions, InitialFocus } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
+  import {
+    collection,
+    doc,
+    getDoc,
+    query,
+    setDoc,
+    updateDoc,
+  } from "@firebase/firestore"
 
   let currentUser
   const unsubcribe = user.subscribe((v) => (currentUser = v))
@@ -52,17 +60,14 @@
       await batch.commit()
     }
 
-    db.collection(currentUser.email) // Update user categories list
-      .doc("categories")
-      .update({
-        categories: categories
-          .filter((c) => c.name !== selectedCat)
-          .map((c) => c.name),
-      })
-      .then(() => {
-        selectedCat = ""
-        location.reload()
-      })
+    updateDoc(doc(db9, currentUser.email, "categories"), {
+      categories: categories
+        .filter((c) => c.name !== selectedCat)
+        .map((c) => c.name),
+    }).then(() => {
+      selectedCat = ""
+      location.reload()
+    })
   }
 </script>
 
