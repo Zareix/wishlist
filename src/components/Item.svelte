@@ -2,14 +2,15 @@
   import { db9 } from "../firebase"
   import { user } from "../stores"
 
+  import { Link } from "svelte-routing"
+  import { deleteDoc, doc, setDoc } from "@firebase/firestore"
   import { ActionIcons } from "@smui/card"
   import IconButton from "@smui/icon-button"
   import Tooltip, { Wrapper } from "@smui/tooltip"
   import Chip, { Set, Text } from "@smui/chips"
 
   import ItemImage from "./ItemImage.svelte"
-  import { Link } from "svelte-routing"
-  import { deleteDoc, doc, setDoc } from "@firebase/firestore"
+  import { onDestroy } from "svelte"
 
   export let item = undefined
   export let removeItem = undefined
@@ -20,7 +21,9 @@
   export let category = ""
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
+
+  onDestroy(() => unsubscribe())
 
   const formatRef = (ref) => {
     ref = ref.replace(new RegExp("(http)(s)?(://)(www\\.)?(m\\.)?"), "")

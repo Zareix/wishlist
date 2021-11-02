@@ -1,4 +1,6 @@
 <script>
+  import { onDestroy } from "svelte"
+
   import { auth } from "../firebase"
   import { user } from "../stores"
 
@@ -10,9 +12,11 @@
   import Footer from "./Footer.svelte"
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   export let active = ""
+
+  onDestroy(() => unsubscribe())
 
   const logout = () => {
     navigate("/login")

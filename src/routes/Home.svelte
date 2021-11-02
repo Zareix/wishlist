@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onDestroy, onMount } from "svelte"
 
   import { db9 } from "../firebase"
   import { user } from "../stores"
@@ -8,11 +8,6 @@
   import Snackbar, { Actions, Label } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
   import { navigate } from "svelte-routing"
-
-  import List from "../components/List.svelte"
-  import NoContent from "../components/NoContent.svelte"
-  import Loading from "../components/Loading.svelte"
-  import Layout from "../components/Layout.svelte"
   import {
     collection,
     doc,
@@ -22,8 +17,13 @@
     where,
   } from "@firebase/firestore"
 
+  import List from "../components/List.svelte"
+  import NoContent from "../components/NoContent.svelte"
+  import Loading from "../components/Loading.svelte"
+  import Layout from "../components/Layout.svelte"
+
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   if (currentUser == null) navigate("/login", { replace: true })
 
@@ -37,6 +37,8 @@
 
   $: displayCategories =
     chosenUser === currentUser.email ? categories : authorizedCat[chosenUser]
+
+  onDestroy(() => unsubscribe())
 
   onMount(async () => {
     allUsers = [currentUser.email]

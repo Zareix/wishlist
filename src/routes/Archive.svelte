@@ -1,5 +1,6 @@
 <script>
-  import { onMount } from "svelte"
+  import { onDestroy, onMount } from "svelte"
+
   import { db9 } from "../firebase"
   import { user } from "../stores"
 
@@ -8,11 +9,6 @@
   import Radio from "@smui/radio"
   import FormField from "@smui/form-field"
   import Button from "@smui/button"
-
-  import Loading from "../components/Loading.svelte"
-  import Item from "../components/Item.svelte"
-  import NoContent from "../components/NoContent.svelte"
-  import Layout from "../components/Layout.svelte"
   import {
     collection,
     deleteDoc,
@@ -24,8 +20,13 @@
     setDoc,
   } from "@firebase/firestore"
 
+  import Loading from "../components/Loading.svelte"
+  import Item from "../components/Item.svelte"
+  import NoContent from "../components/NoContent.svelte"
+  import Layout from "../components/Layout.svelte"
+
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   let loading = true
   let items = []
@@ -38,6 +39,8 @@
   $: filteredItems = loading
     ? []
     : filterItems(items, selectedType, itemsToShow)
+
+  onDestroy(() => unsubscribe())
 
   onMount(() => {
     loading = true

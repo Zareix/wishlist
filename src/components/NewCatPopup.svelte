@@ -1,14 +1,16 @@
 <script>
+  import { onDestroy } from "svelte"
+
   import Dialog, { Content, Actions } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
   import Textfield from "@smui/textfield"
+  import { doc, setDoc } from "@firebase/firestore"
 
   import { db9 } from "../firebase"
   import { user } from "../stores"
-  import { doc, setDoc } from "@firebase/firestore"
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   export let toggleDialog
   export let allCategories
@@ -16,6 +18,8 @@
 
   let category = ""
   let error = ""
+
+  onDestroy(() => unsubscribe())
 
   const closeDialog = () => {
     category = ""

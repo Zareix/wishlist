@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onDestroy, onMount } from "svelte"
 
   import { auth } from "../firebase"
   import { user } from "../stores"
@@ -25,6 +25,8 @@
   const unsubscribe = authState(auth).subscribe((u) => {
     user.set(u)
   })
+
+  onDestroy(() => unsubscribe.unsubscribe())
 
   const login = () =>
     signInWithPopup(auth, new GoogleAuthProvider()).then(() =>

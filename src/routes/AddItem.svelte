@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onMount, onDestroy } from "svelte"
 
   import { db9 } from "../firebase"
   import { user } from "../stores.js"
@@ -30,7 +30,7 @@
   } from "@firebase/firestore"
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   export let modifId = undefined
   export let oldCategory = ""
@@ -55,6 +55,8 @@
     category: false,
   }
   let newCatPopupOpen
+
+  onDestroy(() => unsubscribe())
 
   onMount(async () => {
     if (urlParams.has("title")) title = urlParams.get("title")

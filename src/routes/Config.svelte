@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onDestroy, onMount } from "svelte"
 
   import { db9 } from "../firebase"
   import { user } from "../stores"
@@ -10,14 +10,14 @@
   import IconButton from "@smui/icon-button"
   import Switch from "@smui/switch"
   import FormField from "@smui/form-field"
+  import { collection, doc, getDoc, getDocs, setDoc } from "@firebase/firestore"
 
   import Layout from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
   import DeleteCategory from "../components/DeleteCategory.svelte"
-  import { collection, doc, getDoc, getDocs, setDoc } from "@firebase/firestore"
 
   let currentUser
-  const unsubcribe = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   let canWatch = []
   let snackbar
@@ -25,6 +25,8 @@
   let categories = []
   let loadingCanWatch = true
   let loadingVisibleCat = true
+
+  onDestroy(() => unsubscribe())
 
   onMount(async () => {
     let authorizedCat = []

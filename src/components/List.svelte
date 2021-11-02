@@ -1,6 +1,7 @@
 <script>
-  import { onMount } from "svelte"
-  import { db, db9 } from "../firebase"
+  import { onDestroy, onMount } from "svelte"
+
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import { flip } from "svelte/animate"
@@ -8,12 +9,19 @@
 
   import IconButton from "@smui/icon-button"
   import { Icon } from "@smui/button"
+  import {
+    collection,
+    doc,
+    getDocs,
+    orderBy,
+    query,
+    writeBatch,
+  } from "@firebase/firestore"
 
   import Item from "./Item.svelte"
-  import { collection, getDocs, orderBy, query } from "@firebase/firestore"
 
   let currentUser
-  const unsubcribe2 = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   const flipDurationMs = 300
   const dropTargetClasses = ["dnd-active"]
@@ -34,6 +42,8 @@
     category.slice(1).replace(" ", "") +
     Math.random() * 100
   let collapsed = true
+
+  onDestroy(() => unsubscribe())
 
   onMount(() => {
     oldUser = chosenUser
@@ -71,19 +81,15 @@
     snackbarOpen('"' + item.title + '" placé dans les archives')
   }
 
-  const updatePosition = () => {
-    const batch = db.batch()
+  const updatePosition = async () => {
+    const batch = writeBatch(db9)
+
     items.forEach((item, index) => {
-      batch.update(
-        db
-          .collection(chosenUser)
-          .doc("items")
-          .collection(category)
-          .doc(item.id),
-        { position: index }
-      )
+      batch.update(doc(db9, chosenUser, "items", category, item.id), {
+        position: index,
+      })
     })
-    batch.commit()
+    await batch.commit()
   }
 
   const handleDndConsider = (e) => {

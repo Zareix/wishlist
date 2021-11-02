@@ -1,5 +1,7 @@
 <script>
-  import { db, db9 } from "../firebase"
+  import { onDestroy } from "svelte"
+
+  import { db9 } from "../firebase"
   import { user } from "../stores"
 
   import Tooltip from "@smui/tooltip/Tooltip.svelte"
@@ -10,18 +12,19 @@
   import {
     collection,
     doc,
-    getDoc,
-    query,
-    setDoc,
+    getDocs,
     updateDoc,
+    writeBatch,
   } from "@firebase/firestore"
 
   let currentUser
-  const unsubcribe = user.subscribe((v) => (currentUser = v))
+  const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   export let categories = []
   let selectedCat = ""
   let prompt = false
+
+  onDestroy(() => unsubscribe())
 
   const promptDeleteCat = (cat) => {
     prompt = true
@@ -34,28 +37,25 @@
   }
 
   const deleteCat = async () => {
-    const snapshot = await db
-      .collection(currentUser.email)
-      .doc("items")
-      .collection(selectedCat)
-      .get()
+    const snap = await getDocs(
+      collection(db9, currentUser.email, "items", selectedCat)
+    )
 
-    // Delete collection
-    if (snapshot.size !== 0) {
-      const batch = snapshot.docs.forEach((doc) => {
-        //Move to archive
-        const ref = db
-          .collection(currentUser.email)
-          .doc("items")
-          .collection("_archive")
-          .doc(doc.id)
-        batch.set(ref, {
-          ...doc.data(),
-          categorie: selectedCat,
-          validated: false,
-        })
+    if (snap.size !== 0) {
+      const batch = writeBatch(db9)
+      snap.docs.forEach((document) => {
+        batch.set(
+          doc(db9, currentUser.email, "items", "_archive", document.id),
+          {
+            ...document.data(),
+            categorie: selectedCat,
+            validated: false,
+          }
+        )
 
-        batch.delete(doc.ref) // Delete from category so delete collection
+        batch.delete(
+          doc(db9, currentUser.email, "items", selectedCat, document.id)
+        )
       })
       await batch.commit()
     }
