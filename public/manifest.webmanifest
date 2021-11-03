@@ -2,6 +2,7 @@
     "theme_color": "#6002EE",
     "background_color": "#ffffff",
     "display": "standalone",
+    "orientation": "portrait",
     "scope": "/",
     "start_url": "/",
     "name": "Wishlist",
