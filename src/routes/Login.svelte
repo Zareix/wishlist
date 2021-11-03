@@ -34,6 +34,10 @@
     )
 </script>
 
+<svelte:head>
+  <title>Wishlist - Login</title>
+</svelte:head>
+
 <main id="login">
   {#if loading}
     <Loading />

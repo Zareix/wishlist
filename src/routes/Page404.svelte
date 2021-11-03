@@ -5,6 +5,10 @@
   import { navigate } from "svelte-routing"
 </script>
 
+<svelte:head>
+  <title>Wishlist - 404</title>
+</svelte:head>
+
 <main id="page404">
   <section class="error404">
     {@html page404Svg}

@@ -97,7 +97,7 @@
   }
 </script>
 
-<Layout active="settings">
+<Layout active="settings" pageTitle="Paramètres">
   <main id="settings">
     <div id="permissions" class="card">
       <form on:submit={submit}>

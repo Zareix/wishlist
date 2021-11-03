@@ -79,11 +79,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Wishlist - {currentUser.displayName}</title>
-</svelte:head>
-
-<Layout active="home">
+<Layout active="home" pageTitle={currentUser.displayName}>
   <main id="home">
     {#if loading}
       <div class="loading-container">

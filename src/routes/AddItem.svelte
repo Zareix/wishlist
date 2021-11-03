@@ -185,7 +185,7 @@
   }
 </script>
 
-<Layout active="add">
+<Layout active="add" pageTitle="Ajouter">
   <main id="addItem">
     {#if loading}
       <Loading />

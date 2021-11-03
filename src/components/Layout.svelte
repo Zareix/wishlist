@@ -15,6 +15,7 @@
   const unsubscribe = user.subscribe((v) => (currentUser = v))
 
   export let active = ""
+  export let pageTitle
 
   onDestroy(() => unsubscribe())
 
@@ -24,6 +25,10 @@
     user.set(null)
   }
 </script>
+
+<svelte:head>
+  <title>Wishlist - {pageTitle}</title>
+</svelte:head>
 
 <TopAppBar variant="fixed" id="navbar">
   <Section class="mdc-top-app-bar__row">

@@ -121,7 +121,7 @@
   }
 </script>
 
-<Layout active="archive">
+<Layout active="archive" pageTitle="Archive">
   <main id="archive">
     <h1>Archive</h1>
     {#if loading}
