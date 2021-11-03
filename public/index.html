@@ -55,6 +55,13 @@
           })
         })
       }
+
+      window.addEventListener("resize", function () {
+        let fixedWidth = 300
+        let fixedHeight = 1000
+
+        window.resizeTo(fixedWidth, fixedHeight)
+      })
     </script>
   </body>
 </html>
