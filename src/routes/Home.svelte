@@ -25,8 +25,6 @@
   let currentUser
   const unsubscribe = user.subscribe((v) => (currentUser = v))
 
-  if (currentUser == null) navigate("/login", { replace: true })
-
   let categories = []
   let chosenUser
   let allUsers = []
@@ -94,7 +92,9 @@
           id="selectWishlist"
         >
           {#each allUsers as email}
-            <Option value={email}>{email}</Option>
+            <Option value={email}
+              >{email === currentUser.email ? "Moi" : email}</Option
+            >
           {/each}
         </Select>
       </div>

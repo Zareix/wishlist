@@ -14,6 +14,8 @@
 
   import loginSvg from "../assets/login.svg"
 
+  export let location = ""
+
   let loading = true
 
   onMount(() =>
@@ -30,7 +32,7 @@
 
   const login = () =>
     signInWithPopup(auth, new GoogleAuthProvider()).then(() =>
-      navigate("/", { replace: false })
+      navigate(location, { replace: false })
     )
 </script>
 

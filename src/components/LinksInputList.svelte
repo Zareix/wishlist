@@ -60,8 +60,12 @@
   <div class="separator" />
   <h4>{title} :</h4>
 {/if}
-<section
+<form
   class="links-list"
+  on:submit={(e) => {
+    e.preventDefault()
+    addNewLink()
+  }}
   use:dndzone={{
     items: links,
     flipDurationMs,
@@ -88,13 +92,12 @@
       <Textfield
         label={placeholder + " " + (links.indexOf(link) + 1)}
         bind:value={link.value}
+      />
+      <IconButton
+        type="button"
+        class="material-icons delete-link-btn"
+        on:click={() => removeLink(link)}>delete</IconButton
       >
-        <IconButton
-          class="material-icons delete-link-btn"
-          slot="trailingIcon"
-          on:click={() => removeLink(link)}>delete</IconButton
-        >
-      </Textfield>
       {#if showThumbnail && imageExists(link.value)}
         <img
           src={link.value}
@@ -104,11 +107,11 @@
       {/if}
     </div>
   {/each}
-</section>
-<Button type="button" on:click={addNewLink}>
-  <Icon class="material-icons">add</Icon>
-  <Label>Ajouter une {addBtnText.toLowerCase()}</Label>
-</Button>
+  <Button type="submit">
+    <Icon class="material-icons">add</Icon>
+    <Label>Ajouter une {addBtnText.toLowerCase()}</Label>
+  </Button>
+</form>
 
 <style>
   .links-list {

@@ -25,7 +25,6 @@
     doc,
     getDoc,
     getDocs,
-    setDoc,
     updateDoc,
   } from "@firebase/firestore"
 
@@ -163,15 +162,21 @@
     )
 
   const addNewRef = () =>
-    (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: "" }])
+    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: "" }])
   const addRef = (ref) =>
-    (refs = [...refs, { id: Math.floor(Math.random() * 1000), value: ref }])
+    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: ref }])
   const removeRef = (ref) => (refs = refs.filter((r) => r !== ref))
 
   const addNewImg = () =>
-    (images = [...images, { id: Math.floor(Math.random() * 1000), value: "" }])
+    (images = [
+      ...images,
+      { id: Math.floor(Math.random() * 100000), value: "" },
+    ])
   const addImg = (img) =>
-    (images = [...images, { id: Math.floor(Math.random() * 1000), value: img }])
+    (images = [
+      ...images,
+      { id: Math.floor(Math.random() * 100000), value: img },
+    ])
   const removeImg = (img) => (images = images.filter((i) => i !== img))
 
   const switchTitleDesc = () => ([title, description] = [description, title])
