@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="wishlist logo" src="https://wishlist.raphael-catarino.fr/favicon.ico" width="60" />
+    <img alt="wishlist logo" src="https://wishlist.raphael-catarino.fr/icons/icon-512x512.png" width="60" />
 </p>
 <h1 align="center">
   Wishlist
