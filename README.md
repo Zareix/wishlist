@@ -1,4 +1,9 @@
-# raphael-wishlist
+<p align="center">
+    <img alt="wishlist logo" src="https://wishlist.raphael-catarino.fr/favicon.ico" width="60" />
+</p>
+<h1 align="center">
+  Wishlist
+</h1>
 
 ## Description
 A simple wishlist that do what I want, made by myself with _[Svelte JS](https://svelte.dev)_.<br>
