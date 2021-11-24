@@ -181,7 +181,7 @@
         on:finalize={handleDndFinalize}
       >
         {#each items as item (item.id)}
-          <div animate:flip={{ duration: flipDurationMs }}>
+          <li animate:flip={{ duration: flipDurationMs }}>
             <div class="drag-icon-item-wrapper">
               <Icon
                 class="material-icons drag-icon-item"
@@ -200,7 +200,7 @@
               {canModif}
               {category}
             />
-          </div>
+          </li>
         {/each}
       </ul>
     {:else}
@@ -301,16 +301,20 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 0 1.5rem;
+    padding-inline: 1rem;
   }
 
   .collapsible {
-    transition: max-height 1s ease;
+    transition: all 1s ease;
     overflow: hidden;
   }
 
+  :not(.collapsed) .item-list {
+    padding-bottom: 1rem;
+  }
+
   .collapsed .item-list {
-    max-height: 0px;
+    max-height: 0;
   }
 
   :global(.chevron) {

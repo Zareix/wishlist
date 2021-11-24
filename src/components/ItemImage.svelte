@@ -9,7 +9,7 @@
   let open = false
 </script>
 
-<div class="image">
+<li class="image">
   <img
     src={image}
     alt={"Thumbnail " + index + " of " + title}
@@ -33,7 +33,7 @@
       </Button>
     </Actions>
   </Dialog>
-</div>
+</li>
 
 <style>
   h2 {
@@ -72,17 +72,20 @@
   }
 
   .image {
-    max-width: 30%;
+    vertical-align: middle;
+    display: inline-flex;
+    min-height: 6rem;
     max-height: 15rem;
+    border-radius: 16px;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .image:not(:last-child) {
+    margin-right: 0.25rem;
   }
 
   .image-dialog {
-    max-height: 80vh;
-  }
-
-  @media (max-width: 768px) {
-    .image {
-      max-width: 40%;
-    }
+    max-height: 70vh;
   }
 </style>

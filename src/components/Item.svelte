@@ -11,6 +11,7 @@
 
   import ItemImage from "./ItemImage.svelte"
   import { onDestroy } from "svelte"
+  import ItemImageList from "./ItemImageList.svelte"
 
   export let item = undefined
   export let removeItem = undefined
@@ -45,28 +46,25 @@
   }
 </script>
 
-<li id={category.replace(" ", "") + "Item" + index} class="item">
-  <div class={"item-header"}>
-    {#if restoreItem && item.validated}
-      <div class="material-icons green-icon-button check">check</div>
-    {/if}
-    {#if restoreItem && !item.validated}
-      <div class="material-icons red-icon-button check">close</div>
-    {/if}
-    <div class="flex-grow">
-      <h3 class="title">
-        {item.title}
-      </h3>
-      {#if item.description && item.description !== ""}
-        <p class="description text-gray">{item.description}</p>
-      {/if}
-    </div>
-    {#if item.price && item.price !== 0}
-      <p class="price text-gray">{item.price.toLocaleString()} €</p>
-    {/if}
-  </div>
-  {#if item.references.length > 0 || item.images.length > 0}
-    <section class="item-content">
+<div id={category.replace(" ", "") + "Item" + index} class="item">
+  <div class="content-wrapper">
+    <div class="content">
+      <div class="item-header">
+        {#if restoreItem && item.validated}
+          <div class="material-icons green-icon-button check">check</div>
+        {/if}
+        {#if restoreItem && !item.validated}
+          <div class="material-icons red-icon-button check">close</div>
+        {/if}
+        <div class="flex-grow">
+          <h3 class="title">
+            {item.title}
+          </h3>
+          {#if item.description && item.description !== ""}
+            <p class="description text-gray">{item.description}</p>
+          {/if}
+        </div>
+      </div>
       {#if item.references.length > 0}
         <Set chips={item.references} let:chip class="chips-set">
           {#if chip.startsWith("http")}
@@ -83,17 +81,18 @@
           {/if}
         </Set>
       {/if}
-      {#if item.images.length > 0}
-        <div class="image-list">
-          {#each item.images as image, index}
-            <ItemImage title={item.title} {image} {index} />
-          {/each}
-        </div>
-      {/if}
-    </section>
-  {/if}
+    </div>
+    {#if item.images.length > 0}
+      <div class="image-list">
+        <ItemImageList images={item.images} title={item.title} />
+      </div>
+    {/if}
+  </div>
   {#if restoreItem}
     <ActionIcons>
+      {#if item.price && item.price !== 0}
+        <p class="price text-gray">{item.price.toLocaleString()} €</p>
+      {/if}
       <p class="item-deleted-from">
         Supprimé de <span class="category-name">"{category}"</span>
       </p>
@@ -116,6 +115,9 @@
     </ActionIcons>
   {:else if canModif}
     <ActionIcons>
+      {#if item.price && item.price !== 0}
+        <p class="price text-gray">{item.price.toLocaleString()} €</p>
+      {/if}
       <Wrapper>
         <Link to={"/item/" + item.categorie + "/" + item.id}>
           <IconButton class="material-icons edit-icon-button">edit</IconButton>
@@ -138,14 +140,36 @@
       </Wrapper>
     </ActionIcons>
   {/if}
-</li>
+</div>
 
 <style>
+  .content-wrapper {
+    margin-top: 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .content {
+    grid-column: span 2 / span 2;
+    margin-inline: 0.5rem;
+  }
+
+  .content:only-child {
+    grid-column: span 3 / span 3;
+  }
+
   .item {
     padding: 0.5rem;
     background-color: var(--background-secondary);
     border-radius: 16px;
     cursor: default;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.5s ease;
+  }
+
+  .item:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
   .title {
@@ -154,17 +178,10 @@
   }
 
   .item-header {
-    margin: 1rem;
-    margin-bottom: 0;
     padding-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-  }
-
-  .item-content {
-    margin: 0 1rem;
-    border-top: 1px solid var(--gray-light);
   }
 
   .description {
@@ -180,6 +197,8 @@
 
   .price {
     margin: 0;
+    margin-left: 1rem;
+    width: 100%;
     cursor: text;
     white-space: nowrap;
   }
@@ -195,7 +214,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em 1em;
-    margin-bottom: 0.25em;
     align-items: center;
     align-content: center;
   }
@@ -213,6 +231,10 @@
   .item-deleted-from .category-name {
     text-transform: capitalize;
     font-style: italic;
+  }
+
+  :global(.mdc-chip-set .mdc-chip) {
+    margin: 0;
   }
 
   @media (max-width: 768px) {

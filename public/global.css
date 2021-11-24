@@ -106,6 +106,7 @@ header {
 
 ::-webkit-scrollbar-track:horizontal {
   background-color: transparent;
+  margin-inline: 0.5rem;
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
@@ -239,6 +240,12 @@ a:hover {
 .dnd-item-active {
   z-index: 10 !important;
   outline: none !important;
+  border-radius: 16px !important;
+}
+
+.dnd-item-active .item {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .dnd-active {
@@ -267,7 +274,7 @@ a:hover {
 }
 
 .card {
-  width: clamp(17rem, 50vw, 35rem);
+  width: clamp(19.5rem, 50vw, 35rem);
   margin: auto;
   margin-top: 2em;
   padding: 1rem;
