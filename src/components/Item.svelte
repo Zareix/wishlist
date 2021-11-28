@@ -9,7 +9,6 @@
   import Tooltip, { Wrapper } from "@smui/tooltip"
   import Chip, { Set, Text } from "@smui/chips"
 
-  import ItemImage from "./ItemImage.svelte"
   import { onDestroy } from "svelte"
   import ItemImageList from "./ItemImageList.svelte"
 
@@ -88,11 +87,11 @@
       </div>
     {/if}
   </div>
-  {#if restoreItem}
-    <ActionIcons>
-      {#if item.price && item.price !== 0}
-        <p class="price text-gray">{item.price.toLocaleString()} €</p>
-      {/if}
+  <ActionIcons>
+    {#if item.price && item.price !== 0}
+      <p class="price text-gray">{item.price.toLocaleString()} €</p>
+    {/if}
+    {#if restoreItem}
       <p class="item-deleted-from">
         Supprimé de <span class="category-name">"{category}"</span>
       </p>
@@ -112,12 +111,7 @@
         >
         <Tooltip>Supprimer définitivement</Tooltip>
       </Wrapper>
-    </ActionIcons>
-  {:else if canModif}
-    <ActionIcons>
-      {#if item.price && item.price !== 0}
-        <p class="price text-gray">{item.price.toLocaleString()} €</p>
-      {/if}
+    {:else if canModif}
       <Wrapper>
         <Link to={"/item/" + item.categorie + "/" + item.id}>
           <IconButton class="material-icons edit-icon-button">edit</IconButton>
@@ -138,8 +132,8 @@
         >
         <Tooltip>Supprimer</Tooltip>
       </Wrapper>
-    </ActionIcons>
-  {/if}
+    {/if}
+  </ActionIcons>
 </div>
 
 <style>
@@ -197,7 +191,7 @@
 
   .price {
     margin: 0;
-    margin-left: 1rem;
+    margin-left: 2rem;
     width: 100%;
     cursor: text;
     white-space: nowrap;
@@ -220,17 +214,21 @@
 
   .item-deleted-from {
     width: 100%;
-    margin-left: 1rem;
     font-size: 0.8rem;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-align: right;
     color: var(--text-color);
   }
 
   .item-deleted-from .category-name {
     text-transform: capitalize;
     font-style: italic;
+  }
+
+  :global(.mdc-card__action-icons) {
+    min-height: 3rem;
   }
 
   :global(.mdc-chip-set .mdc-chip) {
