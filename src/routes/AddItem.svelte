@@ -72,8 +72,9 @@
     }
 
     const res = await getDoc(doc(db9, currentUser.email, "categories"))
-    if (res.exists) categories = res.data().categories
-    else categories = []
+    if (res.exists) {
+      categories = res.data().categories.sort((a, b) => a.localeCompare(b))
+    } else categories = []
 
     if (modifId) {
       await getDoc(doc(db9, currentUser.email, "items", oldCategory, modifId))
@@ -247,7 +248,14 @@
             <br />
             <div class="spacer" />
 
-            <Textfield label="Prix" bind:value={price} type="number">
+            <Textfield
+              label="Prix"
+              bind:value={price}
+              type="number"
+              input$min="0.00"
+              input$max="1000000.00"
+              input$step="0.01"
+            >
               <svelte:fragment slot="trailingIcon">€</svelte:fragment>
             </Textfield>
 

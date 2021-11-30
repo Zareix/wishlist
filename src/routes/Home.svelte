@@ -62,13 +62,7 @@
     const res3 = await getDoc(doc(db9, "permissions", currentUser.email))
     userAuthorizedCat = res3.data().authorizedCat
 
-    categories = categories.sort((a, b) => {
-      a = a.toLowerCase()
-      b = b.toLowerCase()
-      if (a < b) return -1
-      if (a > b) return 1
-      return 0
-    })
+    categories = categories.sort((a, b) => a.localeCompare(b))
     loading = false
   })
 
