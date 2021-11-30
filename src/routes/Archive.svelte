@@ -127,9 +127,7 @@
     {#if loading}
       <Loading />
     {:else if items.length === 0}
-      <NoContent
-        subtitle="Les objets supprimés ou validés apparaîtront ici !"
-      />
+      <NoContent subtitle="Les objets supprimés ou validés apparaîtront ici" />
     {:else}
       <section id="selectType">
         <FormField>

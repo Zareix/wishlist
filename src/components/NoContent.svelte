@@ -23,7 +23,8 @@
   }
 
   .empty-svg {
-    width: 100%;
+    margin: auto;
+    width: clamp(4rem, 100%, 16rem);
   }
 
   #noContent {

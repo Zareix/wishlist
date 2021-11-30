@@ -19,10 +19,10 @@
 
   onDestroy(() => unsubscribe())
 
-  const logout = () => {
-    navigate("/login")
-    auth.signOut()
+  const logout = async () => {
+    await auth.signOut()
     user.set(null)
+    location.reload()
   }
 </script>
 

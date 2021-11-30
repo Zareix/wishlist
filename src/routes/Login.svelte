@@ -1,18 +1,18 @@
 <script>
   import { onDestroy, onMount } from "svelte"
 
-  import { auth } from "../firebase"
+  import { auth, db9 } from "../firebase"
   import { user } from "../stores"
 
   import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
   import { authState } from "rxfire/auth"
   import Button, { Label } from "@smui/button"
-  import { navigate } from "svelte-routing"
 
   import Loading from "../components/Loading.svelte"
   import Footer from "../components/Footer.svelte"
 
   import loginSvg from "../assets/login.svg"
+  import { doc, getDoc, setDoc } from "@firebase/firestore"
 
   export let location = ""
 
@@ -21,7 +21,7 @@
   onMount(() =>
     setTimeout(() => {
       loading = false
-    }, 2000)
+    }, 1200)
   )
 
   const unsubscribe = authState(auth).subscribe((u) => {
@@ -31,9 +31,21 @@
   onDestroy(() => unsubscribe.unsubscribe())
 
   const login = () =>
-    signInWithPopup(auth, new GoogleAuthProvider()).then(() =>
-      navigate(location, { replace: false })
+    signInWithPopup(auth, new GoogleAuthProvider()).then(
+      async (data) => await checkIsNewUser(data.user.email)
     )
+
+  const checkIsNewUser = async (email) => {
+    const res = await getDoc(doc(db9, email, "categories"))
+    if (res.exists()) return
+    await setDoc(doc(db9, email, "categories"), {
+      categories: [],
+    })
+    await setDoc(doc(db9, "permissions", email), {
+      authorizedCat: [],
+      canWatch: [],
+    })
+  }
 </script>
 
 <svelte:head>

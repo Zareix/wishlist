@@ -73,10 +73,7 @@
 
     const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) categories = res.data().categories
-    else {
-      const res2 = await getDocs(collection(db9, "categories"))
-      res2.forEach((cat) => (categories = [...categories, cat.id]))
-    }
+    else categories = []
 
     if (modifId) {
       await getDoc(doc(db9, currentUser.email, "items", oldCategory, modifId))
@@ -207,8 +204,11 @@
             <div class="flex">
               <Select
                 bind:value={category}
-                label="Catégorie"
+                label={categories.length === 0
+                  ? "Aucune catégorie"
+                  : "Catégorie"}
                 bind:invalid={inputErrors.category}
+                disabled={categories.length === 0}
               >
                 {#each categories as cat}
                   <Option value={cat}>{cat.toUpperCase()}</Option>

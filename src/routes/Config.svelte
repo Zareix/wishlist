@@ -10,7 +10,7 @@
   import IconButton from "@smui/icon-button"
   import Switch from "@smui/switch"
   import FormField from "@smui/form-field"
-  import { collection, doc, getDoc, getDocs, setDoc } from "@firebase/firestore"
+  import { doc, getDoc, setDoc } from "@firebase/firestore"
 
   import Layout from "../components/Layout.svelte"
   import Loading from "../components/Loading.svelte"
@@ -51,11 +51,7 @@
         .categories.map((c) => ({ name: c, checked: false }))
       loadingVisibleCat = false
     } else {
-      const res2 = await getDocs(collection(db9, "categories"))
-      res2.forEach(
-        (cat) =>
-          (categories = [...categories, { name: cat.id, checked: false }])
-      )
+      categories = []
       loadingVisibleCat = false
     }
 

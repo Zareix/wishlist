@@ -43,11 +43,8 @@
     chosenUser = currentUser.email
 
     const res = await getDoc(doc(db9, currentUser.email, "categories"))
-    if (res.exists) categories = res.data().categories
-    else {
-      const res3 = await getDocs(collection(db9, "categories"))
-      res3.forEach((cat) => (categories = [...categories, cat.id]))
-    }
+    if (res.exists()) categories = res.data().categories
+    else categories = []
 
     const res2 = await getDocs(
       query(
@@ -150,15 +147,10 @@
   }
 
   #wishlist > :global(#noContent:only-child) {
-    width: 30%;
     margin: 2rem auto;
   }
 
   @media (max-width: 768px) {
-    #wishlist > :global(#noContent:only-child) {
-      width: 70%;
-    }
-
     hr {
       width: 60vw;
     }
