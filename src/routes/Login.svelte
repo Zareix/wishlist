@@ -14,8 +14,6 @@
   import loginSvg from "../assets/login.svg"
   import { doc, getDoc, setDoc } from "@firebase/firestore"
 
-  export let location = ""
-
   let loading = true
 
   onMount(() =>

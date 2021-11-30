@@ -31,6 +31,7 @@
   export let chosenUser
   export let snackbarOpen
   export let orderByPosition
+  export let hidden
 
   let oldUser
   let items = []
@@ -149,9 +150,14 @@
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div
-      class={"category-header" + (collapsed ? "" : " sticky")}
+      class={"category-header" +
+        (collapsed ? "" : " sticky") +
+        (hidden ? " hidden" : "")}
       on:click={collapse}
     >
+      {#if hidden}
+        <div class="material-icons hidden-icon">visibility_off</div>
+      {/if}
       <div class="category-header-content">
         <h2>{category}</h2>
         {#if catPrice !== 0}
@@ -235,7 +241,7 @@
   .category {
     width: 80%;
     margin: 1rem auto 2.5rem auto;
-    transition: border 1s ease;
+    transition: border-color 0.5s ease;
     border-bottom: solid 1px;
     border-color: rgba(163, 163, 163, 0);
   }
@@ -272,8 +278,14 @@
     text-align: center;
   }
 
-  .category-header::before {
+  .category-header:not(.hidden)::before {
     content: "";
+    width: 24px;
+    height: 24px;
+    margin: 12px;
+  }
+
+  .hidden-icon {
     width: 24px;
     height: 24px;
     margin: 12px;

@@ -29,6 +29,7 @@
   let chosenUser
   let allUsers = []
   let authorizedCat = {}
+  let userAuthorizedCat = []
   let snackbar
   let snackbarText
   let loading = true
@@ -57,6 +58,9 @@
       authorizedCat[u.id] = u.data().authorizedCat
       authorizedCat[u.id].sort()
     })
+
+    const res3 = await getDoc(doc(db9, "permissions", currentUser.email))
+    userAuthorizedCat = res3.data().authorizedCat
 
     categories = categories.sort((a, b) => {
       a = a.toLowerCase()
@@ -100,11 +104,13 @@
         {#each displayCategories as c}
           <List
             category={c}
-            chosenUser={chosenUser !== undefined
-              ? chosenUser
-              : currentUser.email}
+            {chosenUser}
             {snackbarOpen}
             orderByPosition
+            hidden={chosenUser === currentUser.email &&
+              !userAuthorizedCat.some(
+                (x) => x.toLowerCase() === c.toLowerCase()
+              )}
           />
         {/each}
         <NoContent
