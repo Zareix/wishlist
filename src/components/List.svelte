@@ -35,7 +35,6 @@
 
   let oldUser
   let items = []
-  let catPrice = 0
   let upPosTimeoutId
   const collapsible =
     "collapsibleContainer" +
@@ -57,8 +56,11 @@
 
   $: canModif = currentUser.email === chosenUser
 
+  $: catPrice =
+    Math.floor(items.reduce((x, y) => x + (y.price ? y.price : 0), 0) * 100) /
+    100
+
   const fetchData = async () => {
-    catPrice = 0
     items = []
 
     const res = await getDocs(
@@ -69,8 +71,6 @@
     )
 
     res.forEach((i) => {
-      let price = i.data().price
-      if (price) catPrice += price
       addItems({ id: i.id, categorie: category, ...i.data() })
     })
   }
