@@ -1,8 +1,6 @@
 <script>
-  import { doc, getDoc, setDoc } from "@firebase/firestore"
-  import { onDestroy, onMount } from "svelte"
   import { Route } from "svelte-routing"
-  import { db9 } from "../firebase"
+  import Layout from "../components/Layout.svelte"
 
   import { user } from "../stores"
 

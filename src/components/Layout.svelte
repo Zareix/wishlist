@@ -1,15 +1,13 @@
 <script>
   import { onDestroy } from "svelte"
 
-  import { auth } from "../firebase"
   import { user } from "../stores"
 
   import TopAppBar, { Section, Title } from "@smui/top-app-bar"
-  import IconButton from "@smui/icon-button"
-  import { Link, navigate } from "svelte-routing"
-  import Fab, { Icon as FabIcon } from "@smui/fab"
+  import { Link } from "svelte-routing"
 
   import Footer from "./Footer.svelte"
+  import NavBar from "./NavBar.svelte"
 
   let currentUser
   const unsubscribe = user.subscribe((v) => (currentUser = v))
@@ -18,12 +16,6 @@
   export let pageTitle
 
   onDestroy(() => unsubscribe())
-
-  const logout = async () => {
-    await auth.signOut()
-    user.set(null)
-    location.reload()
-  }
 </script>
 
 <svelte:head>
@@ -39,136 +31,12 @@
   </Section>
 </TopAppBar>
 <slot />
-<nav class="bottom-navbar">
-  <Link to="/" class={"navlink" + (active === "home" ? " navlink-active" : "")}>
-    <IconButton class="navlink-icon material-icons-outlined">home</IconButton>
-    <p class="navlink-text">Accueil</p>
-  </Link>
-  <Link
-    to="/archive"
-    class={"navlink" + (active === "archive" ? " navlink-active" : "")}
-  >
-    <IconButton class="navlink-icon material-icons-outlined">archive</IconButton
-    >
-    <p class="navlink-text">Archive</p>
-  </Link>
-  <Link
-    to="/add"
-    class={"navlink" + (active === "add" ? " navlink-active" : "")}
-  >
-    <Fab color="primary" class="fab">
-      <FabIcon class="material-icons fab-icon">add</FabIcon>
-    </Fab>
-  </Link>
-  <Link
-    to="/settings"
-    class={"navlink" + (active === "settings" ? " navlink-active" : "")}
-  >
-    <IconButton class="navlink-icon material-icons-outlined"
-      >settings</IconButton
-    >
-    <p class="navlink-text">Paramètres</p>
-  </Link>
-  <div on:click={logout} class="navlink">
-    <IconButton class="navlink-icon material-icons-outlined">logout</IconButton>
-    <p class="navlink-text">Déconnexion</p>
-  </div>
-</nav>
+<NavBar {active} />
 <Footer />
 
 <style>
-  :global(#navTitle) {
-    max-width: 90%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: white;
-  }
-
   .logo {
     margin-left: 1rem;
     width: 2rem;
-  }
-
-  .bottom-navbar {
-    z-index: 100;
-    position: fixed;
-    inset: 0;
-    top: auto;
-    bottom: 14px;
-    margin: 0 auto;
-    width: clamp(15rem, 80vw, 30rem);
-    height: 3rem;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    justify-content: space-around;
-    align-content: center;
-    padding: 0.25rem 1rem;
-    box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    background-color: var(--mdc-theme-background);
-  }
-
-  :global(.navlink) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  :global(.navlink-icon) {
-    height: auto;
-    width: auto;
-    padding: 0;
-    opacity: 0.8;
-  }
-
-  .navlink-text {
-    margin: 0;
-    overflow: hidden;
-    height: 0;
-    font-size: 0.8rem;
-    font-weight: 500;
-    opacity: 0.8;
-  }
-
-  :global(.navlink-active) :global(.navlink-icon) {
-    font-family: "Material Icons";
-    opacity: 1;
-  }
-
-  :global(.navlink-active) .navlink-text {
-    height: 1rem;
-    animation: slideIn 250ms ease;
-    opacity: 1;
-  }
-
-  @keyframes slideIn {
-    from {
-      height: 0;
-    }
-    to {
-      height: 1rem;
-    }
-  }
-
-  :global(.fab) {
-    background-color: var(--green) !important;
-    position: relative;
-    bottom: 1rem;
-  }
-
-  :global(.navlink-active) :global(.fab-icon) {
-    font-weight: 600;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .bottom-navbar {
-      background-color: rgb(23, 32, 51);
-      box-shadow: 0px 10px 14px 5px rgba(50, 50, 50, 0.1);
-    }
   }
 </style>
