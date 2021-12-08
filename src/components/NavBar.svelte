@@ -1,7 +1,7 @@
 <script>
+  import { user } from "../stores"
   import { auth } from "../firebase"
 
-  import Fab, { Icon as FabIcon } from "@smui/fab"
   import { Link } from "svelte-routing"
   import IconButton from "@smui/icon-button"
 
@@ -54,7 +54,9 @@
       </div>
     </li>
 
-    <div class="indicator" />
+    <div class="indicator">
+      <div class="indicator-circle" />
+    </div>
   </ul>
 </nav>
 
@@ -99,6 +101,8 @@
   }
 
   :global(.nav-icon) {
+    overflow: hidden;
+    border-radius: 50%;
     padding: 0;
     margin: auto;
   }
@@ -112,13 +116,13 @@
 
   :global(.mdc-icon-button) {
     z-index: 102;
-    height: 3.25rem;
-    width: 32px;
+    height: 3rem;
+    width: 3rem;
   }
 
   @keyframes icon {
     100% {
-      transform: translateY(-25px);
+      transform: translateY(-50%);
       color: white;
     }
   }
@@ -144,9 +148,8 @@
     animation: text 0.5s forwards;
   }
 
-  @keyframes indicator {
+  @keyframes indicator-circle {
     100% {
-      transform: translateX(0);
       width: 3rem;
       height: 3rem;
     }
@@ -155,31 +158,38 @@
   .indicator {
     z-index: 101;
     position: absolute;
+    bottom: 50%;
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+  }
+
+  .indicator-circle {
     width: 0;
     height: 0;
-    transform: translateX(1.5rem);
-    bottom: 50%;
-    left: 5%;
     border-radius: 50%;
     background-color: var(--green);
-    background-clip: padding-box;
-    animation: indicator 0.5s forwards;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    animation: indicator-circle 0.5s forwards;
   }
 
   li:nth-child(1).active ~ .indicator {
-    left: 5%;
+    left: 0%;
   }
 
   li:nth-child(2).active ~ .indicator {
-    left: 25%;
+    left: 20%;
   }
 
   li:nth-child(3).active ~ .indicator {
-    left: 45%;
+    left: 40%;
   }
 
   li:nth-child(4).active ~ .indicator {
-    left: 65%;
+    left: 60%;
   }
 
   @media (prefers-color-scheme: dark) {

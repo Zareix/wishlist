@@ -32,6 +32,11 @@
       error = "Merci d'entrer l'intitulé de la catégorie"
       return true
     }
+    if (!category.match(/^[a-zA-Z][a-zA-Z0-9- ]+[a-zA-Z0-9]$/)) {
+      error =
+        "La catégorie ne doit contenir que des chiffres, lettres, espaces et/ou charactères '-'"
+      return true
+    }
     if (
       allCategories.some(
         (c) => category.trim().toLowerCase() === c.trim().toLowerCase()
