@@ -1,7 +1,7 @@
 :root {
   --primary-color: #6002ee;
   --primary-attenuated-color: #7e3ff2;
-  --text-color: #333;
+  --text-color: #0f172a;
   --background-secondary: #f3f4f6;
 
   --mdc-theme-background: #fff;
@@ -331,7 +331,7 @@ hr {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color: #f9fafb;
+    --text-color: rgb(241 245 249);
     --background-secondary: #1f2937;
 
     --mdc-theme-primary: #6d28d9;

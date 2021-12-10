@@ -43,9 +43,9 @@
   img {
     display: block;
     position: relative;
-    max-width: 100%;
-    max-height: 15rem;
-    object-fit: contain;
+    width: 100%;
+    max-height: 12rem;
+    object-fit: cover;
   }
 
   img::before {
@@ -74,8 +74,9 @@
   .image {
     vertical-align: middle;
     display: inline-flex;
+    width: 100%;
     min-height: 6rem;
-    max-height: 15rem;
+    max-height: 12rem;
     border-radius: 16px;
     overflow: hidden;
     align-items: center;
@@ -86,6 +87,6 @@
   }
 
   .image-dialog {
-    max-height: 70vh;
+    max-height: 60vh;
   }
 </style>

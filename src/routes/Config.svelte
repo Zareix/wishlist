@@ -1,7 +1,7 @@
 <script>
   import { onDestroy, onMount } from "svelte"
 
-  import { db9 } from "../firebase"
+  import { auth, db9 } from "../firebase"
   import { user } from "../stores"
 
   import TextField from "@smui/textfield"
@@ -34,27 +34,21 @@
     const res1 = await getDoc(doc(db9, "permissions", currentUser.email))
     if (res1.exists()) {
       canWatch = res1.data().canWatch
-      if (res1.data().authorizedCat) authorizedCat = res.data().authorizedCat
+      if (res1.data().authorizedCat)
+        authorizedCat = res1
+          .data()
+          .authorizedCat.map((x) => x.trim().toLowerCase())
     }
-    loadingCanWatch = false 
+    loadingCanWatch = false
 
     const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists()) {
-      categories = res
-        .data()
-        .categories.map((c) => ({ name: c, checked: false }))
-      loadingVisibleCat = false
-    } else {
-      categories = []
-      loadingVisibleCat = false
+      categories = res.data().categories.map((c) => ({
+        name: c,
+        checked: authorizedCat.includes(c),
+      }))
     }
-
-    authorizedCat.forEach(
-      (ac) =>
-        (categories.find(
-          (c) => c.name.toLowerCase() === ac.toLowerCase()
-        ).checked = true)
-    )
+    loadingVisibleCat = false
 
     categories = categories.sort((a, b) => {
       const tempA = a.name.toLowerCase()

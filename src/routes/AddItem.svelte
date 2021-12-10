@@ -263,7 +263,7 @@
             <div class="spacer" />
 
             <LinkInputList
-              links={refs}
+              bind:links={refs}
               addNewLink={addNewRef}
               removeLink={removeRef}
               placeholder="Référence"
@@ -273,7 +273,7 @@
             <div class="spacer" />
 
             <LinkInputList
-              links={images}
+              bind:links={images}
               addNewLink={addNewImg}
               removeLink={removeImg}
               placeholder="Image"
