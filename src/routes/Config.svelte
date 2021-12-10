@@ -31,18 +31,12 @@
   onMount(async () => {
     let authorizedCat = []
 
-    getDoc(doc(db9, "permissions", currentUser.email))
-      .then((res) => {
-        if (res.exists) {
-          canWatch = res.data().canWatch
-          if (res.data().authorizedCat) authorizedCat = res.data().authorizedCat
-        }
-        loadingCanWatch = false
-      })
-      .catch((error) => {
-        loadingCanWatch = false
-        console.log(error)
-      })
+    const res1 = await getDoc(doc(db9, "permissions", currentUser.email))
+    if (res1.exists) {
+      canWatch = res1.data().canWatch
+      if (res1.data().authorizedCat) authorizedCat = res.data().authorizedCat
+    }
+    loadingCanWatch = false 
 
     const res = await getDoc(doc(db9, currentUser.email, "categories"))
     if (res.exists) {
