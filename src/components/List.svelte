@@ -350,7 +350,7 @@
 
   :global(.chevron) {
     opacity: 0;
-    animation: fadeIn 250ms 2s linear forwards;
+    animation: fadeIn 250ms 0.5s linear forwards;
     transition: transform 500ms ease;
   }
 
