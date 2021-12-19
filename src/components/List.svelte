@@ -339,7 +339,18 @@
     max-height: 0;
   }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   :global(.chevron) {
+    opacity: 0;
+    animation: fadeIn 250ms 2s linear forwards;
     transition: transform 500ms ease;
   }
 
