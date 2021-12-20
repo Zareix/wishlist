@@ -251,6 +251,7 @@
     width: 80%;
     margin: 1rem auto 2.5rem auto;
     transition: border-color 0.5s ease;
+    border-bottom: 1px solid;
     border-color: rgba(163, 163, 163, 0);
     animation: fadeIn 1s ease forwards;
   }
