@@ -248,12 +248,25 @@
   }
 
   .category {
+    position: relative;
     width: 80%;
     margin: 1rem auto 2.5rem auto;
     transition: border-color 0.5s ease;
-    border-bottom: 1px solid;
-    border-color: rgba(163, 163, 163, 0);
     animation: fadeIn 1s ease forwards;
+  }
+
+  .category::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    left: 10%;
+    height: 1px;
+    background-color: rgba(163, 163, 163, 0);
+  }
+
+  .category.collapsed:not(:nth-last-child(2))::after {
+    background-color: rgba(163, 163, 163, 0.6);
   }
 
   .category-header {
@@ -300,10 +313,6 @@
     width: 24px;
     height: 24px;
     margin: 12px;
-  }
-
-  .category.collapsed:not(:nth-last-child(2)) {
-    border-color: rgba(163, 163, 163, 0.6);
   }
 
   h2 {
