@@ -24,9 +24,9 @@
 
 <TopAppBar variant="fixed" id="navbar">
   <Section class="mdc-top-app-bar__row">
-    <Link id="navTitle">
+    <Link id="nav-link">
       <img src="/icons/icon-512x512.png" class="logo" alt="logo" />
-      <Title>Wishlist - {currentUser.displayName}</Title>
+      <Title class="nav-title">Wishlist - {currentUser.displayName}</Title>
     </Link>
   </Section>
 </TopAppBar>
@@ -38,5 +38,27 @@
   .logo {
     margin-left: 1rem;
     width: 2rem;
+  }
+
+  :global(.mdc-top-app-bar--fixed-scrolled) {
+  }
+
+  :global(#nav-link) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  :global(.nav-title) {
+    color: #f9fafb;
+    font-weight: 600;
+  }
+
+  :global(#nav-link::after) {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    display: block;
   }
 </style>

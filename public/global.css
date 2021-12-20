@@ -2,9 +2,9 @@
   --primary-color: #6002ee;
   --primary-attenuated-color: #7e3ff2;
   --text-color: #0f172a;
-  --background-secondary: #f3f4f6;
+  --background-secondary: #fff;
 
-  --mdc-theme-background: #fff;
+  --mdc-theme-background: #fafafa;
   --mdc-theme-surface: #fff;
   --mdc-shape-medium: 16px;
   --mdc-theme-primary: #6002ee;
@@ -280,6 +280,7 @@ a:hover {
   padding: 1rem;
   border-radius: 16px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+  background-color: var(--background-secondary);
 }
 
 .mdc-chip {
@@ -359,10 +360,6 @@ hr {
     --mdc-theme-text-hint-on-dark: hsla(0, 0%, 100%, 0.5);
     --mdc-theme-text-disabled-on-dark: hsla(0, 0%, 100%, 0.5);
     --mdc-theme-text-icon-on-dark: hsla(0, 0%, 100%, 0.5);
-  }
-
-  .card {
-    background-color: var(--background-secondary);
   }
 
   .mdc-button {

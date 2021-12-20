@@ -251,7 +251,6 @@
     width: 80%;
     margin: 1rem auto 2.5rem auto;
     transition: border-color 0.5s ease;
-    border-bottom: solid 1px;
     border-color: rgba(163, 163, 163, 0);
     animation: fadeIn 1s ease forwards;
   }
@@ -267,7 +266,7 @@
     cursor: pointer;
     border-radius: 12px;
     background-color: var(--mdc-theme-background);
-    transition: box-shadow 250ms ease;
+    transition: box-shadow 250ms ease, background-color 250ms ease;
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
@@ -281,6 +280,7 @@
   .category-header.sticky {
     position: sticky;
     top: 5rem;
+    background-color: var(--background-secondary);
     box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.05);
   }
 
@@ -350,12 +350,13 @@
 
   :global(.chevron) {
     opacity: 0;
+    transform: rotate(180deg);
     animation: fadeIn 250ms 1s linear forwards;
     transition: transform 500ms ease;
   }
 
   :global(.chevron-active) {
-    transform: rotate(180deg);
+    transform: rotate(0);
   }
 
   @media (max-width: 768px) {

@@ -157,8 +157,8 @@
     background-color: var(--background-secondary);
     border-radius: 16px;
     cursor: default;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    transition: box-shadow 0.5s ease;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: box-shadow 250ms ease;
   }
 
   .item:hover {
@@ -233,6 +233,10 @@
 
   :global(.mdc-chip-set .mdc-chip) {
     margin: 0;
+  }
+
+  :global(.mdc-card__action-icons .mdc-icon-button) {
+    z-index: 0;
   }
 
   @media (max-width: 768px) {

@@ -76,7 +76,7 @@
     display: inline-flex;
     width: 100%;
     min-height: 6rem;
-    max-height: 12rem;
+    max-height: 8rem;
     border-radius: 16px;
     overflow: hidden;
     align-items: center;
