@@ -77,13 +77,13 @@
     position: fixed;
     inset: 0;
     top: auto;
-    bottom: 0;
+    bottom: 14px;
     margin: 0 auto;
-    width: clamp(15rem, 85vw, 30rem);
+    width: clamp(15rem, 80vw, 30rem);
     height: 3rem;
-    padding: 0.25rem 1rem 0.6rem 1rem;
+    padding: 0.25rem 1rem;
     box-shadow: 0px 7px 10px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px;
     background-color: var(--background-secondary);
   }
 
