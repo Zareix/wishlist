@@ -27,8 +27,19 @@
     width: clamp(4rem, 100%, 16rem);
   }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 100%;
+    }
+  }
+
   #noContent {
+    opacity: 0;
     margin: 2rem;
     text-align: center;
+    animation: fadeIn 250ms 2s forwards;
   }
 </style>

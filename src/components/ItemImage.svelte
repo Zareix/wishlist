@@ -87,6 +87,7 @@
   }
 
   .image-dialog {
+    object-fit: contain;
     max-height: 60vh;
   }
 </style>
