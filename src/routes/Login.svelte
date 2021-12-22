@@ -16,22 +16,23 @@
 
   let loading = true
 
-  onMount(() =>
-    setTimeout(() => {
-      loading = false
-    }, 1200)
-  )
-
-  const unsubscribe = authState(auth).subscribe((u) => {
-    user.set(u)
+  const unsubscribe = authState(auth).subscribe({
+    next: async (u) => {
+      if (u) {
+        await checkIsNewUser(u.email)
+        user.set(u)
+      } else {
+        loading = false
+      }
+    },
+    error: (e) => {
+      console.error(e)
+    },
   })
 
   onDestroy(() => unsubscribe.unsubscribe())
 
-  const login = () =>
-    signInWithPopup(auth, new GoogleAuthProvider()).then(
-      async (data) => await checkIsNewUser(data.user.email)
-    )
+  const login = () => signInWithPopup(auth, new GoogleAuthProvider())
 
   const checkIsNewUser = async (email) => {
     const res = await getDoc(doc(db9, email, "categories"))
