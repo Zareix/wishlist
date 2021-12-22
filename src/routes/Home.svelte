@@ -3,11 +3,11 @@
 
   import { db9 } from "../firebase"
   import { user } from "../stores"
+  import { getCategories } from "../utils/firebase-utils"
 
   import Select, { Option } from "@smui/select"
   import Snackbar, { Actions, Label } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
-  import { navigate } from "svelte-routing"
   import {
     collection,
     doc,
@@ -43,9 +43,7 @@
     allUsers = [currentUser.email]
     chosenUser = currentUser.email
 
-    const res = await getDoc(doc(db9, currentUser.email, "categories"))
-    if (res.exists()) categories = res.data().categories
-    else categories = []
+    categories = await getCategories(currentUser.email)
 
     const res2 = await getDocs(
       query(
@@ -62,7 +60,6 @@
     const res3 = await getDoc(doc(db9, "permissions", currentUser.email))
     userAuthorizedCat = res3.data().authorizedCat
 
-    categories = categories.sort((a, b) => a.localeCompare(b))
     loading = false
   })
 

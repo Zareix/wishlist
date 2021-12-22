@@ -27,6 +27,7 @@
     getDocs,
     updateDoc,
   } from "@firebase/firestore"
+  import { getCategories } from "../utils/firebase-utils"
 
   let currentUser
   const unsubscribe = user.subscribe((v) => (currentUser = v))
@@ -71,10 +72,7 @@
       } else description = body
     }
 
-    const res = await getDoc(doc(db9, currentUser.email, "categories"))
-    if (res.exists) {
-      categories = res.data().categories.sort((a, b) => a.localeCompare(b))
-    } else categories = []
+    categories = await getCategories(currentUser.email)
 
     if (modifId) {
       await getDoc(doc(db9, currentUser.email, "items", oldCategory, modifId))
