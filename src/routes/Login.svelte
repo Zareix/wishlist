@@ -23,9 +23,8 @@
       if (u) {
         await checkIsNewUser(u.email)
         user.set(u)
-      } else {
-        loading = false
       }
+      loading = false
       btnLoading = false
     },
     error: (e) => {
@@ -38,7 +37,7 @@
   onDestroy(() => unsubscribe.unsubscribe())
 
   const login = () => {
-    error = ""
+    error = false
     btnLoading = true
     signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => {
       console.error(e)
@@ -83,9 +82,7 @@
       </Label>
     </Button>
     {#if error}
-      <p class="error">
-        Une erreur est survenu merci de recharger la page et réessayer.
-      </p>
+      <p class="error">Une erreur est survenu merci de réessayer.</p>
     {/if}
   {/if}
 </main>
