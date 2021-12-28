@@ -36,12 +36,9 @@
   let oldUser
   let items = []
   let upPosTimeoutId
-  const collapsible =
-    "collapsibleContainer" +
-    category.charAt(0).toUpperCase() +
-    category.slice(1).replace(" ", "") +
-    Math.random() * 100
   let collapsed = true
+  let catSection
+  let collapsibleUl
 
   onDestroy(() => unsubscribe())
 
@@ -133,10 +130,12 @@
   const transformDraggedElement = (e) => (e.className = "dnd-item-active")
 
   const collapse = () => {
-    const element = document.getElementById(collapsible)
+    catSection.scrollIntoView({
+      behavior: "smooth",
+    })
 
-    if (!collapsed) element.style.maxHeight = null
-    else element.style.maxHeight = 400 * items.length + "px"
+    if (!collapsed) collapsibleUl.style.maxHeight = 0
+    else collapsibleUl.style.maxHeight = 400 * items.length + "px"
 
     collapsed = !collapsed
   }
@@ -144,9 +143,8 @@
 
 {#if items.length !== 0}
   <section
-    id={"category" +
-      category.charAt(0).toUpperCase() +
-      category.slice(1).replace(" ", "")}
+    id={"category_" + category.toLowerCase().replaceAll(" ", "")}
+    bind:this={catSection}
     class={"category" + (collapsed ? " collapsed" : "")}
   >
     <div
@@ -173,7 +171,7 @@
     {#if items.length > 1 && canModif}
       <ul
         class="item-list collapsible"
-        id={collapsible}
+        bind:this={collapsibleUl}
         use:dndzone={{
           items,
           flipDurationMs,
@@ -210,7 +208,7 @@
         {/each}
       </ul>
     {:else}
-      <ul class="item-list collapsible" id={collapsible}>
+      <div class="item-list collapsible" bind:this={collapsibleUl}>
         {#each items as item (item.id)}
           <Item
             index={items.indexOf(item)}
@@ -220,7 +218,7 @@
             {category}
           />
         {/each}
-      </ul>
+      </div>
     {/if}
   </section>
 {/if}
@@ -334,6 +332,10 @@
     flex-direction: column;
     gap: 1rem;
     padding-inline: 1rem;
+  }
+
+  div.item-list {
+    margin-block: 1em;
   }
 
   .collapsible {
