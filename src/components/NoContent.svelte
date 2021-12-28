@@ -5,13 +5,13 @@
   export let subtitle = ""
 </script>
 
-<div id="noContent">
+<li id="noContent">
   <div class="empty-svg">
     {@html emptySvg}
   </div>
   <h2>{title}</h2>
   <h3 class="text-gray">{subtitle}</h3>
-</div>
+</li>
 
 <style>
   h2 {

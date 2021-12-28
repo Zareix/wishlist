@@ -45,7 +45,7 @@
   }
 </script>
 
-<div id={category.replace(" ", "") + "Item" + index} class="item">
+<article id={category.replaceAll(" ", "") + "_item" + index} class="item">
   <div class="content-wrapper">
     <div class="content">
       <div class="item-header">
@@ -134,7 +134,7 @@
       </Wrapper>
     {/if}
   </ActionIcons>
-</div>
+</article>
 
 <style>
   .content-wrapper {
