@@ -19,7 +19,7 @@
   <Dialog bind:open>
     <h2>{title}</h2>
     <Content>
-      <div class="flex center" on:click={() => (open = false)}>
+      <div class="flex center">
         <img
           src={image}
           alt={"Image " + index + " de " + title}
