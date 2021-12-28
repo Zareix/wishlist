@@ -24,9 +24,12 @@
   import Item from "../components/Item.svelte"
   import NoContent from "../components/NoContent.svelte"
   import Layout from "../components/Layout.svelte"
+  import { flip } from "svelte/animate"
 
   let currentUser
   const unsubscribe = user.subscribe((v) => (currentUser = v))
+
+  const flipDurationMs = 300
 
   let loading = true
   let items = []
@@ -152,14 +155,16 @@
         </FormField>
       </section>
       <ul class="item-list">
-        {#each filteredItems as item, index}
-          <Item
-            {index}
-            {item}
-            {restoreItem}
-            permanentDeleteItem={deleteItem}
-            category={item.categorie}
-          />
+        {#each filteredItems as item, index (item.id)}
+          <li animate:flip={{ duration: flipDurationMs }}>
+            <Item
+              {index}
+              {item}
+              {restoreItem}
+              permanentDeleteItem={deleteItem}
+              category={item.categorie}
+            />
+          </li>
         {/each}
         <NoContent title="Aucun objet de ce type" />
       </ul>
