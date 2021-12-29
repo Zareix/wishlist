@@ -3,6 +3,7 @@
 
   import { db9 } from "../firebase"
   import { user } from "../stores"
+  import { getCategories } from "../utils/firebase-utils"
 
   import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
   import IconButton from "@smui/icon-button"
@@ -81,13 +82,7 @@
   }
 
   const restoreItem = async (item) => {
-    let categories = []
-    const res = getDoc(doc(db9, currentUser.email, "categories"))
-    if (res.exists) categories = res.data().categories
-    else {
-      const res2 = await getDocs(collection(db9, "categories"))
-      res2.forEach((cat) => (categories = [...categories, cat.id]))
-    }
+    let categories = await getCategories(currentUser.email)
 
     if (
       !categories.some(
