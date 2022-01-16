@@ -1,45 +1,29 @@
 <script>
-  import Dialog, { Content, Actions } from "@smui/dialog"
-  import Button, { Label } from "@smui/button"
+  import { dialogImage } from "../stores"
 
   export let image
   export let index
   export let title
 
-  let open = false
+  const open = () => {
+    dialogImage.set({
+      src: image,
+      index,
+      title,
+    })
+  }
 </script>
 
 <li class="image">
   <img
     src={image}
     alt={"Thumbnail " + index + " of " + title}
-    on:click={() => (open = true)}
+    on:click={open}
     class="pointer"
   />
-  <Dialog bind:open>
-    <h2>{title}</h2>
-    <Content>
-      <div class="flex center">
-        <img
-          src={image}
-          alt={"Image " + index + " de " + title}
-          class="image-dialog"
-        />
-      </div>
-    </Content>
-    <Actions>
-      <Button on:click={() => (open = false)}>
-        <Label>Fermer</Label>
-      </Button>
-    </Actions>
-  </Dialog>
 </li>
 
 <style>
-  h2 {
-    margin: 0.75em 1em;
-  }
-
   img {
     display: block;
     position: relative;
@@ -84,10 +68,5 @@
 
   .image:not(:last-child) {
     margin-right: 0.25rem;
-  }
-
-  .image-dialog {
-    object-fit: contain;
-    max-height: 60vh;
   }
 </style>

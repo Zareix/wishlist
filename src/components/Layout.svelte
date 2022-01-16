@@ -8,6 +8,7 @@
 
   import Footer from "./Footer.svelte"
   import NavBar from "./NavBar.svelte"
+  import ImageDialog from "./ImageDialog.svelte"
 
   let currentUser
   const unsubscribe = user.subscribe((v) => (currentUser = v))
@@ -30,6 +31,7 @@
     </Link>
   </Section>
 </TopAppBar>
+<ImageDialog />
 <slot />
 <NavBar {active} />
 <Footer />
