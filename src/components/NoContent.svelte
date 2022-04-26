@@ -7,7 +7,7 @@
 
 <li id="noContent">
   <div class="empty-svg">
-    {@html emptySvg}
+    <img src={emptySvg} alt="empty">
   </div>
   <h2>{title}</h2>
   <h3 class="text-gray">{subtitle}</h3>

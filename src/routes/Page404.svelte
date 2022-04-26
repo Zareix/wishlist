@@ -11,7 +11,7 @@
 
 <main id="page404">
   <section class="error404">
-    {@html page404Svg}
+   <img src={page404Svg} alt="not found">
     <h1>Page introuvable</h1>
     <div id="backHomeBtn">
       <Button

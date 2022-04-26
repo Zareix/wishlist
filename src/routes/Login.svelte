@@ -12,7 +12,7 @@
   import Loading from "../components/Loading.svelte"
   import Footer from "../components/Footer.svelte"
 
-  import loginSvg from "../assets/login.svg"
+  import svgLogin from "../assets/login.svg"
 
   let loading = true
   let btnLoading = false
@@ -56,9 +56,7 @@
     <Loading />
   {:else}
     <h1>Wishlist</h1>
-    <div class="illustration">
-      {@html loginSvg}
-    </div>
+      <img src={svgLogin} alt="login" class="illustration">
     <h2>Se connecter :</h2>
     <Button on:click={login} variant="raised" disabled={btnLoading}>
       <svg

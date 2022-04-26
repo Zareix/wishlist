@@ -192,7 +192,7 @@
       <Loading />
     {:else if error}
       <div class="error">
-        {@html itemNotFoundSvg}
+        <img src={itemNotFoundSvg} alt="item not found">
         <h2>Oups, impossible de trouver cet objet</h2>
       </div>
     {:else}
