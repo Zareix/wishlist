@@ -5,7 +5,7 @@
   import { user } from "../stores"
   import { checkIsNewUser } from "../utils/firebase-utils"
 
-  import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+  import {  GoogleAuthProvider, signInWithPopup } from "firebase/auth"
   import { authState } from "rxfire/auth"
   import Button, { Label } from "@smui/button"
 

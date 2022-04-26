@@ -5,6 +5,8 @@
   export let index
   export let title
 
+  let error
+
   const open = () => {
     dialogImage.set({
       src: image,
@@ -15,12 +17,18 @@
 </script>
 
 <li class="image">
+  {#if error}
+  <div class="error">Error loading image {index}</div>
+  {:else}
   <img
+    on:error={() => error = true}
     src={image}
     alt={"Thumbnail " + index + " of " + title}
     on:click={open}
     class="pointer"
   />
+    
+  {/if}
 </li>
 
 <style>
@@ -30,29 +38,6 @@
     width: 100%;
     max-height: 12rem;
     object-fit: cover;
-  }
-
-  img::before {
-    content: "";
-    position: absolute;
-    background-color: rgb(228, 228, 228);
-    border: 1px hsl(0, 0%, 66.7%);
-    display: block;
-    height: 100%;
-    width: 100%;
-  }
-
-  img::after {
-    content: attr(alt);
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    color: rgb(122, 122, 122);
-    font-weight: 400;
-    font-style: italic;
   }
 
   .image {
@@ -68,5 +53,14 @@
 
   .image:not(:last-child) {
     margin-right: 0.25rem;
+  }
+
+  .error {
+    max-width: 5rem;
+    margin: 0 auto;
+    height: 100%;
+    white-space: pre-wrap;
+    text-align: center;
+    color: var(--red);  
   }
 </style>
