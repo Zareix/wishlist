@@ -48,20 +48,20 @@
     </noscript>
 
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/service-worker.js").then((reg) => {
-            console.log("Service worker registered.", reg)
-          })
-        })
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').then((reg) => {
+            console.log('Service worker registered.', reg);
+          });
+        });
       }
 
-      window.addEventListener("resize", function () {
-        let fixedWidth = 480
-        let fixedHeight = 800
+      window.addEventListener('resize', function () {
+        let fixedWidth = 480;
+        let fixedHeight = 800;
 
-        window.resizeTo(fixedWidth, fixedHeight)
-      })
+        window.resizeTo(fixedWidth, fixedHeight);
+      });
     </script>
   </body>
 </html>
