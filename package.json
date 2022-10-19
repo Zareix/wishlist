@@ -25,7 +25,7 @@
   "dependencies": {
     "firebase": "9.6.11",
     "rxfire": "6.0.3",
-    "rxjs": "7.5.5",
+    "rxjs": "7.5.7",
     "sirv-cli": "2.0.2",
     "svelte-material-ui": "4.2.0",
     "svelte-routing": "1.6.0"
