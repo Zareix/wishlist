@@ -2195,10 +2195,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-svelte-dnd-action@0.9.18:
-  version "0.9.18"
-  resolved "https://registry.yarnpkg.com/svelte-dnd-action/-/svelte-dnd-action-0.9.18.tgz#84b1cc7ebba703a8fc22da7a187fa892cfd75ea5"
-  integrity sha512-b2R8dxlA5az1eBwmptzR/9qzAyhBHPpMwLDfhgNgD5pwEGuhMQnyDUN3dyh8pQmyPz0IL3k0Seaa7X9hC+hpIw==
+svelte-dnd-action@0.9.20:
+  version "0.9.20"
+  resolved "https://registry.yarnpkg.com/svelte-dnd-action/-/svelte-dnd-action-0.9.20.tgz#f0b716f0e66629524b13138e745f474280b822df"
+  integrity sha512-AJIkSNZMPOLsv8UehA4T7wjOqfVhnvWIpdbZp5rXraUfE7Feo/pKG9xpi+2Op+7PZp9qywdCx7LXvtCh37OEMA==
 
 svelte-hmr@^0.15.0:
   version "0.15.0"
