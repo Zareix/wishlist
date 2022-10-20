@@ -15,7 +15,7 @@
     "@smui/select": "4.2.0",
     "@smui/snackbar": "4.2.0",
     "@smui/textfield": "4.2.0",
-    "@smui/tooltip": "4.2.0",
+    "@smui/tooltip": "6.1.4",
     "@smui/top-app-bar": "4.2.0",
     "@sveltejs/vite-plugin-svelte": "1.0.9",
     "svelte": "3.52.0",
