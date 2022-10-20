@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@smui/button": "4.2.0",
-    "@smui/circular-progress": "4.2.0",
+    "@smui/circular-progress": "6.1.4",
     "@smui/fab": "4.2.0",
     "@smui/icon-button": "4.2.0",
     "@smui/select": "4.2.0",

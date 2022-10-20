@@ -418,6 +418,13 @@
   dependencies:
     tslib "^2.1.0"
 
+"@material/animation@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/animation/-/animation-13.0.0.tgz#42ec7aee6548ba27edb49063c7a7ae431e4ef450"
+  integrity sha512-YR0/u4u56qXDjKYolQ7F+IvlPkaSBhMl/dZv8DK0FbD6PH4ckOPd3bEXNRndXtprsxwknQQP2pttjPImylkl0g==
+  dependencies:
+    tslib "^2.1.0"
+
 "@material/banner@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/banner/-/banner-11.0.0.tgz#0598d6a1aa76ce8c7df754989ebeae9af108588c"
@@ -438,6 +445,13 @@
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/base/-/base-11.0.0.tgz#e8819a10946d8d7755d7111071adbe59ec998bdf"
   integrity sha512-GTybYdiWBoEyYQ3he8cEeuXe5mPq2peFX41rBsMrs516TGDxrVJrEAKNedydhtpfRBsZRreTXMLZtbGrZzfIFQ==
+  dependencies:
+    tslib "^2.1.0"
+
+"@material/base@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/base/-/base-13.0.0.tgz#18f7f5ac112bf67e66c1ade6ab543ea9df9d3836"
+  integrity sha512-vFx0JryRfcvUNX3cZ2u32wUMvxzd+c/YW0LFOXNgqCDWlubHcMm0Y6Wz371LhfQo80/NE69u+/4Joo99yKnVeg==
   dependencies:
     tslib "^2.1.0"
 
@@ -519,6 +533,19 @@
     "@material/theme" "^11.0.0"
     tslib "^2.1.0"
 
+"@material/circular-progress@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/circular-progress/-/circular-progress-13.0.0.tgz#ad90b88d1e88d522f7492ded4eaaac56376ce2aa"
+  integrity sha512-jSbr0ywY2N6s05tyqTXl/cG339C+qU3ck3FwXUq5SJup8CWT0AoJ8EG/CD10CEhNH8nH9Iwstve95oNgIt8G4g==
+  dependencies:
+    "@material/animation" "^13.0.0"
+    "@material/base" "^13.0.0"
+    "@material/feature-targeting" "^13.0.0"
+    "@material/progress-indicator" "^13.0.0"
+    "@material/rtl" "^13.0.0"
+    "@material/theme" "^13.0.0"
+    tslib "^2.1.0"
+
 "@material/data-table@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/data-table/-/data-table-11.0.0.tgz#78d243cee79f3580075398792aad81c28b26d33c"
@@ -578,6 +605,14 @@
     "@material/feature-targeting" "^11.0.0"
     tslib "^2.1.0"
 
+"@material/dom@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/dom/-/dom-13.0.0.tgz#3f3cc935f6e59fa99e3dafe118d3e48091118c0e"
+  integrity sha512-M9HLAYBZtkTUvf66FL+jAEvUOdhji1HkGA1mV6oyE+HY9gkCkmso+mngvzlLd5+uaAVE9I3WQFhSb9gp0cpXnw==
+  dependencies:
+    "@material/feature-targeting" "^13.0.0"
+    tslib "^2.1.0"
+
 "@material/drawer@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/drawer/-/drawer-11.0.0.tgz#be53de6ca0394b5ce570c176495c66d555785b40"
@@ -628,6 +663,13 @@
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/feature-targeting/-/feature-targeting-11.0.0.tgz#fa04d955c1374fe92cbee95fa86784fac8673fd7"
   integrity sha512-7/jdaHm7C16Eq02tDQ1iI+giWKgk+QRNWFrmGKzHfXbU604XwY/eSLSiVS8QI01vx9QZ0aO9K84m0yhQQNQQtg==
+  dependencies:
+    tslib "^2.1.0"
+
+"@material/feature-targeting@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/feature-targeting/-/feature-targeting-13.0.0.tgz#7bc7840b40930b6831101a22882acdd0329591c0"
+  integrity sha512-QJClfeaA4EMyAxKJy9WR0Nx+/VwSZCkhGLUVBG9NhxqYGfl/LtaeaidrNm32vYEoNZAofN92VD2RwQTRwp/dMQ==
   dependencies:
     tslib "^2.1.0"
 
@@ -779,6 +821,13 @@
   dependencies:
     tslib "^2.1.0"
 
+"@material/progress-indicator@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/progress-indicator/-/progress-indicator-13.0.0.tgz#8097208c5fa3dd6753d8b7bf141c28beb0938c23"
+  integrity sha512-IfhAMn03gWg/Rl0Bg26Q1g+DrMnaULllz+ZJeIY7BXZC5qFYq1fLq4+RiQmfPGlJfURUjrWNLcI1VDVyXUHHzg==
+  dependencies:
+    tslib "^2.1.0"
+
 "@material/radio@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/radio/-/radio-11.0.0.tgz#0686e94d57ba3ebdb856d7d263c1e21b89fa2ba4"
@@ -812,6 +861,14 @@
   integrity sha512-FcS8+N9MhnC0Wdd34O2yCC/5ylIwkfHjV5pbmHyEtb4YXoWngnPIxgpOr5PsUv95WSQBmeqWCRJDwS+sGZHoKQ==
   dependencies:
     "@material/theme" "^11.0.0"
+    tslib "^2.1.0"
+
+"@material/rtl@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-13.0.0.tgz#c8dbdc2b63d122450ff456572d08a9f5639704ab"
+  integrity sha512-nFGy3iQg7k+xLs67eb86mRFVLwa0yi7MusqRK4OM8DXcLO5yoVfUTPKpdSykcbRryp9imVHsxutox2tZawR4og==
+  dependencies:
+    "@material/theme" "^13.0.0"
     tslib "^2.1.0"
 
 "@material/segmented-button@^11.0.0":
@@ -990,6 +1047,14 @@
     "@material/feature-targeting" "^11.0.0"
     tslib "^2.1.0"
 
+"@material/theme@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@material/theme/-/theme-13.0.0.tgz#dad25ca7c3427d5d35f074343c7f7957cbc1eb8c"
+  integrity sha512-KAe1s0MvvfCGAwJliDVTvgAKuD3ESwhl7F7br4Iam4IPdqME2rWl8NPhKHFfaWqTG7PyCgMMngYEYuA8cLNTsA==
+  dependencies:
+    "@material/feature-targeting" "^13.0.0"
+    tslib "^2.1.0"
+
 "@material/tooltip@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/tooltip/-/tooltip-11.0.0.tgz#1b3af742f9c9072300e32a85d192d57e0ca8c0b4"
@@ -1165,6 +1230,15 @@
     "@material/circular-progress" "^11.0.0"
     "@smui/common" "^4.2.0"
 
+"@smui/circular-progress@6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@smui/circular-progress/-/circular-progress-6.1.4.tgz#ad883f43e8ff5a36a0b123f6924d3f365a4ed5bc"
+  integrity sha512-79SOd1XpQsSA4P1JpuWgvMVRmGIXFnsTqDkbe8bqF5U8TuK8vPbTNeBO/ANlkOJr2Mqt4j/lJ8Vma02tqjamMA==
+  dependencies:
+    "@material/circular-progress" "^13.0.0"
+    "@smui/common" "^6.1.4"
+    svelte2tsx "^0.5.12"
+
 "@smui/common@4.2.0", "@smui/common@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@smui/common/-/common-4.2.0.tgz#81ddb9d5b9a39cc814188fa18834301261b9ea9e"
@@ -1172,6 +1246,15 @@
   dependencies:
     "@material/dom" "^11.0.0"
     svelte "^3.35.0"
+
+"@smui/common@^6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@smui/common/-/common-6.1.4.tgz#2e15eda0c5907d1192806311123978ad466d3f66"
+  integrity sha512-l6c4gJH+qP9HdM9RhTP07Gl8eewVbYWT7QfVSAF+wwji32ndjgZLlP5P2Jl/GmsQOOlDoNB3VPy/o4Z/kab31g==
+  dependencies:
+    "@material/dom" "^13.0.0"
+    "@tsconfig/svelte" "^3.0.0"
+    svelte2tsx "^0.5.12"
 
 "@smui/data-table@4.2.0":
   version "4.2.0"
@@ -1490,6 +1573,11 @@
     kleur "^4.1.5"
     magic-string "^0.26.5"
     svelte-hmr "^0.15.0"
+
+"@tsconfig/svelte@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@tsconfig/svelte/-/svelte-3.0.0.tgz#b06e059209f04c414de0069f2f0e2796d979fc6f"
+  integrity sha512-pYrtLtOwku/7r1i9AMONsJMVYAtk3hzOfiGNekhtq5tYBGA7unMve8RvUclKLMT3PrihvJqUmzsRGh0RP84hKg==
 
 "@types/long@^4.0.1":
   version "4.0.2"
@@ -2255,6 +2343,14 @@ svelte2tsx@^0.1.157:
   version "0.1.193"
   resolved "https://registry.yarnpkg.com/svelte2tsx/-/svelte2tsx-0.1.193.tgz#16fe594898ef455e4f715ac317d219c9c757656b"
   integrity sha512-vzy4YQNYDnoqp2iZPnJy7kpPAY6y121L0HKrSBjU/IWW7DQ6T7RMJed2VVHFmVYm0zAGYMDl9urPc6R4DDUyhg==
+  dependencies:
+    dedent-js "^1.0.1"
+    pascal-case "^3.1.1"
+
+svelte2tsx@^0.5.12:
+  version "0.5.20"
+  resolved "https://registry.yarnpkg.com/svelte2tsx/-/svelte2tsx-0.5.20.tgz#0ac5411b53d6b6913b12e12a02c03ce9eb13e945"
+  integrity sha512-yNHmN/uoAnJ7d1XqVohiNA6TMFOxibHyEddUAHVt1PiLXtbwAJF3WaGYlg8QbOdoXzOVsVNCAlqRUIdULUm+OA==
   dependencies:
     dedent-js "^1.0.1"
     pascal-case "^3.1.1"
