@@ -12,7 +12,7 @@
     "@smui/circular-progress": "4.2.0",
     "@smui/fab": "4.2.0",
     "@smui/icon-button": "4.2.0",
-    "@smui/select": "4.2.0",
+    "@smui/select": "6.2.0",
     "@smui/snackbar": "4.2.0",
     "@smui/textfield": "4.2.0",
     "@smui/tooltip": "4.2.0",
