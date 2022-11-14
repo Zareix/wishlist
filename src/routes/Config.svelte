@@ -1,84 +1,85 @@
-<script>
-  import { onDestroy, onMount } from "svelte"
+<script lang="ts">
+  import { onDestroy, onMount } from 'svelte';
 
-  import { auth, db9 } from "../firebase"
-  import { user } from "../stores"
+  import { auth, db9 } from '../firebase';
+  import { user } from '../stores';
 
-  import TextField from "@smui/textfield"
-  import Button, { Icon, Label as BtnLabel } from "@smui/button"
-  import Snackbar, { Actions, Label } from "@smui/snackbar"
-  import IconButton from "@smui/icon-button"
-  import Switch from "@smui/switch"
-  import FormField from "@smui/form-field"
-  import { doc, getDoc, setDoc } from "@firebase/firestore"
+  import TextField from '@smui/textfield';
+  import Button, { Icon, Label as BtnLabel } from '@smui/button';
+  import Snackbar, { Actions, Label } from '@smui/snackbar';
+  import IconButton from '@smui/icon-button';
+  import Switch from '@smui/switch';
+  import FormField from '@smui/form-field';
+  import { doc, getDoc, setDoc } from '@firebase/firestore';
 
-  import Layout from "../components/Layout.svelte"
-  import Loading from "../components/Loading.svelte"
-  import DeleteCategory from "../components/DeleteCategory.svelte"
+  import Layout from '../components/Layout.svelte';
+  import Loading from '../components/Loading.svelte';
+  import DeleteCategory from '../components/DeleteCategory.svelte';
+  import type { User } from 'firebase/auth';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  let canWatch = []
-  let snackbar
-  let snackbarText = ""
-  let categories = []
-  let loadingCanWatch = true
-  let loadingVisibleCat = true
+  let canWatch: string[] = [];
+  let snackbar: Snackbar;
+  let snackbarText = '';
+  let categories: { name: string; checked: boolean }[] = [];
+  let loadingCanWatch = true;
+  let loadingVisibleCat = true;
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   onMount(async () => {
-    let authorizedCat = []
+    let authorizedCat: string[] = [];
 
-    const res1 = await getDoc(doc(db9, "permissions", currentUser.email))
+    const res1 = await getDoc(doc(db9, 'permissions', currentUser.email));
     if (res1.exists()) {
-      canWatch = res1.data().canWatch
+      canWatch = res1.data().canWatch;
       if (res1.data().authorizedCat)
         authorizedCat = res1
           .data()
-          .authorizedCat.map((x) => x.trim().toLowerCase())
+          .authorizedCat.map((x: string) => x.trim().toLowerCase());
     }
-    loadingCanWatch = false
+    loadingCanWatch = false;
 
-    const res = await getDoc(doc(db9, currentUser.email, "categories"))
+    const res = await getDoc(doc(db9, currentUser.email, 'categories'));
     if (res.exists()) {
-      categories = res.data().categories.map((c) => ({
+      categories = res.data().categories.map((c: string) => ({
         name: c,
         checked: authorizedCat.includes(c),
-      }))
+      }));
     }
-    loadingVisibleCat = false
+    loadingVisibleCat = false;
 
     categories = categories.sort((a, b) => {
-      const tempA = a.name.toLowerCase()
-      const tempB = b.name.toLowerCase()
-      if (tempA < tempB) return -1
-      if (tempA > tempB) return 1
-      return 0
-    })
-  })
+      const tempA = a.name.toLowerCase();
+      const tempB = b.name.toLowerCase();
+      if (tempA < tempB) return -1;
+      if (tempA > tempB) return 1;
+      return 0;
+    });
+  });
 
   const addPermission = () => {
     if (canWatch.length === 10) {
-      snackbarText = "Impossible de mettre plus de 10 permissions"
-      snackbar.open()
-      return
+      snackbarText = 'Impossible de mettre plus de 10 permissions';
+      snackbar.open();
+      return;
     }
-    canWatch = [...canWatch, ""]
-  }
+    canWatch = [...canWatch, ''];
+  };
 
   const submit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    setDoc(doc(db9, "permissions", currentUser.email), {
-      canWatch: canWatch.filter((c) => c !== ""),
+    setDoc(doc(db9, 'permissions', currentUser.email), {
+      canWatch: canWatch.filter((c) => c !== ''),
       authorizedCat: categories.filter((c) => c.checked).map((c) => c.name),
     }).then(() => {
-      snackbarText = "Permissions mises à jour"
-      snackbar.open()
-    })
-  }
+      snackbarText = 'Permissions mises à jour';
+      snackbar.open();
+    });
+  };
 </script>
 
 <Layout active="settings" pageTitle="Paramètres">
@@ -91,7 +92,7 @@
         {:else}
           <div class="permissions-inputs">
             {#each canWatch as email, i}
-              <TextField label={"Email " + (i + 1)} bind:value={email} />
+              <TextField label={'Email ' + (i + 1)} bind:value={email} />
               <br />
             {/each}
           </div>
@@ -114,7 +115,7 @@
           <div class="categories">
             {#each categories as c, i}
               <FormField
-                align={i % 2 === 0 ? "end" : "start"}
+                align={i % 2 === 0 ? 'end' : 'start'}
                 class="perm-category-input"
               >
                 <Switch bind:checked={categories[i].checked} />

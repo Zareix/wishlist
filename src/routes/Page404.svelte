@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import page404Svg from "../assets/error-404.svg"
 
   import Button, { Icon, Label } from "@smui/button"

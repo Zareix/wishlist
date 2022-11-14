@@ -1,22 +1,22 @@
-<script>
-  import { Route } from "svelte-routing"
-  import Layout from "../components/Layout.svelte"
+<script lang="ts">
+  import { Route } from 'svelte-routing';
+  import type { SvelteComponentDev } from 'svelte/internal';
 
-  import { user } from "../stores"
+  import { user } from '../stores';
 
-  import Login from "./Login.svelte"
+  import Login from './Login.svelte';
 
-  export let path
-  export let component
+  export let path: string;
+  export let component: typeof SvelteComponentDev;
 
-  $: isAuthenticated = $user
+  $: isAuthenticated = $user;
 
   history.pushState = new Proxy(history.pushState, {
     apply(target, thisArg, argumentsList) {
-      scrollTo(0, 0)
-      Reflect.apply(target, thisArg, argumentsList)
+      scrollTo(0, 0);
+      Reflect.apply(target, thisArg, argumentsList);
     },
-  })
+  });
 </script>
 
 {#if isAuthenticated}

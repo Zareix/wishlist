@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import ItemImage from "./ItemImage.svelte"
 
   export let images = []

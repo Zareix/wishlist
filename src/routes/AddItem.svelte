@@ -1,23 +1,23 @@
-<script>
-  import { onMount, onDestroy } from "svelte"
+<script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores.js"
+  import { db9 } from '../firebase';
+  import { user } from '../stores.js';
 
-  import Loading from "../components/Loading.svelte"
-  import NewCatPopup from "../components/NewCatPopup.svelte"
-  import LinkInputList from "../components/LinksInputList.svelte"
-  import Layout from "../components/Layout.svelte"
+  import Loading from '../components/Loading.svelte';
+  import NewCatPopup from '../components/NewCatPopup.svelte';
+  import LinkInputList from '../components/LinksInputList.svelte';
+  import Layout from '../components/Layout.svelte';
 
-  import itemNotFoundSvg from "../assets/item-not-found.svg"
+  import itemNotFoundSvg from '../assets/item-not-found.svg';
 
-  import Select, { Option } from "@smui/select"
-  import Button from "@smui/button"
-  import { Content } from "@smui/card"
-  import Textfield from "@smui/textfield"
-  import { navigate } from "svelte-routing"
-  import IconButton from "@smui/icon-button"
-  import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
+  import Select, { Option } from '@smui/select';
+  import Button from '@smui/button';
+  import { Content } from '@smui/card';
+  import Textfield from '@smui/textfield';
+  import { navigate } from 'svelte-routing';
+  import IconButton from '@smui/icon-button';
+  import Snackbar, { Actions, Label as LabelSnack } from '@smui/snackbar';
   import {
     addDoc,
     collection,
@@ -26,164 +26,170 @@
     getDoc,
     getDocs,
     updateDoc,
-  } from "@firebase/firestore"
-  import { getCategories } from "../utils/firebase-utils"
+  } from '@firebase/firestore';
+  import { getCategories } from '../utils/firebase-utils';
+  import type { User } from 'firebase/auth';
+  import type { Item as ItemModel } from '../models/Item';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  export let modifId = undefined
-  export let oldCategory = ""
+  export let modifId: string = undefined;
+  export let oldCategory = '';
 
-  export let location
-  const urlParams = new URLSearchParams(location.search)
+  export let location;
+  const urlParams = new URLSearchParams(location.search);
 
-  let error = false
-  let title = ""
-  let loading = false
-  let description = ""
-  let price = 0
-  let category = ""
-  let categories = []
-  let refs = []
-  let images = []
-  let createdAt
-  let snackbar
-  let snackbarText
+  let error = false;
+  let title = '';
+  let loading = false;
+  let description = '';
+  let price = 0;
+  let category = '';
+  let categories: string[] = [];
+  let refs: RefImg[] = [];
+  let images: RefImg[] = [];
+  let createdAt: Date;
+  let snackbar: Snackbar;
+  let snackbarText: string;
   let inputErrors = {
     title: false,
     category: false,
-  }
-  let newCatPopupOpen
+  };
+  let newCatPopupOpen: boolean;
 
-  onDestroy(() => unsubscribe())
+  type RefImg = { value: string; id: number };
+
+  onDestroy(() => unsubscribe());
 
   onMount(async () => {
-    if (urlParams.has("title")) title = urlParams.get("title")
-    if (urlParams.has("ref")) addRef(urlParams.get("ref"))
-    if (urlParams.has("body")) {
-      let body = urlParams.get("body")
+    if (urlParams.has('title')) title = urlParams.get('title');
+    if (urlParams.has('ref')) addRef(urlParams.get('ref'));
+    if (urlParams.has('body')) {
+      let body = urlParams.get('body');
       if (
         refs.length === 0 &&
-        (body.includes("http://") || body.includes("https://"))
+        (body.includes('http://') || body.includes('https://'))
       ) {
-        description = body.split("http")[0]
-        addRef("http" + body.split("http")[1])
-      } else description = body
+        description = body.split('http')[0];
+        addRef('http' + body.split('http')[1]);
+      } else description = body;
     }
 
-    categories = await getCategories(currentUser.email)
+    categories = await getCategories(currentUser.email);
 
     if (modifId) {
-      await getDoc(doc(db9, currentUser.email, "items", oldCategory, modifId))
+      await getDoc<ItemModel>(
+        doc(db9, currentUser.email, 'items', oldCategory, modifId)
+      )
         .then((i) => {
-          let data = i.data()
-          category = oldCategory
-          title = data.title
-          data.references.forEach((r) => addRef(r))
-          data.images.forEach((i) => addImg(i))
-          createdAt = data.createdAt
-          description = data.description ? data.description : ""
-          price = data.price ? data.price : 0
+          let data = i.data();
+          category = oldCategory;
+          title = data.title;
+          data.references.forEach((r) => addRef(r));
+          data.images.forEach((i) => addImg(i));
+          createdAt = data.createdAt;
+          description = data.description ? data.description : '';
+          price = data.price ? data.price : 0;
         })
-        .catch((e) => (error = true))
+        .catch((e) => (error = true));
     }
-  })
+  });
 
   const addItem = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    inputErrors = [false, false]
-    snackbar.close()
-    snackbarText = ""
+    inputErrors = { title: false, category: false };
+    snackbar.close();
+    snackbarText = '';
 
-    if (category === undefined || category.trim() === "") {
-      inputErrors.category = true
-      snackbarText = "Merci de choisir une catégorie"
+    if (category === undefined || category.trim() === '') {
+      inputErrors.category = true;
+      snackbarText = 'Merci de choisir une catégorie';
     }
-    if (title === undefined || title.trim() === "") {
-      inputErrors.title = true
-      snackbarText = "Merci de choisir un titre"
-    }
-
-    if (snackbarText !== "") {
-      snackbar.open()
-      return
+    if (title === undefined || title.trim() === '') {
+      inputErrors.title = true;
+      snackbarText = 'Merci de choisir un titre';
     }
 
-    loading = true
+    if (snackbarText !== '') {
+      snackbar.open();
+      return;
+    }
+
+    loading = true;
 
     if (modifId) {
       if (oldCategory !== category) {
         await deleteDoc(
-          doc(db9, currentUser.email, "items", oldCategory, modifId)
-        )
-        await addDoc(collection(db9, currentUser.email, "items", category), {
+          doc(db9, currentUser.email, 'items', oldCategory, modifId)
+        );
+        await addDoc(collection(db9, currentUser.email, 'items', category), {
           title,
           description,
           price,
           createdAt,
           position: 0,
-          references: refs.filter((r) => r.value !== "").map((r) => r.value),
-          images: images.filter((i) => i.value !== "").map((i) => i.value),
-        })
-        back()
+          references: refs.filter((r) => r.value !== '').map((r) => r.value),
+          images: images.filter((i) => i.value !== '').map((i) => i.value),
+        });
+        back();
       } else {
-        updateDoc(doc(db9, currentUser.email, "items", category, modifId), {
+        updateDoc(doc(db9, currentUser.email, 'items', category, modifId), {
           title,
           description,
           price,
-          references: refs.filter((r) => r.value !== "").map((r) => r.value),
-          images: images.filter((i) => i.value !== "").map((i) => i.value),
-        }).then(() => back())
+          references: refs.filter((r) => r.value !== '').map((r) => r.value),
+          images: images.filter((i) => i.value !== '').map((i) => i.value),
+        }).then(() => back());
       }
     } else {
-      addDoc(collection(db9, currentUser.email, "items", category), {
+      addDoc(collection(db9, currentUser.email, 'items', category), {
         position: 0,
         title,
         description,
         price,
         createdAt: Date.now(),
-        references: refs.filter((r) => r.value !== "").map((r) => r.value),
-        images: images.filter((i) => i.value !== "").map((i) => i.value),
-      }).then(() => back())
+        references: refs.filter((r) => r.value !== '').map((r) => r.value),
+        images: images.filter((i) => i.value !== '').map((i) => i.value),
+      }).then(() => back());
     }
-  }
+  };
 
   const back = () =>
     navigate(
-      "/#category" +
+      '/#category' +
         category.charAt(0).toUpperCase() +
-        category.slice(1).replace(" ", "")
-    )
+        category.slice(1).replace(' ', '')
+    );
 
   const addNewRef = () =>
-    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: "" }])
-  const addRef = (ref) =>
-    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: ref }])
-  const removeRef = (ref) => (refs = refs.filter((r) => r !== ref))
+    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: '' }]);
+  const addRef = (ref: string) =>
+    (refs = [...refs, { id: Math.floor(Math.random() * 100000), value: ref }]);
+  const removeRef = (ref: RefImg) => (refs = refs.filter((r) => r !== ref));
 
   const addNewImg = () =>
     (images = [
       ...images,
-      { id: Math.floor(Math.random() * 100000), value: "" },
-    ])
-  const addImg = (img) =>
+      { id: Math.floor(Math.random() * 100000), value: '' },
+    ]);
+  const addImg = (img: string) =>
     (images = [
       ...images,
       { id: Math.floor(Math.random() * 100000), value: img },
-    ])
-  const removeImg = (img) => (images = images.filter((i) => i !== img))
+    ]);
+  const removeImg = (img: RefImg) => (images = images.filter((i) => i !== img));
 
-  const switchTitleDesc = () => ([title, description] = [description, title])
+  const switchTitleDesc = () => ([title, description] = [description, title]);
 
   const toggleNewCat = async () => {
-    newCatPopupOpen = !newCatPopupOpen
+    newCatPopupOpen = !newCatPopupOpen;
     if (!newCatPopupOpen) {
-      const res = await getDoc(doc(db9, currentUser.email, "categories"))
-      if (res.exists) categories = res.data().categories
+      const res = await getDoc(doc(db9, currentUser.email, 'categories'));
+      if (res.exists) categories = res.data().categories;
     }
-  }
+  };
 </script>
 
 <Layout active="add" pageTitle="Ajouter">
@@ -192,7 +198,7 @@
       <Loading />
     {:else if error}
       <div class="error">
-        <img src={itemNotFoundSvg} alt="item not found">
+        <img src={itemNotFoundSvg} alt="item not found" />
         <h2>Oups, impossible de trouver cet objet</h2>
       </div>
     {:else}
@@ -204,8 +210,8 @@
               <Select
                 bind:value={category}
                 label={categories.length === 0
-                  ? "Aucune catégorie"
-                  : "Catégorie"}
+                  ? 'Aucune catégorie'
+                  : 'Catégorie'}
                 bind:invalid={inputErrors.category}
                 disabled={categories.length === 0}
               >
@@ -230,7 +236,7 @@
               placeholder="Title"
             />
 
-            {#if urlParams.has("title") && description !== ""}
+            {#if urlParams.has('title') && description !== ''}
               <IconButton
                 class="material-icons swap-icon"
                 type="button"
@@ -339,7 +345,7 @@
   }
 
   :global(.mdc-text-field__input) {
-    -webkit-user-select: text;
+    user-select: text;
   }
 
   @media (max-width: 768px) {

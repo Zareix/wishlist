@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { db9 } from "../firebase"
   import { user } from "../stores"
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import emptySvg from "../assets/empty.svg"
 
   export let title = "C'est vide par ici 👀"

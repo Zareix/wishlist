@@ -1,15 +1,16 @@
-<script>
-  import { onDestroy, onMount } from "svelte"
+<script lang="ts">
+  import { onDestroy, onMount } from 'svelte';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
-  import { getCategories } from "../utils/firebase-utils"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
+  import { getCategories } from '../utils/firebase-utils';
 
-  import Snackbar, { Actions, Label as LabelSnack } from "@smui/snackbar"
-  import IconButton from "@smui/icon-button"
-  import Radio from "@smui/radio"
-  import FormField from "@smui/form-field"
-  import Button from "@smui/button"
+  import Snackbar, { Actions, Label as LabelSnack } from '@smui/snackbar';
+  import IconButton from '@smui/icon-button';
+  import Radio from '@smui/radio';
+  import FormField from '@smui/form-field';
+  import Button from '@smui/button';
+  import { flip } from 'svelte/animate';
   import {
     collection,
     deleteDoc,
@@ -19,104 +20,105 @@
     orderBy,
     query,
     setDoc,
-  } from "@firebase/firestore"
+  } from '@firebase/firestore';
+  import type { User } from 'firebase/auth';
 
-  import Loading from "../components/Loading.svelte"
-  import Item from "../components/Item.svelte"
-  import NoContent from "../components/NoContent.svelte"
-  import Layout from "../components/Layout.svelte"
-  import { flip } from "svelte/animate"
+  import Loading from '../components/Loading.svelte';
+  import Item from '../components/Item.svelte';
+  import NoContent from '../components/NoContent.svelte';
+  import Layout from '../components/Layout.svelte';
+  import type { Item as ItemModel } from '../models/Item';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  const flipDurationMs = 300
+  const flipDurationMs = 300;
 
-  let loading = true
-  let items = []
-  let selectedType = "all"
-  let itemsToShow = 10
+  let loading = true;
+  let items: ItemModel[] = [];
+  let selectedType = 'all';
+  let itemsToShow = 10;
 
-  let snackbar
-  let snackbarText = ""
+  let snackbar: Snackbar;
+  let snackbarText = '';
 
   $: filteredItems = loading
     ? []
-    : filterItems(items, selectedType, itemsToShow)
+    : filterItems(items, selectedType, itemsToShow);
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   onMount(() => {
-    loading = true
+    loading = true;
 
-    getDocs(
-      query(
-        collection(db9, currentUser.email, "items", "_archive"),
-        orderBy("createdAt", "desc")
+    getDocs<ItemModel>(
+      query<ItemModel>(
+        collection(db9, currentUser.email, 'items', '_archive'),
+        orderBy('createdAt', 'desc')
       )
     ).then((data) => {
-      data.forEach((i) => addItems({ id: i.id, ...i.data() }))
-      loading = false
-    })
-  })
+      data.forEach((i) => addItems({ id: i.id, ...i.data() }));
+      loading = false;
+    });
+  });
 
-  const addItems = (i) => (items = [...items, i])
+  const addItems = (i: ItemModel) => (items = [...items, i]);
 
-  const filterItems = (items, type, toShow) => {
+  const filterItems = (items: ItemModel[], type: string, toShow: number) => {
     switch (type) {
-      case "all":
-        return items.slice(0, toShow)
-      case "validated":
-        return items.slice(0, toShow).filter((i) => i.validated)
-      case "notValidated":
-        return items.slice(0, toShow).filter((i) => !i.validated)
+      case 'all':
+        return items.slice(0, toShow);
+      case 'validated':
+        return items.slice(0, toShow).filter((i) => i.validated);
+      case 'notValidated':
+        return items.slice(0, toShow).filter((i) => !i.validated);
       default:
-        return items.slice(0, toShow)
+        return items.slice(0, toShow);
     }
-  }
+  };
 
-  const addCategory = async (categories, newCategory) => {
-    await setDoc(doc(db9, currentUser.email, "categories"), {
+  const addCategory = async (categories: string[], newCategory: string) => {
+    await setDoc(doc(db9, currentUser.email, 'categories'), {
       categories: [...categories, newCategory.trim().toLowerCase()],
-    })
-  }
+    });
+  };
 
-  const restoreItem = async (item) => {
-    let categories = await getCategories(currentUser.email)
+  const restoreItem = async (item: ItemModel) => {
+    let categories: string[] = await getCategories(currentUser.email);
 
     if (
       !categories.some(
         (c) => c.trim().toLowerCase() === item.categorie.trim().toLowerCase()
       )
     )
-      await addCategory(categories, item.categorie)
+      await addCategory(categories, item.categorie);
 
-    setDoc(doc(db9, currentUser.email, "items", item.categorie, item.id), {
+    setDoc(doc(db9, currentUser.email, 'items', item.categorie, item.id), {
       ...item,
       validated: false,
     }).then(() => {
-      snackbarText = `Item '${item.title}' restauré dans '${item.categorie}'`
-      snackbar.open()
-      deleteItem(item)
-    })
-  }
+      snackbarText = `Item '${item.title}' restauré dans '${item.categorie}'`;
+      snackbar.open();
+      deleteItem(item);
+    });
+  };
 
-  const deleteItem = (item) => {
-    deleteDoc(doc(db9, currentUser.email, "items", "_archive", item.id)).then(
+  const deleteItem = (item: ItemModel) => {
+    deleteDoc(doc(db9, currentUser.email, 'items', '_archive', item.id)).then(
       () => {
-        items = items.filter((i) => i !== item)
-        if (!snackbarText.includes("restauré")) {
-          snackbarText = 'Item "' + item.title + '" supprimé'
-          snackbar.open()
+        items = items.filter((i) => i !== item);
+        if (!snackbarText.includes('restauré')) {
+          snackbarText = 'Item "' + item.title + '" supprimé';
+          snackbar.open();
         }
       }
-    )
-  }
+    );
+  };
 
   const showMore = () => {
-    if (itemsToShow + 10 > items.length) itemsToShow = items.length
-    else itemsToShow += 10
-  }
+    if (itemsToShow + 10 > items.length) itemsToShow = items.length;
+    else itemsToShow += 10;
+  };
 </script>
 
 <Layout active="archive" pageTitle="Archive">
@@ -129,23 +131,23 @@
     {:else}
       <section id="selectType">
         <FormField>
-          <Radio bind:group={selectedType} value={"all"} />
+          <Radio bind:group={selectedType} value={'all'} />
           <span slot="label">
-            {"Tous les objets"}
+            {'Tous les objets'}
           </span>
         </FormField>
 
         <FormField>
-          <Radio bind:group={selectedType} value={"validated"} />
+          <Radio bind:group={selectedType} value={'validated'} />
           <span slot="label">
-            {"Validés seulement"}
+            {'Validés seulement'}
           </span>
         </FormField>
 
         <FormField>
-          <Radio bind:group={selectedType} value={"notValidated"} />
+          <Radio bind:group={selectedType} value={'notValidated'} />
           <span slot="label">
-            {"Non validés seulement"}
+            {'Non validés seulement'}
           </span>
         </FormField>
       </section>

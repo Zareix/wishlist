@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Dialog, { Content, Actions } from "@smui/dialog"
   import Button, { Label } from "@smui/button"
 

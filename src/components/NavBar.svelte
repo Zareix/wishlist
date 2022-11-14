@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { user } from "../stores"
   import { auth } from "../firebase"
 

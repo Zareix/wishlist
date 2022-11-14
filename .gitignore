@@ -167,3 +167,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/yarn
 
 .DS_Store
+
+vite.config.ts.*

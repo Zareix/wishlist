@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onDestroy } from "svelte"
 
   import Dialog, { Content, Actions } from "@smui/dialog"

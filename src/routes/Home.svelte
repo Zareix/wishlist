@@ -1,13 +1,13 @@
-<script>
-  import { onDestroy, onMount } from "svelte"
+<script lang="ts">
+  import { onDestroy, onMount } from 'svelte';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
-  import { getCategories } from "../utils/firebase-utils"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
+  import { getCategories } from '../utils/firebase-utils';
 
-  import Select, { Option } from "@smui/select"
-  import Snackbar, { Actions, Label } from "@smui/snackbar"
-  import IconButton from "@smui/icon-button"
+  import Select, { Option } from '@smui/select';
+  import Snackbar, { Actions, Label } from '@smui/snackbar';
+  import IconButton from '@smui/icon-button';
   import {
     collection,
     doc,
@@ -15,58 +15,60 @@
     getDocs,
     query,
     where,
-  } from "@firebase/firestore"
+  } from '@firebase/firestore';
+  import type { User } from '@firebase/auth';
 
-  import List from "../components/List.svelte"
-  import NoContent from "../components/NoContent.svelte"
-  import Loading from "../components/Loading.svelte"
-  import Layout from "../components/Layout.svelte"
+  import List from '../components/List.svelte';
+  import NoContent from '../components/NoContent.svelte';
+  import Loading from '../components/Loading.svelte';
+  import Layout from '../components/Layout.svelte';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  let categories = []
-  let chosenUser
-  let allUsers = []
-  let authorizedCat = {}
-  let userAuthorizedCat = []
-  let snackbar
-  let snackbarText
-  let loading = true
+  let categories: string[] = [];
+  let chosenUser: string | null;
+  let allUsers: string[] = [];
+  let authorizedCat = {};
+  let userAuthorizedCat: string[] = [];
+  let snackbar: Snackbar;
+  let snackbarText: string | null;
+  let loading = true;
 
-  $: displayCategories =
+  $: displayCategories = (
     chosenUser === currentUser.email ? categories : authorizedCat[chosenUser]
+  ) as string[];
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   onMount(async () => {
-    allUsers = [currentUser.email]
-    chosenUser = currentUser.email
+    allUsers = [currentUser.email];
+    chosenUser = currentUser.email;
 
-    categories = await getCategories(currentUser.email)
+    categories = await getCategories(currentUser.email);
 
     const res2 = await getDocs(
       query(
-        collection(db9, "permissions"),
-        where("canWatch", "array-contains", currentUser.email)
+        collection(db9, 'permissions'),
+        where('canWatch', 'array-contains', currentUser.email)
       )
-    )
+    );
     res2.docs.forEach((u) => {
-      allUsers = [...allUsers, u.id]
-      authorizedCat[u.id] = u.data().authorizedCat
-      authorizedCat[u.id].sort()
-    })
+      allUsers = [...allUsers, u.id];
+      authorizedCat[u.id] = u.data().authorizedCat;
+      authorizedCat[u.id].sort();
+    });
 
-    const res3 = await getDoc(doc(db9, "permissions", currentUser.email))
-    userAuthorizedCat = res3.data().authorizedCat
+    const res3 = await getDoc(doc(db9, 'permissions', currentUser.email));
+    userAuthorizedCat = res3.data().authorizedCat;
 
-    loading = false
-  })
+    loading = false;
+  });
 
-  const snackbarOpen = (message) => {
-    snackbarText = message
-    snackbar.open()
-  }
+  const snackbarOpen = (message: string) => {
+    snackbarText = message;
+    snackbar.open();
+  };
 </script>
 
 <Layout active="home" pageTitle={currentUser.displayName}>
@@ -85,7 +87,9 @@
         >
           {#each allUsers as email}
             <Option value={email}
-              >{email === currentUser.email ? "Moi" : email}</Option
+              >{email === currentUser.email
+                ? `Moi (${currentUser.email})`
+                : email}</Option
             >
           {/each}
         </Select>

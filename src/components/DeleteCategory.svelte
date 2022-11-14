@@ -1,74 +1,73 @@
-<script>
-  import { onDestroy } from "svelte"
+<script lang="ts">
+  import { onDestroy } from 'svelte';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
 
-  import Tooltip from "@smui/tooltip/Tooltip.svelte"
-  import IconButton from "@smui/icon-button"
-  import Wrapper from "@smui/tooltip/Wrapper.svelte"
-  import Dialog, { Content, Actions, InitialFocus } from "@smui/dialog"
-  import Button, { Label } from "@smui/button"
+  import Tooltip, { Wrapper } from '@smui/tooltip';
+  import IconButton from '@smui/icon-button';
+  import Dialog, { Content, Actions, InitialFocus } from '@smui/dialog';
+  import Button, { Label } from '@smui/button';
   import {
     collection,
     doc,
     getDocs,
     updateDoc,
     writeBatch,
-  } from "@firebase/firestore"
+  } from '@firebase/firestore';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  export let categories = []
-  let selectedCat = ""
-  let prompt = false
+  export let categories = [];
+  let selectedCat = '';
+  let prompt = false;
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   const promptDeleteCat = (cat) => {
-    prompt = true
-    selectedCat = cat.name
-  }
+    prompt = true;
+    selectedCat = cat.name;
+  };
 
   const cancel = () => {
-    prompt = false
-    selectedCat = ""
-  }
+    prompt = false;
+    selectedCat = '';
+  };
 
   const deleteCat = async () => {
     const snap = await getDocs(
-      collection(db9, currentUser.email, "items", selectedCat)
-    )
+      collection(db9, currentUser.email, 'items', selectedCat)
+    );
 
     if (snap.size !== 0) {
-      const batch = writeBatch(db9)
+      const batch = writeBatch(db9);
       snap.docs.forEach((document) => {
         batch.set(
-          doc(db9, currentUser.email, "items", "_archive", document.id),
+          doc(db9, currentUser.email, 'items', '_archive', document.id),
           {
             ...document.data(),
             categorie: selectedCat,
             validated: false,
           }
-        )
+        );
 
         batch.delete(
-          doc(db9, currentUser.email, "items", selectedCat, document.id)
-        )
-      })
-      await batch.commit()
+          doc(db9, currentUser.email, 'items', selectedCat, document.id)
+        );
+      });
+      await batch.commit();
     }
 
-    updateDoc(doc(db9, currentUser.email, "categories"), {
+    updateDoc(doc(db9, currentUser.email, 'categories'), {
       categories: categories
         .filter((c) => c.name !== selectedCat)
         .map((c) => c.name),
     }).then(() => {
-      selectedCat = ""
-      location.reload()
-    })
-  }
+      selectedCat = '';
+      location.reload();
+    });
+  };
 </script>
 
 <section>
@@ -145,7 +144,7 @@
   }
 
   .list-item:not(:last-child)::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     right: 0;

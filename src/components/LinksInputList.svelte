@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action"
   import { flip } from "svelte/animate"
   import Button, { Label, Icon } from "@smui/button"
