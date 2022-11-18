@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { Router, Route } from "svelte-routing"
+  import { Router, Route } from 'svelte-routing';
 
-  import Home from "./routes/Home.svelte"
-  import Login from "./routes/Login.svelte"
-  import Config from "./routes/Config.svelte"
-  import AddItem from "./routes/AddItem.svelte"
-  import ProtectedRoutes from "./routes/ProtectedRoutes.svelte"
-  import Archive from "./routes/Archive.svelte"
-  import Page404 from "./routes/Page404.svelte"
+  import Home from './routes/Home.svelte';
+  import Login from './routes/Login.svelte';
+  import Config from './routes/Config.svelte';
+  import AddItem from './routes/AddItem.svelte';
+  import ProtectedRoutes from './routes/ProtectedRoutes.svelte';
+  import Archive from './routes/Archive.svelte';
+  import Page404 from './routes/Page404.svelte';
 
-  export let url = ""
+  export let url = '';
 </script>
 
 <Router {url}>

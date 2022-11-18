@@ -62,6 +62,9 @@
     const res3 = await getDoc(doc(db9, 'permissions', currentUser.email));
     userAuthorizedCat = res3.data().authorizedCat;
 
+    let email = new URLSearchParams(window.location.search).get('email');
+    chosenUser = email && allUsers.includes(email) ? email : currentUser.email;
+
     loading = false;
   });
 
