@@ -1,38 +1,50 @@
 <script lang="ts">
-  import Dialog, { Content, Actions } from "@smui/dialog"
-  import Button, { Label } from "@smui/button"
+  import Dialog, { Content, Actions } from '@smui/dialog';
+  import Button, { Label } from '@smui/button';
 
-  import { dialogImage } from "../stores"
-  import { onDestroy } from "svelte"
+  import { dialogImage } from '../stores';
+  import { onDestroy } from 'svelte';
 
-  let image
+  let isOpen = false;
 
-  const unsubscribe = dialogImage.subscribe((i) => (image = i))
+  let image: { src: string; index: number; title: string };
+  const unsubscribe = dialogImage.subscribe((i) => {
+    image = i;
+    if (i) {
+      isOpen = true;
+    }
+  });
 
-  onDestroy(() => unsubscribe())
-
-  $: isOpen = image !== null
+  onDestroy(() => {
+    unsubscribe();
+    isOpen = false;
+  });
 </script>
 
-{#if image !== null}
-  <Dialog bind:open={isOpen} scrimClickAction="" escapeKeyAction="">
+<Dialog bind:open={isOpen} scrimClickAction="" escapeKeyAction="">
+  {#if image !== null && image !== undefined}
     <h2>{image.title}</h2>
     <Content>
       <div class="flex center">
         <img
           src={image.src}
-          alt={"Image " + image.index + " de " + image.title}
+          alt={'Image ' + image.index + ' de ' + image.title}
           class="image-dialog"
         />
       </div>
     </Content>
-    <Actions>
-      <Button on:click={() => dialogImage.set(null)}>
-        <Label>Fermer</Label>
-      </Button>
-    </Actions>
-  </Dialog>
-{/if}
+  {/if}
+  <Actions>
+    <Button
+      on:click={() => {
+        isOpen = false;
+        setTimeout(() => dialogImage.set(undefined), 100);
+      }}
+    >
+      <Label>Fermer</Label>
+    </Button>
+  </Actions>
+</Dialog>
 
 <style>
   .image-dialog {
@@ -53,7 +65,7 @@
   }
 
   img::before {
-    content: "";
+    content: '';
     position: absolute;
     background-color: rgb(228, 228, 228);
     border: 1px hsl(0, 0%, 66.7%);
