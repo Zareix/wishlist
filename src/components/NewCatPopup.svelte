@@ -1,62 +1,69 @@
 <script lang="ts">
-  import { onDestroy } from "svelte"
+  import { onDestroy } from 'svelte';
 
-  import Dialog, { Content, Actions } from "@smui/dialog"
-  import Button, { Label } from "@smui/button"
-  import Textfield from "@smui/textfield"
-  import { doc, setDoc } from "@firebase/firestore"
+  import Dialog, { Content, Actions } from '@smui/dialog';
+  import Button, { Label } from '@smui/button';
+  import Textfield from '@smui/textfield';
+  import { doc, setDoc } from '@firebase/firestore';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
+  import type { User } from 'firebase/auth';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  export let toggleDialog
-  export let allCategories
-  export let open
+  export let toggleDialog: () => void;
+  export let allCategories: string[];
+  export let open: boolean;
 
-  let category = ""
-  let error = ""
+  let category = '';
+  let error = '';
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   const closeDialog = () => {
-    category = ""
-    error = ""
-    toggleDialog()
-  }
+    category = '';
+    error = '';
+    toggleDialog();
+  };
 
-  const checkErrors = () => {
-    if (category.trim() === "") {
-      error = "Merci d'entrer l'intitulé de la catégorie"
-      return true
+  const checkErrors = (): boolean => {
+    if (category.trim() === '') {
+      error = "Merci d'entrer l'intitulé de la catégorie";
+      return true;
     }
-    if (!category.match(/^[a-zA-Z][a-zA-Z0-9- ]+[a-zA-Z0-9]$/)) {
+    if (
+      !category.match(
+        /^[a-zàâçéèêëîïôûùüÿñæœ][a-z0-9-àâçéèêëîïôûùüÿñæœ ]+[a-z0-9àâçéèêëîïôûùüÿñæœ]$/i
+      )
+    ) {
       error =
-        "La catégorie ne doit contenir que des chiffres, lettres, espaces et/ou charactères '-'"
-      return true
+        "La catégorie ne doit contenir que des chiffres, lettres, espaces et/ou charactères '-'";
+      return true;
     }
     if (
       allCategories.some(
         (c) => category.trim().toLowerCase() === c.trim().toLowerCase()
       )
     ) {
-      error = "Cette catégorie existe déjà !"
-      return true
+      error = 'Cette catégorie existe déjà !';
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
-  const addNewCat = (e) => {
-    e.preventDefault()
+  const addNewCat = (
+    e: Event & { currentTarget: EventTarget & HTMLFormElement }
+  ): void => {
+    e.preventDefault();
 
-    if (checkErrors()) return
+    if (checkErrors()) return;
 
-    setDoc(doc(db9, currentUser.email, "categories"), {
+    setDoc(doc(db9, currentUser.email, 'categories'), {
       categories: [...allCategories, category.trim().toLowerCase()],
-    }).then(() => closeDialog())
-  }
+    }).then(() => closeDialog());
+  };
 </script>
 
 <Dialog bind:open>
@@ -66,10 +73,10 @@
       <Textfield
         label="Intitulé"
         bind:value={category}
-        on:focus={() => (error = "")}
+        on:focus={() => (error = '')}
         on:blur{checkErrors}
       />
-      {#if error !== ""}
+      {#if error !== ''}
         <p class="error">{error}</p>
       {/if}
       <Button type="submit">
