@@ -97,7 +97,6 @@
           {/each}
         </Select>
       </div>
-      <hr />
       <div id="wishlist">
         {#each displayCategories as c}
           <List
@@ -132,11 +131,6 @@
     height: 80vh;
   }
 
-  hr {
-    width: 40vw;
-    margin-top: 1rem;
-  }
-
   :global(#selectWishlist) {
     width: auto;
   }
@@ -152,11 +146,5 @@
 
   #wishlist > :global(#noContent:only-child) {
     margin: 2rem auto;
-  }
-
-  @media (max-width: 768px) {
-    hr {
-      width: 60vw;
-    }
   }
 </style>

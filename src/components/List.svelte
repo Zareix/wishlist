@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte"
+  import { onDestroy, onMount } from 'svelte';
 
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
 
-  import { flip } from "svelte/animate"
-  import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action"
+  import { flip } from 'svelte/animate';
+  import { dndzone, SOURCES, TRIGGERS, type DndEvent } from 'svelte-dnd-action';
 
-  import IconButton from "@smui/icon-button"
-  import { Icon } from "@smui/button"
+  import IconButton from '@smui/icon-button';
+  import { Icon } from '@smui/button';
   import {
     collection,
     doc,
@@ -16,154 +16,158 @@
     orderBy,
     query,
     writeBatch,
-  } from "@firebase/firestore"
+  } from '@firebase/firestore';
 
-  import Item from "./Item.svelte"
+  import type { Item as ModelItem } from '../models/Item';
+  import Item from './Item.svelte';
+  import type { User } from 'firebase/auth';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  const flipDurationMs = 300
-  const dropTargetClasses = ["dnd-active"]
-  let dragDisabled = true
+  const flipDurationMs = 300;
+  const dropTargetClasses = ['dnd-active'];
+  let dragDisabled = true;
 
-  export let category
-  export let chosenUser
-  export let snackbarOpen
-  export let orderByPosition
-  export let hidden
+  export let category: string;
+  export let chosenUser: string;
+  export let snackbarOpen: (message: string) => void;
+  export let orderByPosition: boolean;
+  export let hidden: boolean;
 
-  let oldUser
-  let items = []
-  let upPosTimeoutId
-  let collapsed = true
-  let catSection
-  let collapsibleUl
+  let oldUser: string;
+  let items: ModelItem[] = [];
+  let upPosTimeoutId: NodeJS.Timeout;
+  let collapsed = true;
+  let catSection: HTMLElement;
+  let collapsibleUl: HTMLDivElement;
 
-  onDestroy(() => unsubscribe())
+  onDestroy(() => unsubscribe());
 
   onMount(() => {
-    oldUser = chosenUser
-  })
+    oldUser = chosenUser;
+  });
 
   $: if (oldUser !== chosenUser) {
-    fetchData()
-    oldUser = chosenUser
+    fetchData();
+    oldUser = chosenUser;
   }
 
-  $: canModif = currentUser.email === chosenUser
+  $: canModif = currentUser.email === chosenUser;
 
   $: catPrice =
     Math.floor(items.reduce((x, y) => x + (y.price ? y.price : 0), 0) * 100) /
-    100
+    100;
 
   const fetchData = async () => {
-    items = []
+    items = [];
 
-    const res = await getDocs(
-      query(
-        collection(db9, chosenUser, "items", category),
-        orderBy(orderByPosition ? "position" : "createdAt")
+    const res = await getDocs<ModelItem>(
+      query<ModelItem>(
+        collection(db9, chosenUser, 'items', category),
+        orderBy(orderByPosition ? 'position' : 'createdAt')
       )
-    )
+    );
 
     res.forEach((i) => {
-      addItems({ id: i.id, categorie: category, ...i.data() })
-    })
-  }
+      addItems({ id: i.id, categorie: category, ...i.data() });
+    });
+  };
 
-  const addItems = (i) => (items = [...items, i])
+  const addItems = (i: ModelItem) => (items = [...items, i]);
 
-  const removeItem = (item) => {
-    items = items.filter((i) => i !== item)
-    snackbarOpen('"' + item.title + '" placé dans les archives')
-  }
+  const removeItem = (item: ModelItem) => {
+    items = items.filter((i) => i !== item);
+    snackbarOpen('"' + item.title + '" placé dans les archives');
+  };
 
   const updatePosition = async () => {
-    const batch = writeBatch(db9)
+    const batch = writeBatch(db9);
 
     items.forEach((item, index) => {
-      batch.update(doc(db9, chosenUser, "items", category, item.id), {
+      batch.update(doc(db9, chosenUser, 'items', category, item.id), {
         position: index,
-      })
-    })
-    await batch.commit()
-  }
+      });
+    });
+    await batch.commit();
+  };
 
-  const handleDndConsider = (e) => {
+  const handleDndConsider = (e: CustomEvent<DndEvent<ModelItem>>) => {
     const {
       items: newItems,
       info: { source, trigger },
-    } = e.detail
-    items = newItems
+    } = e.detail;
+    items = newItems;
     if (upPosTimeoutId) {
-      clearTimeout(upPosTimeoutId)
-      upPosTimeoutId = undefined
+      clearTimeout(upPosTimeoutId);
+      upPosTimeoutId = undefined;
     }
     if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
-      dragDisabled = true
+      dragDisabled = true;
     }
-  }
+  };
 
-  const handleDndFinalize = (e) => {
+  const handleDndFinalize = (e: CustomEvent<DndEvent<ModelItem>>) => {
     const {
       items: newItems,
       info: { source },
-    } = e.detail
-    items = newItems
-    upPosTimeoutId = setTimeout(updatePosition, 3000)
+    } = e.detail;
+    items = newItems;
+    upPosTimeoutId = setTimeout(updatePosition, 3000);
     if (source === SOURCES.POINTER) {
-      dragDisabled = true
+      dragDisabled = true;
     }
-  }
+  };
 
-  const startDrag = (e) => {
-    e.preventDefault()
-    dragDisabled = false
-  }
+  const startDrag = (e: CustomEvent<DndEvent<ModelItem>>) => {
+    e.preventDefault();
+    dragDisabled = false;
+  };
 
   const handleKeyDown = (e) => {
-    if ((e.key === "Enter" || e.key === " ") && dragDisabled)
-      dragDisabled = false
-  }
+    if ((e.key === 'Enter' || e.key === ' ') && dragDisabled)
+      dragDisabled = false;
+  };
 
-  const transformDraggedElement = (e) => (e.className = "dnd-item-active")
+  const transformDraggedElement = (e: HTMLElement) =>
+    (e.className = 'dnd-item-active');
 
   const collapse = () => {
     catSection.scrollIntoView({
-      behavior: "smooth",
-    })
+      behavior: 'smooth',
+    });
 
-    if (!collapsed) collapsibleUl.style.maxHeight = 0
-    else collapsibleUl.style.maxHeight = 400 * items.length + "px"
+    if (!collapsed) collapsibleUl.style.maxHeight = '0';
+    else collapsibleUl.style.maxHeight = 400 * items.length + 'px';
 
-    collapsed = !collapsed
-  }
+    collapsed = !collapsed;
+  };
 </script>
 
 {#if items.length !== 0}
   <section
-    id={"category_" + category.toLowerCase().replaceAll(" ", "")}
+    id={'category_' + category.toLowerCase().replaceAll(' ', '')}
     bind:this={catSection}
-    class={"category" + (collapsed ? " collapsed" : "")}
+    class={'category' + (collapsed ? ' collapsed' : '')}
   >
     <div
-      class={"category-header" +
-        (collapsed ? "" : " sticky") +
-        (hidden ? " hidden" : "")}
+      class={'category-header' +
+        (collapsed ? '' : ' sticky') +
+        (hidden ? ' hidden' : '')}
       on:click={collapse}
+      on:keypress={collapse}
     >
       {#if hidden}
         <div class="material-icons hidden-icon">visibility_off</div>
       {/if}
       <div class="category-header-content">
         <h2>{category}</h2>
-        {#if catPrice !== 0}
+        {#if catPrice !== 0 && !hidden}
           <p class="text-gray price">Prix total : {catPrice} €</p>
         {/if}
       </div>
       <IconButton
-        class={"material-icons chevron" + (collapsed ? " chevron-active" : "")}
+        class={'material-icons chevron' + (collapsed ? ' chevron-active' : '')}
         >expand_more</IconButton
       >
     </div>
@@ -191,7 +195,7 @@
                 class="material-icons drag-icon-item"
                 tabindex={dragDisabled ? 0 : -1}
                 aria-label="drag-handle"
-                style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+                style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'}
                 on:mousedown={startDrag}
                 on:touchstart={startDrag}
                 on:keydown={handleKeyDown}>drag_indicator</Icon
@@ -248,29 +252,18 @@
   .category {
     position: relative;
     width: 80%;
-    margin: 1rem auto 2.5rem auto;
+    margin: 1rem auto;
     transition: border-color 0.5s ease;
     animation: fadeIn 1s ease forwards;
-  }
 
-  .category::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 10%;
-    left: 10%;
-    height: 1px;
-    background-color: rgba(163, 163, 163, 0);
-  }
-
-  .category.collapsed:not(:nth-last-child(2))::after {
-    background-color: rgba(163, 163, 163, 0.6);
+    border: 1px solid rgb(0 0 0 / 0.2);
+    border-radius: 12px;
   }
 
   .category-header {
     z-index: 25;
     width: max-content;
-    margin: 0 auto;
+    margin: 0.5rem auto;
     padding: 0.5rem;
     display: flex;
     align-items: center;
@@ -301,7 +294,7 @@
   }
 
   .category-header:not(.hidden)::before {
-    content: "";
+    content: '';
     width: 24px;
     height: 24px;
     margin: 12px;
@@ -325,6 +318,11 @@
 
   ul {
     list-style: none;
+    margin-bottom: 0;
+  }
+
+  .category.collapsed .item-list {
+    margin: 0;
   }
 
   .item-list {
@@ -334,8 +332,8 @@
     padding-inline: 1rem;
   }
 
-  div.item-list {
-    margin-block: 1em;
+  .item-list {
+    margin-top: 1rem;
   }
 
   .collapsible {
@@ -380,6 +378,10 @@
   @media (prefers-color-scheme: dark) {
     .price {
       color: var(--gray-light);
+    }
+
+    .category {
+      border: 2px solid rgb(255 255 255 / 0.25);
     }
   }
 </style>
