@@ -15,17 +15,18 @@
     updateDoc,
     writeBatch,
   } from '@firebase/firestore';
+  import type { User } from 'firebase/auth';
 
-  let currentUser;
+  let currentUser: User;
   const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  export let categories = [];
+  export let categories: { name: string }[] = [];
   let selectedCat = '';
   let prompt = false;
 
   onDestroy(() => unsubscribe());
 
-  const promptDeleteCat = (cat) => {
+  const promptDeleteCat = (cat: { name: string }) => {
     prompt = true;
     selectedCat = cat.name;
   };

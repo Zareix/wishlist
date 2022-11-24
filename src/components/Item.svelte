@@ -1,51 +1,54 @@
 <script lang="ts">
-  import { db9 } from "../firebase"
-  import { user } from "../stores"
+  import { onDestroy } from 'svelte';
 
-  import { Link } from "svelte-routing"
-  import { deleteDoc, doc, setDoc } from "@firebase/firestore"
-  import { ActionIcons } from "@smui/card"
-  import IconButton from "@smui/icon-button"
-  import Tooltip, { Wrapper } from "@smui/tooltip"
-  import Chip, { Set, Text } from "@smui/chips"
+  import { Link } from 'svelte-routing';
+  import { deleteDoc, doc, setDoc } from '@firebase/firestore';
+  import { ActionIcons } from '@smui/card';
+  import IconButton from '@smui/icon-button';
+  import Tooltip, { Wrapper } from '@smui/tooltip';
+  import Chip, { Set, Text } from '@smui/chips';
+  import type { User } from 'firebase/auth';
 
-  import { onDestroy } from "svelte"
-  import ItemImageList from "./ItemImageList.svelte"
+  import { db9 } from '../firebase';
+  import { user } from '../stores';
 
-  export let item = undefined
-  export let removeItem = undefined
-  export let canModif = undefined
-  export let restoreItem = undefined
-  export let permanentDeleteItem = undefined
-  export let index = 0
-  export let category = ""
+  import type { Item as ModelItem } from '../models/Item';
+  import ItemImageList from './ItemImageList.svelte';
 
-  let currentUser
-  const unsubscribe = user.subscribe((v) => (currentUser = v))
+  export let item: ModelItem;
+  export let removeItem: (item: ModelItem) => void;
+  export let canModif: boolean;
+  export let restoreItem: (item: ModelItem) => void;
+  export let permanentDeleteItem: (item: ModelItem) => void;
+  export let index = 0;
+  export let category = '';
 
-  onDestroy(() => unsubscribe())
+  let currentUser: User;
+  const unsubscribe = user.subscribe((v) => (currentUser = v));
 
-  const formatRef = (ref) => {
-    ref = ref.replace(new RegExp("(http)(s)?(://)(www\\.)?(m\\.)?"), "")
-    if (ref.indexOf("/") >= 0) return ref.slice(0, ref.indexOf("/"))
-    return ref
-  }
+  onDestroy(() => unsubscribe());
 
-  const moveToArchive = async (validated) => {
-    await setDoc(doc(db9, currentUser.email, "items", "_archive", item.id), {
+  const formatRef = (ref: string) => {
+    ref = ref.replace(new RegExp('(http)(s)?(://)(www\\.)?(m\\.)?'), '');
+    if (ref.indexOf('/') >= 0) return ref.slice(0, ref.indexOf('/'));
+    return ref;
+  };
+
+  const moveToArchive = async (validated: boolean) => {
+    await setDoc(doc(db9, currentUser.email, 'items', '_archive', item.id), {
       ...item,
       validated,
-    })
+    });
 
     deleteDoc(
-      doc(db9, currentUser.email, "items", item.categorie, item.id)
+      doc(db9, currentUser.email, 'items', item.categorie, item.id)
     ).then(() => {
-      removeItem(item)
-    })
-  }
+      removeItem(item);
+    });
+  };
 </script>
 
-<article id={category.replaceAll(" ", "") + "_item" + index} class="item">
+<article id={category.replaceAll(' ', '') + '_item' + index} class="item">
   <div class="content-wrapper">
     <div class="content">
       <div class="item-header">
@@ -59,14 +62,14 @@
           <h3 class="title">
             {item.title}
           </h3>
-          {#if item.description && item.description !== ""}
+          {#if item.description && item.description !== ''}
             <p class="description text-gray">{item.description}</p>
           {/if}
         </div>
       </div>
       {#if item.references.length > 0}
         <Set chips={item.references} let:chip class="chips-set">
-          {#if chip.startsWith("http")}
+          {#if chip.startsWith('http')}
             <a
               href={chip}
               target="_blank"
@@ -113,7 +116,7 @@
       </Wrapper>
     {:else if canModif}
       <Wrapper>
-        <Link to={"/item/" + item.categorie + "/" + item.id}>
+        <Link to={'/item/' + item.categorie + '/' + item.id}>
           <IconButton class="material-icons edit-icon-button">edit</IconButton>
         </Link>
         <Tooltip>Modifier</Tooltip>

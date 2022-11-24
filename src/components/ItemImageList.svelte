@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ItemImage from "./ItemImage.svelte"
+  import ItemImage from './ItemImage.svelte';
 
-  export let images = []
-  export let title = ""
+  export let images: string[] = [];
+  export let title = '';
 </script>
 
-<ul class={images.length > 1 ? "list" : ""}>
+<ul class={images.length > 1 ? 'list' : ''}>
   {#each images as image, index}
     <ItemImage {title} {image} {index} />
   {/each}
@@ -19,8 +19,8 @@
       0 2px 4px -1px rgba(0, 0, 0, 0.06);
     min-height: 6rem;
   }
-  
-  ul:not(.list){
+
+  ul:not(.list) {
     width: 100%;
     display: flex;
     justify-content: center;

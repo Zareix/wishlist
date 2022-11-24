@@ -1,13 +1,14 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import Dialog, { Content, Actions } from '@smui/dialog';
   import Button, { Label } from '@smui/button';
 
+  import type { DialogImage } from '../models/DialogImage';
   import { dialogImage } from '../stores';
-  import { onDestroy } from 'svelte';
 
   let isOpen = false;
 
-  let image: { src: string; index: number; title: string };
+  let image: DialogImage;
   const unsubscribe = dialogImage.subscribe((i) => {
     image = i;
     if (i) {

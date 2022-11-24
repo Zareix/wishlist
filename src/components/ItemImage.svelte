@@ -1,33 +1,33 @@
 <script lang="ts">
-  import { dialogImage } from "../stores"
+  import { dialogImage } from '../stores';
 
-  export let image
-  export let index
-  export let title
+  export let image: string;
+  export let index: number;
+  export let title: string;
 
-  let error
+  let error: boolean;
 
   const open = () => {
     dialogImage.set({
       src: image,
       index,
       title,
-    })
-  }
+    });
+  };
 </script>
 
 <li class="image">
   {#if error}
-  <div class="error">Error loading image {index}</div>
+    <div class="error">Error loading image {index}</div>
   {:else}
-  <img
-    on:error={() => error = true}
-    src={image}
-    alt={"Thumbnail " + index + " of " + title}
-    on:click={open}
-    class="pointer"
-  />
-    
+    <img
+      on:error={() => (error = true)}
+      src={image}
+      alt={'Thumbnail ' + index + ' of ' + title}
+      on:click={open}
+      on:keypress={open}
+      class="pointer"
+    />
   {/if}
 </li>
 
@@ -61,6 +61,6 @@
     height: 100%;
     white-space: pre-wrap;
     text-align: center;
-    color: var(--red);  
+    color: var(--red);
   }
 </style>
