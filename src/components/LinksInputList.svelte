@@ -1,59 +1,66 @@
 <script lang="ts">
-  import { dndzone, SOURCES, TRIGGERS } from "svelte-dnd-action"
-  import { flip } from "svelte/animate"
-  import Button, { Label, Icon } from "@smui/button"
-  import IconButton from "@smui/icon-button"
-  import Textfield from "@smui/textfield"
+  import {
+    dndzone,
+    SOURCES,
+    TRIGGERS,
+    type DndEvent,
+    type TransformDraggedElementFunction,
+  } from 'svelte-dnd-action';
+  import { flip } from 'svelte/animate';
+  import Button, { Label, Icon } from '@smui/button';
+  import IconButton from '@smui/icon-button';
+  import Textfield from '@smui/textfield';
 
-  export let showThumbnail = false
-  export let links = []
-  export let addNewLink
-  export let removeLink
+  type Link = { id: number; value: string };
 
-  export let placeholder
-  export let title
-  export let addBtnText = placeholder
+  export let showThumbnail = false;
+  export let links: Link[] = [];
+  export let addNewLink: () => void;
+  export let removeLink: (link: Link) => void;
+  export let placeholder: string;
+  export let title: string;
+  export let addBtnText = placeholder;
 
-  const flipDurationMs = 300
-  const dropTargetClasses = ["dnd-active"]
-  let dragDisabled = true
+  const flipDurationMs = 300;
+  const dropTargetClasses = ['dnd-active'];
+  let dragDisabled = true;
 
-  const handleConsider = (e) => {
+  const handleConsider = (e: CustomEvent<DndEvent<Link>>) => {
     const {
       items: newItems,
       info: { source, trigger },
-    } = e.detail
-    links = newItems
+    } = e.detail;
+    links = newItems;
     if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
-      dragDisabled = true
+      dragDisabled = true;
     }
-  }
+  };
 
-  const handleFinalize = (e) => {
+  const handleFinalize = (e: CustomEvent<DndEvent<Link>>) => {
     const {
       items: newItems,
       info: { source },
-    } = e.detail
-    links = newItems
+    } = e.detail;
+    links = newItems;
     if (source === SOURCES.POINTER) {
-      dragDisabled = true
+      dragDisabled = true;
     }
-  }
+  };
 
-  const startDrag = (e) => {
-    e.preventDefault()
-    dragDisabled = false
-  }
+  const startDrag = (e: CustomEvent<DndEvent<Link>>) => {
+    e.preventDefault();
+    dragDisabled = false;
+  };
 
-  const handleKeyDown = (e) => {
-    if ((e.key === "Enter" || e.key === " ") && dragDisabled)
-      dragDisabled = false
-  }
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if ((e.key === 'Enter' || e.key === ' ') && dragDisabled)
+      dragDisabled = false;
+  };
 
-  const transformDraggedElement = (e) =>
-    (e.className = "dnd-item-active dnd-ref")
+  const transformDraggedElement: TransformDraggedElementFunction = (e) =>
+    (e.className = 'dnd-item-active dnd-ref');
 
-  const imageExists = (image_url) => image_url.startsWith("http")
+  const imageExists = (imageUrl: string) => imageUrl.startsWith('http');
 </script>
 
 {#if links.length > 0}
@@ -63,8 +70,8 @@
 <form
   class="links-list"
   on:submit={(e) => {
-    e.preventDefault()
-    addNewLink()
+    e.preventDefault();
+    addNewLink();
   }}
   use:dndzone={{
     items: links,
@@ -84,13 +91,13 @@
         class="material-icons drag-icon"
         tabindex={dragDisabled ? 0 : -1}
         aria-label="drag-handle"
-        style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+        style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'}
         on:mousedown={startDrag}
         on:touchstart={startDrag}
         on:keydown={handleKeyDown}>drag_indicator</Icon
       >
       <Textfield
-        label={placeholder + " " + (links.indexOf(link) + 1)}
+        label={placeholder + ' ' + (links.indexOf(link) + 1)}
         bind:value={link.value}
       />
       <IconButton
@@ -101,7 +108,7 @@
       {#if showThumbnail && imageExists(link.value)}
         <img
           src={link.value}
-          alt={"thumbnail " + links.indexOf(link)}
+          alt={'thumbnail ' + links.indexOf(link)}
           class="thumbnail"
         />
       {/if}

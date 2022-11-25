@@ -8,6 +8,8 @@
   import NewCatPopup from '../components/NewCatPopup.svelte';
   import LinkInputList from '../components/LinksInputList.svelte';
   import Layout from '../components/Layout.svelte';
+  import { getCategories } from '../utils/firebase-utils';
+  import type { Item as ItemModel } from '../models/Item';
 
   import itemNotFoundSvg from '../assets/item-not-found.svg';
 
@@ -24,12 +26,9 @@
     deleteDoc,
     doc,
     getDoc,
-    getDocs,
     updateDoc,
   } from '@firebase/firestore';
-  import { getCategories } from '../utils/firebase-utils';
   import type { User } from 'firebase/auth';
-  import type { Item as ItemModel } from '../models/Item';
 
   let currentUser: User;
   const unsubscribe = user.subscribe((v) => (currentUser = v));

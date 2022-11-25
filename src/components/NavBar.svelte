@@ -1,29 +1,29 @@
 <script lang="ts">
-  import { user } from "../stores"
-  import { auth } from "../firebase"
+  import { user } from '../stores';
+  import { auth } from '../firebase';
 
-  import { Link } from "svelte-routing"
-  import IconButton from "@smui/icon-button"
+  import { Link } from 'svelte-routing';
+  import IconButton from '@smui/icon-button';
 
-  export let active = ""
+  export let active = '';
 
   const logout = async () => {
-    await auth.signOut()
-    user.set(null)
-    location.reload()
-  }
+    await auth.signOut();
+    user.set(null);
+    location.reload();
+  };
 </script>
 
 <nav>
   <ul>
-    <li class={active === "home" ? " active" : ""}>
+    <li class={active === 'home' ? ' active' : ''}>
       <Link to="/" class="nav-link">
         <IconButton class="nav-icon material-icons-outlined">home</IconButton>
         <span>Accueil</span>
       </Link>
     </li>
 
-    <li class={active === "archive" ? " active" : ""}>
+    <li class={active === 'archive' ? ' active' : ''}>
       <Link to="/archive" class="nav-link">
         <IconButton class="nav-icon material-icons-outlined">archive</IconButton
         >
@@ -31,14 +31,14 @@
       </Link>
     </li>
 
-    <li class={active === "add" ? " active" : ""}>
+    <li class={active === 'add' ? ' active' : ''}>
       <Link to="/add" class="nav-link">
         <IconButton class="nav-icon material-icons-outlined">add</IconButton>
         <span>Ajouter</span>
       </Link>
     </li>
 
-    <li class={active === "settings" ? " active" : ""}>
+    <li class={active === 'settings' ? ' active' : ''}>
       <Link to="/settings" class="nav-link">
         <IconButton class="nav-icon material-icons-outlined"
           >settings</IconButton
@@ -48,7 +48,7 @@
     </li>
 
     <li>
-      <div on:click={logout} class="nav-link">
+      <div on:click={logout} on:keypress={logout} class="nav-link">
         <IconButton class="nav-icon material-icons-outlined">logout</IconButton>
         <span>Déconnexion</span>
       </div>
