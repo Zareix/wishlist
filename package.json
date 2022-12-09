@@ -20,7 +20,7 @@
     "@smui/textfield": "7.0.0-beta.0",
     "@smui/tooltip": "7.0.0-beta.0",
     "@smui/top-app-bar": "7.0.0-beta.0",
-    "@sveltejs/vite-plugin-svelte": "^1.1.1",
+    "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^3.0.0",
     "concurrently": "^7.5.0",
     "svelte": "^3.53.1",
