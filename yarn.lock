@@ -1522,7 +1522,18 @@
     "@smui/common" "^7.0.0-beta.0"
     svelte2tsx "^0.5.12"
 
-"@smui/icon-button@7.0.0-beta.0", "@smui/icon-button@^7.0.0-beta.0":
+"@smui/icon-button@7.0.0-beta.1":
+  version "7.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.1.tgz#7dab31a4f213892bb06507228f5c8e1da19a9916"
+  integrity sha512-FAAOKNIKOjOOPn+P3iNirlGjMohOP/y6YV+C0yf/1X0u/PQ0uHHmQcWZaCpQSJE/ZRq5BV5cu2oRVNBgppqNog==
+  dependencies:
+    "@material/density" "^14.0.0"
+    "@material/icon-button" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.1"
+    "@smui/ripple" "^7.0.0-beta.1"
+    svelte2tsx "^0.6.10"
+
+"@smui/icon-button@^7.0.0-beta.0":
   version "7.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.0.tgz#78a5b59aef8987cb7c601d238cbf3d46b96f8dc4"
   integrity sha512-XBcZwcRh3VmOXbKsR9dv32gBZmvTCNQc+T/XhF3PDQRjGvE4q2VW8ZByB0IB47xpmWqJvfPb32DhJuR+Iffncg==
