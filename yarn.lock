@@ -1348,7 +1348,7 @@
     "@smui/common" "^7.0.0-beta.0"
     svelte2tsx "^0.5.12"
 
-"@smui/button@7.0.0-beta.1":
+"@smui/button@7.0.0-beta.1", "@smui/button@^7.0.0-beta.1":
   version "7.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@smui/button/-/button-7.0.0-beta.1.tgz#aef7b8498ba19e57f41a53f481960f83124cc82b"
   integrity sha512-8Dqr7qRmjiRnnyF9nJZOTyv77CC9S7YNlcgj6BsjyGK6+a73fRGCVah4cp5WOw0m4A2bKC6/T5QX2db1DnMHAg==
@@ -1531,7 +1531,7 @@
     "@smui/common" "^7.0.0-beta.0"
     svelte2tsx "^0.5.12"
 
-"@smui/icon-button@7.0.0-beta.1":
+"@smui/icon-button@7.0.0-beta.1", "@smui/icon-button@^7.0.0-beta.1":
   version "7.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.1.tgz#7dab31a4f213892bb06507228f5c8e1da19a9916"
   integrity sha512-FAAOKNIKOjOOPn+P3iNirlGjMohOP/y6YV+C0yf/1X0u/PQ0uHHmQcWZaCpQSJE/ZRq5BV5cu2oRVNBgppqNog==
@@ -1790,7 +1790,21 @@
     "@smui/ripple" "^7.0.0-beta.0"
     svelte2tsx "^0.5.12"
 
-"@smui/snackbar@7.0.0-beta.0", "@smui/snackbar@^7.0.0-beta.0":
+"@smui/snackbar@7.0.0-beta.1":
+  version "7.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@smui/snackbar/-/snackbar-7.0.0-beta.1.tgz#47128920d9fe787608b50d7b408e819d13e305e6"
+  integrity sha512-lNasXu3amNziU7nH4PB3hJczc8sgSfaSxNlfpTE7EKSDrCd/4X3dBdHOD8xiMkkph8xXv/PhG9L1slmF2I7mhA==
+  dependencies:
+    "@material/dom" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/snackbar" "^14.0.0"
+    "@smui/button" "^7.0.0-beta.1"
+    "@smui/common" "^7.0.0-beta.1"
+    "@smui/icon-button" "^7.0.0-beta.1"
+    "@smui/ripple" "^7.0.0-beta.1"
+    svelte2tsx "^0.6.10"
+
+"@smui/snackbar@^7.0.0-beta.0":
   version "7.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/@smui/snackbar/-/snackbar-7.0.0-beta.0.tgz#48f12c81ecb111e480e579e63f0a55b34c3f4297"
   integrity sha512-01DFF3ggnU7O3ispu2WvcI8MLXmP82Oplzex5cOdNDat/xzU4fn++1fw3CcuNGZ4NSm3eb3HqDkSSkN39mQQ6w==
