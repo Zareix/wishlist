@@ -1503,15 +1503,15 @@
     "@smui/common" "^7.0.0-beta.0"
     svelte2tsx "^0.5.12"
 
-"@smui/fab@7.0.0-beta.1":
-  version "7.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@smui/fab/-/fab-7.0.0-beta.1.tgz#3a90b5aea5782bc247eb8ebb29b17760651af88a"
-  integrity sha512-EznYu3oFuAUBvltSTQHDIKak1DlClmGeLYQOektTNCa7HE+Z/geSBbZeHOk1p0054b/YNFKqC2NaS223BQoN7A==
+"@smui/fab@7.0.0-beta.2":
+  version "7.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@smui/fab/-/fab-7.0.0-beta.2.tgz#a966015cf419e07673a5be7a96ec76da05529653"
+  integrity sha512-TIzHo/tLz3Yg1TZyreETTVrIwOnwPWn8kxoHTBdilTN82ob0E+kprR+pcLXSd3/9E0XWSPQF73yXVxHD21l1bw==
   dependencies:
     "@material/fab" "^14.0.0"
     "@material/feature-targeting" "^14.0.0"
-    "@smui/common" "^7.0.0-beta.1"
-    "@smui/ripple" "^7.0.0-beta.1"
+    "@smui/common" "^7.0.0-beta.2"
+    "@smui/ripple" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
 "@smui/fab@^7.0.0-beta.0":
