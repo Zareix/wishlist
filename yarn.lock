@@ -1420,15 +1420,6 @@
     "@smui/common" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/common@^7.0.0-beta.0":
-  version "7.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@smui/common/-/common-7.0.0-beta.0.tgz#5c4e6d9ed194be45ca9e9e2dc18a9bf73c4ec130"
-  integrity sha512-JFbmbXR/j3NdUPC1Nn28LDH62WVv6AaKQVr4VVmutgBYAkMy+QIQhG/kvFBP4Shr2gG8DLQyXGSK0wHHgiONlw==
-  dependencies:
-    "@material/dom" "^14.0.0"
-    "@tsconfig/svelte" "^3.0.0"
-    svelte2tsx "^0.5.12"
-
 "@smui/common@^7.0.0-beta.1":
   version "7.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@smui/common/-/common-7.0.0-beta.1.tgz#82e843c1de58a0e6c5b9f6073e897e0912bd86dc"
@@ -1804,17 +1795,7 @@
     "@smui/common" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/top-app-bar@7.0.0-beta.0":
-  version "7.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@smui/top-app-bar/-/top-app-bar-7.0.0-beta.0.tgz#ce41bc8a63be5f9681a051003f848074462a631c"
-  integrity sha512-urwTvK9PTGHu+HxNY9KCTvlCqk6PjRJxL73GoW6UGW5BmjXWd5D49NfPnzl+Vgft3oWY3eKMOUHg5bPtjg5/Fg==
-  dependencies:
-    "@material/feature-targeting" "^14.0.0"
-    "@material/top-app-bar" "^14.0.0"
-    "@smui/common" "^7.0.0-beta.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/top-app-bar@^7.0.0-beta.2":
+"@smui/top-app-bar@7.0.0-beta.2", "@smui/top-app-bar@^7.0.0-beta.2":
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@smui/top-app-bar/-/top-app-bar-7.0.0-beta.2.tgz#f2202cc85342b26f57ea56fad2c529c266681a6f"
   integrity sha512-ALlUKg5ZMEkJtQGCvNnB2mxc9vG3Bojrll2hL8RbrMOWuk+NrjQ+mW1CFrWwDfJefsd2A+e3zSNOpODd/F1A+g==
@@ -2765,14 +2746,6 @@ svelte2tsx@^0.1.157:
   version "0.1.193"
   resolved "https://registry.yarnpkg.com/svelte2tsx/-/svelte2tsx-0.1.193.tgz#16fe594898ef455e4f715ac317d219c9c757656b"
   integrity sha512-vzy4YQNYDnoqp2iZPnJy7kpPAY6y121L0HKrSBjU/IWW7DQ6T7RMJed2VVHFmVYm0zAGYMDl9urPc6R4DDUyhg==
-  dependencies:
-    dedent-js "^1.0.1"
-    pascal-case "^3.1.1"
-
-svelte2tsx@^0.5.12:
-  version "0.5.20"
-  resolved "https://registry.yarnpkg.com/svelte2tsx/-/svelte2tsx-0.5.20.tgz#0ac5411b53d6b6913b12e12a02c03ce9eb13e945"
-  integrity sha512-yNHmN/uoAnJ7d1XqVohiNA6TMFOxibHyEddUAHVt1PiLXtbwAJF3WaGYlg8QbOdoXzOVsVNCAlqRUIdULUm+OA==
   dependencies:
     dedent-js "^1.0.1"
     pascal-case "^3.1.1"
