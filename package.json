@@ -19,7 +19,7 @@
     "@smui/snackbar": "7.0.0-beta.1",
     "@smui/textfield": "7.0.0-beta.2",
     "@smui/tooltip": "7.0.0-beta.2",
-    "@smui/top-app-bar": "7.0.0-beta.0",
+    "@smui/top-app-bar": "7.0.0-beta.2",
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@tsconfig/svelte": "^3.0.0",
     "concurrently": "^7.6.0",
