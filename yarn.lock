@@ -1906,7 +1906,16 @@
     "@smui/ripple" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/tooltip@7.0.0-beta.2", "@smui/tooltip@^7.0.0-beta.2":
+"@smui/tooltip@7.0.0-beta.3":
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@smui/tooltip/-/tooltip-7.0.0-beta.3.tgz#1343b843cda773cdf2348b6826fe5e3d1e354600"
+  integrity sha512-gfD/KydkwzwgDe5TJfS7VA4Kk/yGyRSwjizAviqvGZSyfIbkPzuJzk/q4Q0RU/x3fwH41S8wurNDrsAzGPVRZg==
+  dependencies:
+    "@material/tooltip" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.3"
+    svelte2tsx "^0.6.10"
+
+"@smui/tooltip@^7.0.0-beta.2":
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@smui/tooltip/-/tooltip-7.0.0-beta.2.tgz#1859fca853cdeff527a5bcde3c2be461f8f30a9b"
   integrity sha512-cUKqkjSsYMahka5dQf5ZQTFlmrIVYaUrbDw1b6nubTcSN1k/OPq5pZeDV5uc5PdKZfvu8rQxIB21psIaai4IOg==
