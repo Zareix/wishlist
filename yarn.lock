@@ -1924,7 +1924,17 @@
     "@smui/common" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/top-app-bar@7.0.0-beta.2", "@smui/top-app-bar@^7.0.0-beta.2":
+"@smui/top-app-bar@7.0.0-beta.3":
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@smui/top-app-bar/-/top-app-bar-7.0.0-beta.3.tgz#5b30a5cec9d13d781b6e19e6312e3179de0b4562"
+  integrity sha512-CkS7dQBiIW+oKp/mvrk4XWL6R7N44eOAcRwdsBOUCYH4N2XkwPLxAvAm7x6pwekTYa1O5Xg6P4JhLTtE2Bm+TA==
+  dependencies:
+    "@material/feature-targeting" "^14.0.0"
+    "@material/top-app-bar" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.3"
+    svelte2tsx "^0.6.10"
+
+"@smui/top-app-bar@^7.0.0-beta.2":
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@smui/top-app-bar/-/top-app-bar-7.0.0-beta.2.tgz#f2202cc85342b26f57ea56fad2c529c266681a6f"
   integrity sha512-ALlUKg5ZMEkJtQGCvNnB2mxc9vG3Bojrll2hL8RbrMOWuk+NrjQ+mW1CFrWwDfJefsd2A+e3zSNOpODd/F1A+g==
