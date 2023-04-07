@@ -1426,7 +1426,16 @@
     "@smui/ripple" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/circular-progress@7.0.0-beta.2", "@smui/circular-progress@^7.0.0-beta.2":
+"@smui/circular-progress@7.0.0-beta.3":
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@smui/circular-progress/-/circular-progress-7.0.0-beta.3.tgz#b144d441b95497dba6e8a8a5eaacf385dccc6686"
+  integrity sha512-3d7zsd8IvllpSCP1vnNQ26qpQ0QqsiCdGxDr2g67NJ1tb0gI/ihSM+5Lli0uqiLD5NufvywFa+ds6NaLq27bzw==
+  dependencies:
+    "@material/circular-progress" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.3"
+    svelte2tsx "^0.6.10"
+
+"@smui/circular-progress@^7.0.0-beta.2":
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@smui/circular-progress/-/circular-progress-7.0.0-beta.2.tgz#0b77cb400a83a30d55f5d9ac428ea778e56cb3ae"
   integrity sha512-gnncfkIkmiEhHc93QlAAGwQ6Nis8jVQkJYiBmJtuGDWasWOpSUpeM4YJYp9NJdEJi7Gi8N5oCDaSnOqYrk3XgQ==
