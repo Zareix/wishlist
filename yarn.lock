@@ -1872,7 +1872,24 @@
     "@smui/tab-indicator" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/textfield@7.0.0-beta.2", "@smui/textfield@^7.0.0-beta.2":
+"@smui/textfield@7.0.0-beta.3":
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@smui/textfield/-/textfield-7.0.0-beta.3.tgz#b3ddc6b9f8defc6c87620d2c2de0c4a6dc9e48a1"
+  integrity sha512-MH8D8BZEZkEz/h+F4RqV0w8jAqBg/c6lnq/yQeCXW5VBfwUA7QxbWiLghSWS5e0uVwybhGz50uDWzPzfFiWaWg==
+  dependencies:
+    "@material/dom" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/textfield" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.3"
+    "@smui/floating-label" "^7.0.0-beta.3"
+    "@smui/line-ripple" "^7.0.0-beta.3"
+    "@smui/notched-outline" "^7.0.0-beta.3"
+    "@smui/ripple" "^7.0.0-beta.3"
+    svelte2tsx "^0.6.10"
+
+"@smui/textfield@^7.0.0-beta.2":
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@smui/textfield/-/textfield-7.0.0-beta.2.tgz#0f332e5c85dde94ef5de16b02c4d006e6312cd29"
   integrity sha512-k37Uw9qJldoevJFRhA2U+Tz+y71XLfPD7ghx55JhNNi1flO0dpy1qztSTh4lQvtqBGMN2KAZ8Oe+arnTUtZWiw==
