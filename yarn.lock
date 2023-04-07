@@ -1523,18 +1523,7 @@
     "@smui/common" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
-"@smui/icon-button@7.0.0-beta.2", "@smui/icon-button@^7.0.0-beta.2":
-  version "7.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.2.tgz#c6d947508008bcfa4c39495ff511064cdf416997"
-  integrity sha512-6Gw36gek8zuqVNzSnR9OIjBDjN+E/WxnqzupdGrUrAqqqRz2BC+7sW8TQT7EtgGi2T9b4tVFvdnS05IocqYLNA==
-  dependencies:
-    "@material/density" "^14.0.0"
-    "@material/icon-button" "^14.0.0"
-    "@smui/common" "^7.0.0-beta.2"
-    "@smui/ripple" "^7.0.0-beta.2"
-    svelte2tsx "^0.6.10"
-
-"@smui/icon-button@^7.0.0-beta.3":
+"@smui/icon-button@7.0.0-beta.3", "@smui/icon-button@^7.0.0-beta.3":
   version "7.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.3.tgz#a995ef64c31270630a9af7f5b1edd1ef978698f4"
   integrity sha512-EerVXfssP/lwkoTSUvVGCj/FUblUnzHE2yJxHYUVdhHWo4n/w0IBBL9mFXCjj/kOOOg37X+o0jplu0rs+pQDYA==
@@ -1543,6 +1532,17 @@
     "@material/icon-button" "^14.0.0"
     "@smui/common" "^7.0.0-beta.3"
     "@smui/ripple" "^7.0.0-beta.3"
+    svelte2tsx "^0.6.10"
+
+"@smui/icon-button@^7.0.0-beta.2":
+  version "7.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@smui/icon-button/-/icon-button-7.0.0-beta.2.tgz#c6d947508008bcfa4c39495ff511064cdf416997"
+  integrity sha512-6Gw36gek8zuqVNzSnR9OIjBDjN+E/WxnqzupdGrUrAqqqRz2BC+7sW8TQT7EtgGi2T9b4tVFvdnS05IocqYLNA==
+  dependencies:
+    "@material/density" "^14.0.0"
+    "@material/icon-button" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.2"
+    "@smui/ripple" "^7.0.0-beta.2"
     svelte2tsx "^0.6.10"
 
 "@smui/image-list@^7.0.0-beta.2":
