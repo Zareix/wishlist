@@ -13,7 +13,7 @@
   "devDependencies": {
     "@smui/button": "7.0.0-beta.3",
     "@smui/circular-progress": "7.0.0-beta.3",
-    "@smui/fab": "7.0.0-beta.2",
+    "@smui/fab": "7.0.0-beta.3",
     "@smui/icon-button": "7.0.0-beta.2",
     "@smui/select": "7.0.0-beta.2",
     "@smui/snackbar": "7.0.0-beta.3",
