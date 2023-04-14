@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 // Necessary for Next auth
@@ -14,12 +15,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -42,7 +43,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    WishlistItem  WishlistItem[]
+    wishlistItems WishlistItem[]
+    categoris     Category[]
 }
 
 model VerificationToken {
@@ -56,20 +58,45 @@ model VerificationToken {
 model ItemLink {
     id             String       @id @default(cuid())
     name           String
-    price          Float
-    link           String
-    WishlistItem   WishlistItem @relation(fields: [wishlistItemId], references: [id])
+    price          Float?
+    link           String       @db.Text
+    wishlistItem   WishlistItem @relation(fields: [wishlistItemId], references: [id])
+    wishlistItemId String
+}
+
+model ItemImage {
+    id             String       @id @default(cuid())
+    image          String       @db.Text
+    wishlistItem   WishlistItem @relation(fields: [wishlistItemId], references: [id])
     wishlistItemId String
 }
 
 model WishlistItem {
-    id        String     @id @default(cuid())
-    name      String
-    price     Float
-    images    String[]
-    links     ItemLink[]
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String
+    id         String       @id @default(cuid())
+    name       String
+    price      Float?
+    currency   EnumCurrency
+    images     ItemImage[]
+    links      ItemLink[]
+    createdAt  DateTime     @default(now())
+    updatedAt  DateTime     @updatedAt
+    user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId     String
+    category   Category     @relation(fields: [categoryId], references: [id])
+    categoryId String
+}
+
+model Category {
+    id            String         @id @default(cuid())
+    name          String
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId        String
+    wishlistItems WishlistItem[]
+}
+
+enum EnumCurrency {
+    USD
+    EUR
 }

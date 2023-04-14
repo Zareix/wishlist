@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  @apply bg-neutral-100 text-slate-900 dark:bg-slate-900 dark:text-neutral-50;
+}
+
+main {
+  @apply min-h-screen px-6 py-8 pb-24;
+}
+
 h1 {
   @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
 }
@@ -11,11 +20,11 @@ h2 {
 }
 
 h3 {
-  @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight;
+  @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight data-[orientation]:mt-0;
 }
 
 p {
-  @apply leading-7 [&:not(:first-child)]:mt-6;
+  @apply leading-7;
 }
 
 ul {
@@ -26,6 +35,6 @@ small {
   @apply text-sm font-medium leading-none;
 }
 
-p.subtle {
+.subtle {
   @apply text-sm text-slate-500 dark:text-slate-400;
 }

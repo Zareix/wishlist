@@ -3,6 +3,7 @@ import { SessionProvider } from 'next-auth/react';
 import { type AppType } from 'next/app';
 import { Inter } from 'next/font/google';
 
+import Layout from '@/components/Layout';
 import '@/styles/globals.css';
 import { api } from '@/utils/api';
 
@@ -22,7 +23,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
           --font-sans: ${font.style.fontFamily};
         }
       `}</style>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 };

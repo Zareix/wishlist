@@ -30,7 +30,7 @@ const protectedRoute = (
     if (!session?.user) {
       return {
         redirect: {
-          destination: '/signin',
+          destination: '/login',
           permanent: false,
         },
       };
