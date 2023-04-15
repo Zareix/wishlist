@@ -61,7 +61,7 @@ const AddCategory = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a new category</DialogTitle>
-          <DialogDescription>
+          <DialogDescription asChild>
             {addCategoryMutation.isSuccess ? (
               <>
                 <div className="mx-auto flex items-center justify-center gap-2">
@@ -76,7 +76,7 @@ const AddCategory = ({
                       reset();
                     }}
                     variant="outline"
-                    className="mt-2"
+                    className="mx-auto mt-2"
                   >
                     Close
                   </Button>

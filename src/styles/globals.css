@@ -35,6 +35,14 @@ small {
   @apply text-sm font-medium leading-none;
 }
 
+code {
+  @apply relative rounded bg-slate-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400;
+}
+
+.large {
+  @apply text-lg font-semibold text-slate-900 dark:text-slate-50;
+}
+
 .subtle {
   @apply text-sm text-slate-500 dark:text-slate-400;
 }

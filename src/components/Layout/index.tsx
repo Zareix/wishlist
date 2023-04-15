@@ -19,7 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </div>
       {data?.user && (
         <>
-          <nav className="fixed inset-y-4 left-2 right-auto hidden w-[15vw] flex-col items-center border-r lg:flex">
+          <nav className="fixed inset-y-4 left-2 right-auto hidden w-[15vw] flex-col border-r pl-2 lg:flex">
             <Link href="/">
               <Button variant="link">
                 <Home className="mr-2" /> Home
@@ -35,7 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <Archive className="mr-2" /> Archive
               </Button>
             </Link>
-            <Button variant="link" onClick={logout}>
+            <Button variant="link" onClick={logout} className="mr-auto">
               <LogOut className="mr-2" /> Log out
             </Button>
           </nav>

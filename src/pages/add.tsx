@@ -3,9 +3,9 @@ import {
   type ItemLink,
   type WishlistItem,
 } from '@prisma/client';
-import { DollarSign, Euro, Loader2, Plus } from 'lucide-react';
+import { DollarSign, Euro, Loader2, Plus, Trash } from 'lucide-react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Controller,
   type SubmitHandler,
@@ -52,11 +52,19 @@ const AddPage = () => {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
-  const { fields: links, append: appendLink } = useFieldArray({
+  const {
+    fields: links,
+    append: appendLink,
+    remove: removeLink,
+  } = useFieldArray({
     control,
     name: 'links',
   });
-  const { fields: images, append: appendImage } = useFieldArray({
+  const {
+    fields: images,
+    append: appendImage,
+    remove: removeImage,
+  } = useFieldArray({
     control,
     name: 'images',
   });
@@ -179,32 +187,44 @@ const AddPage = () => {
             <TabsTrigger value="links">Links</TabsTrigger>
             <TabsTrigger value="images">Images</TabsTrigger>
           </TabsList>
-          <TabsContent value="links">
+          <TabsContent value="links" className="px-3">
             <div className="flex flex-col gap-4">
               {links.map((field, index) => {
                 return (
-                  <div key={field.id} className="grid grid-cols-3 gap-1">
-                    <Input
-                      placeholder="Name"
-                      className="col-span-2"
-                      {...register(`links.${index}.name`)}
-                    />
-                    <Input
-                      placeholder="Price"
-                      type="number"
-                      {...register(`links.${index}.price`, {
-                        valueAsNumber: true,
-                      })}
-                    />
-                    <Input
-                      placeholder="Link"
-                      className="col-span-3"
-                      {...register(`links.${index}.link`, {
-                        required: true,
-                      })}
-                    />
+                  <div key={field.id} className="flex flex-wrap">
+                    <div className="grid w-[85%] grid-cols-3 gap-1">
+                      <Input
+                        placeholder="Name"
+                        className="col-span-2"
+                        {...register(`links.${index}.name`)}
+                      />
+                      <Input
+                        placeholder="Price"
+                        type="number"
+                        {...register(`links.${index}.price`, {
+                          valueAsNumber: true,
+                        })}
+                      />
+                      <Input
+                        placeholder="Link"
+                        className="col-span-3"
+                        {...register(`links.${index}.link`, {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                    <Button
+                      variant="destructive"
+                      className="m-auto w-[12%] p-1"
+                      type="button"
+                      onClick={() => {
+                        removeLink(index);
+                      }}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
                     {errors.links?.[index]?.link && (
-                      <InputError className="col-span-3">
+                      <InputError className="w-full">
                         This field is required
                       </InputError>
                     )}
@@ -228,36 +248,43 @@ const AddPage = () => {
               </Button>
             </div>
           </TabsContent>
-          <TabsContent value="images">
+          <TabsContent value="images" className="px-3">
             <div className="flex flex-col gap-2">
               {images.map((field, index) => {
                 return (
-                  <div key={field.id}>
+                  <div key={field.id} className="flex flex-wrap">
                     <HoverCard openDelay={0} closeDelay={0}>
                       <HoverCardTrigger asChild>
                         <Input
                           placeholder="Image URL"
+                          className="w-[85%]"
                           {...register(`images.${index}.image`, {
                             required: true,
                           })}
                         />
                       </HoverCardTrigger>
                       {watch(`images.${index}.image`) && (
-                        <HoverCardContent>
-                          <div>
-                            {/* eslint-disable-next-line @next/next/no-img-element*/}
-                            <img
-                              src={watch(`images.${index}.image`)}
-                              alt="Preview"
-                              className="h-full max-h-32 w-full object-contain"
-                            />
-                          </div>
+                        <HoverCardContent side="top">
+                          <ItemImageCard
+                            image={watch(`images.${index}.image`)}
+                          />
                         </HoverCardContent>
                       )}
                     </HoverCard>
-
+                    <Button
+                      variant="destructive"
+                      className="m-auto w-[12%] p-1"
+                      type="button"
+                      onClick={() => {
+                        removeImage(index);
+                      }}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
                     {errors.images?.[index]?.image && (
-                      <InputError>This field is required</InputError>
+                      <InputError className="w-full">
+                        This field is required
+                      </InputError>
                     )}
                   </div>
                 );
@@ -298,6 +325,30 @@ const AddPage = () => {
         </Button>
       </form>
     </main>
+  );
+};
+
+const ItemImageCard = ({ image }: { image: string }) => {
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setError(false);
+  }, [image]);
+
+  if (error) return <InputError>Error loading image</InputError>;
+
+  return (
+    <div>
+      {/* eslint-disable-next-line @next/next/no-img-element*/}
+      <img
+        src={image}
+        alt="Preview"
+        className="h-full max-h-32 w-full object-contain"
+        onError={() => {
+          setError(true);
+        }}
+      />
+    </div>
   );
 };
 

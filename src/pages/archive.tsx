@@ -1,7 +1,11 @@
 import { protectedRoute } from '@/utils/routes';
 
 const ArchivePage = () => {
-  return <h1>Todo</h1>;
+  return (
+    <main>
+      <h1>Archive</h1>
+    </main>
+  );
 };
 
 export const getServerSideProps = protectedRoute();
