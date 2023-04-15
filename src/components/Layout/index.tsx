@@ -2,7 +2,7 @@ import { Archive, Home, LogOut, Plus } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
-import LoginPage from '@/components/Layout/login';
+import LoginPage from '@/components/Layout/Login';
 import { Button } from '@/components/ui/Button';
 import { LoadingFullPage } from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/Separator';
