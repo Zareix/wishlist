@@ -1,5 +1,3 @@
-import { protectedRoute } from '@/utils/routes';
-
 const ArchivePage = () => {
   return (
     <main>
@@ -7,7 +5,5 @@ const ArchivePage = () => {
     </main>
   );
 };
-
-export const getServerSideProps = protectedRoute();
 
 export default ArchivePage;

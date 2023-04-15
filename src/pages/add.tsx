@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { api } from '@/utils/api';
-import { protectedRoute } from '@/utils/routes';
 
 type Inputs = Pick<
   WishlistItem,
@@ -351,7 +350,5 @@ const ItemImageCard = ({ image }: { image: string }) => {
     </div>
   );
 };
-
-export const getServerSideProps = protectedRoute();
 
 export default AddPage;

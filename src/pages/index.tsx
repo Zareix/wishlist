@@ -9,7 +9,6 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Loading, LoadingFullPage } from '@/components/ui/Loading';
 import { api } from '@/utils/api';
-import { protectedRoute } from '@/utils/routes';
 
 const HomePage = () => {
   const { data, isLoading, isSuccess, refetch } =
@@ -80,7 +79,5 @@ const CategoryContent = ({ categoryId }: { categoryId: string }) => {
     </ul>
   );
 };
-
-export const getServerSideProps = protectedRoute();
 
 export default HomePage;

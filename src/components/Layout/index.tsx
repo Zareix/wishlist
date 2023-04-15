@@ -2,15 +2,25 @@ import { Archive, Home, LogOut, Plus } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
+import LoginPage from '@/components/Layout/login';
 import { Button } from '@/components/ui/Button';
+import { LoadingFullPage } from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/Separator';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   const logout = () => {
     signOut().catch(console.error);
   };
+
+  if (status === 'loading') {
+    return <LoadingFullPage />;
+  }
+
+  if (!data?.user) {
+    return <LoginPage />;
+  }
 
   return (
     <>

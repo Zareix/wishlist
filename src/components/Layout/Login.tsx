@@ -1,14 +1,16 @@
 import { Mail } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/Button';
 import { Input, InputError, InputGroup } from '@/components/ui/Inputs';
 import { Label } from '@/components/ui/Label';
 import { Separator } from '@/components/ui/Separator';
-import { protectedRoute } from '@/utils/routes';
 
-const Login = () => {
+const LoginPage = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -18,7 +20,7 @@ const Login = () => {
 
   const loginEmail: SubmitHandler<{ email: string }> = (data) => {
     const { email } = data;
-    signIn('email', { email }).catch(() => {
+    signIn('email', { email, callbackUrl: router.pathname }).catch(() => {
       setError('email', {
         type: 'manual',
         message: 'Something went wrong. Please try again.',
@@ -28,7 +30,7 @@ const Login = () => {
 
   const loginGoogle = () => {
     signIn('google', {
-      callbackUrl: '/',
+      callbackUrl: router.pathname,
     }).catch(console.error);
   };
 
@@ -74,6 +76,4 @@ const Login = () => {
   );
 };
 
-export const getServerSideProps = protectedRoute('guest');
-
-export default Login;
+export default LoginPage;
