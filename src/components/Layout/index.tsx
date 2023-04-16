@@ -1,5 +1,5 @@
-import { Archive, Home, LogOut, Plus } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
+import { Archive, Home, Plus, Settings } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 import LoginPage from '@/components/Layout/Login';
@@ -9,10 +9,6 @@ import { Separator } from '@/components/ui/Separator';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { data, status } = useSession();
-
-  const logout = () => {
-    signOut().catch(console.error);
-  };
 
   if (status === 'loading') {
     return <LoadingFullPage />;
@@ -45,9 +41,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <Archive className="mr-2" /> Archive
               </Button>
             </Link>
-            <Button variant="link" onClick={logout} className="mr-auto">
-              <LogOut className="mr-2" /> Log out
-            </Button>
+            <Link href="/settings">
+              <Button variant="link">
+                <Settings className="mr-2" /> Settings
+              </Button>
+            </Link>
           </nav>
           <nav className="fixed inset-x-4 bottom-4 mx-auto flex max-w-sm items-center justify-center space-x-4 rounded-full bg-neutral-50 py-2 shadow-sm dark:border dark:border-slate-700 dark:bg-slate-950 lg:hidden">
             <Link href="/">
@@ -68,9 +66,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </Button>
             </Link>
             <Separator orientation="vertical" className="h-6" />
-            <Button variant="link" onClick={logout}>
-              <LogOut />
-            </Button>
+            <Link href="/settings">
+              <Button variant="link">
+                <Settings />
+              </Button>
+            </Link>
           </nav>
         </>
       )}

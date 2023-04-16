@@ -25,6 +25,7 @@ model Account {
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
 model Session {
@@ -33,6 +34,8 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model User {
@@ -62,6 +65,8 @@ model ItemLink {
     link           String       @db.Text
     wishlistItem   WishlistItem @relation(fields: [wishlistItemId], references: [id])
     wishlistItemId String
+
+    @@index([wishlistItemId])
 }
 
 model ItemImage {
@@ -69,6 +74,8 @@ model ItemImage {
     image          String       @db.Text
     wishlistItem   WishlistItem @relation(fields: [wishlistItemId], references: [id])
     wishlistItemId String
+
+    @@index([wishlistItemId])
 }
 
 model WishlistItem {
@@ -84,16 +91,25 @@ model WishlistItem {
     userId     String
     category   Category     @relation(fields: [categoryId], references: [id])
     categoryId String
+
+    @@index([categoryId])
+    @@index([userId])
 }
 
 model Category {
-    id            String         @id @default(cuid())
-    name          String
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId        String
-    wishlistItems WishlistItem[]
+    id               String         @id @default(cuid())
+    name             String
+    createdAt        DateTime       @default(now())
+    updatedAt        DateTime       @updatedAt
+    user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId           String
+    wishlistItems    WishlistItem[]
+    parentCategoryId String?
+    parentCategory   Category?      @relation("CategorySubCategory", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    subCategories    Category[]     @relation("CategorySubCategory")
+
+    @@index([parentCategoryId])
+    @@index([userId])
 }
 
 enum EnumCurrency {

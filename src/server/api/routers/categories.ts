@@ -7,8 +7,18 @@ export const categoriesRouter = createTRPCRouter({
     return ctx.prisma.category.findMany({
       where: {
         userId: ctx.session.user.id,
+        parentCategoryId: null,
       },
       include: {
+        subCategories: {
+          include: {
+            _count: {
+              select: {
+                wishlistItems: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             wishlistItems: true,
@@ -17,10 +27,11 @@ export const categoriesRouter = createTRPCRouter({
       },
     });
   }),
-  getOne: protectedProcedure.query(({ ctx }) => {
+  getAllComplete: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany({
       where: {
         userId: ctx.session.user.id,
+        parentCategoryId: null,
       },
       include: {
         wishlistItems: {
@@ -29,28 +40,42 @@ export const categoriesRouter = createTRPCRouter({
             links: true,
           },
         },
+        subCategories: {
+          include: {
+            wishlistItems: {
+              include: {
+                images: true,
+                links: true,
+              },
+            },
+          },
+        },
       },
     });
   }),
   create: protectedProcedure
-    .input(z.string())
+    .input(
+      z.object({
+        name: z.string(),
+        parentCategoryId: z.string().optional().nullable(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       if (
-        (
-          await ctx.prisma.category.findMany({
-            where: {
-              name: input,
-              userId: ctx.session.user.id,
-            },
-          })
-        ).length > 0
+        await ctx.prisma.category.findFirst({
+          where: {
+            name: input.name,
+            userId: ctx.session.user.id,
+          },
+        })
       ) {
         throw new Error('Category already exists');
       }
       return ctx.prisma.category.create({
         data: {
-          name: input,
+          name: input.name,
           userId: ctx.session.user.id,
+          parentCategoryId: input.parentCategoryId,
         },
       });
     }),

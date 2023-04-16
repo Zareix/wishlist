@@ -1,19 +1,28 @@
 import { type Category } from '@prisma/client';
 import { CheckCircle, Plus } from 'lucide-react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/Button';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/Dialog';
 import { Input, InputError, InputGroup } from '@/components/ui/Inputs';
 import { Label } from '@/components/ui/Label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select';
 import { api } from '@/utils/api';
+
+type Inputs = Pick<Category, 'name' | 'parentCategoryId'>;
 
 const AddCategory = ({
   categories,
@@ -27,11 +36,12 @@ const AddCategory = ({
     handleSubmit,
     setError,
     reset,
+    control,
     formState: { errors },
-  } = useForm<Pick<Category, 'name'>>();
+  } = useForm<Inputs>();
   const addCategoryMutation = api.categories.create.useMutation();
 
-  const onSubmit: SubmitHandler<Pick<Category, 'name'>> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (
       categories.find(
         (category) =>
@@ -44,7 +54,7 @@ const AddCategory = ({
       });
     }
     addCategoryMutation
-      .mutateAsync(data.name)
+      .mutateAsync(data)
       .then(() => {
         refetchCategories();
       })
@@ -61,57 +71,97 @@ const AddCategory = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a new category</DialogTitle>
-          <DialogDescription asChild>
-            {addCategoryMutation.isSuccess ? (
-              <>
-                <div className="mx-auto flex items-center justify-center gap-2">
-                  <CheckCircle className="h-6 w-6 text-green-500" />
-                  Category added
-                </div>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      addCategoryMutation.reset();
-                      reset();
-                    }}
-                    variant="outline"
-                    className="mx-auto mt-2"
-                  >
-                    Close
-                  </Button>
-                </DialogTrigger>
-              </>
-            ) : (
-              <div className="mt-2 flex flex-col items-start gap-4">
-                <InputGroup className="justify-items-start">
-                  <Label>Name</Label>
-                  <Input
-                    placeholder="Name"
-                    {...register('name', {
-                      required: 'This field is required',
-                      pattern: {
-                        value: /^[a-zA-Z0-9 ]+$/,
-                        message: 'Only alphanumeric characters',
-                      },
-                    })}
-                  />
-                  {errors.name && (
-                    <InputError>{errors.name.message}</InputError>
-                  )}
-                </InputGroup>
-                <Button
-                  type="button"
-                  className="ml-auto"
-                  disabled={addCategoryMutation.isLoading}
-                  onClick={() => handleSubmit(onSubmit)()}
-                >
-                  Add category
-                </Button>
-              </div>
-            )}
-          </DialogDescription>
         </DialogHeader>
+        {addCategoryMutation.isSuccess ? (
+          <>
+            <div className="mx-auto flex items-center justify-center gap-2">
+              <CheckCircle className="h-6 w-6 text-green-500" />
+              Category added
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-start gap-4">
+            <InputGroup className="justify-items-start">
+              <Label>Name</Label>
+              <Input
+                placeholder="Name"
+                {...register('name', {
+                  required: 'This field is required',
+                  pattern: {
+                    value: /^[a-zA-Z0-9 ]+$/,
+                    message: 'Only alphanumeric characters',
+                  },
+                })}
+              />
+              {errors.name && <InputError>{errors.name.message}</InputError>}
+            </InputGroup>
+            <InputGroup className="justify-items-start">
+              <Label>Parent Category</Label>
+              <Controller
+                control={control}
+                name="parentCategoryId"
+                render={({ field }) => (
+                  <>
+                    <Select onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <>
+                            <SelectItem value={category.id} key={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          </>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </>
+                )}
+              />
+              {errors.parentCategoryId && (
+                <InputError>{errors.parentCategoryId.message}</InputError>
+              )}
+            </InputGroup>
+          </div>
+        )}
+        <DialogFooter>
+          {addCategoryMutation.isSuccess ? (
+            <DialogTrigger asChild>
+              <Button
+                type="button"
+                onClick={() => {
+                  addCategoryMutation.reset();
+                  reset();
+                }}
+                variant="outline"
+                className="mx-auto mt-2"
+              >
+                Close
+              </Button>
+            </DialogTrigger>
+          ) : addCategoryMutation.isError ? (
+            <Button
+              type="button"
+              onClick={() => {
+                addCategoryMutation.reset();
+              }}
+              variant="destructive"
+              className="mx-auto mt-2"
+            >
+              Reset
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              className="ml-auto"
+              disabled={addCategoryMutation.isLoading}
+              onClick={() => handleSubmit(onSubmit)()}
+            >
+              Add category
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,5 @@
 import {
+  EnumCurrency,
   type ItemImage,
   type ItemLink,
   type WishlistItem,
@@ -26,7 +27,9 @@ import { Loading } from '@/components/ui/Loading';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select';
@@ -74,7 +77,7 @@ const AddPage = () => {
     addMutation
       .mutateAsync({
         ...data,
-        currency: isEuro ? 'EUR' : 'USD',
+        currency: isEuro ? EnumCurrency.EUR : EnumCurrency.USD,
         links: data.links.map((link) => {
           return {
             ...link,
@@ -139,10 +142,29 @@ const AddPage = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {categoriesQuery.data &&
-                          categoriesQuery.data.map((category) => (
-                            <SelectItem value={category.id} key={category.id}>
-                              {category.name}
-                            </SelectItem>
+                          categoriesQuery.data.map((category, index) => (
+                            <React.Fragment key={category.id}>
+                              <SelectGroup>
+                                <SelectItem
+                                  value={category.id}
+                                  className="font-semibold text-slate-900 dark:text-slate-300"
+                                >
+                                  {category.name}
+                                </SelectItem>
+                                {category.subCategories.map((subCategory) => (
+                                  <SelectItem
+                                    value={subCategory.id}
+                                    key={subCategory.id}
+                                    className="ml-2"
+                                  >
+                                    {subCategory.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                              {index < categoriesQuery.data.length - 1 && (
+                                <SelectSeparator />
+                              )}
+                            </React.Fragment>
                           ))}
                       </SelectContent>
                     </Select>

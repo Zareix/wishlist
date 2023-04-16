@@ -16,11 +16,15 @@ h1 {
 }
 
 h2 {
-  @apply mt-10 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700;
+  @apply scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700;
 }
 
 h3 {
-  @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight data-[orientation]:mt-0;
+  @apply scroll-m-20 text-2xl font-semibold tracking-tight data-[orientation]:mt-0;
+}
+
+h4 {
+  @apply scroll-m-20 text-xl font-semibold tracking-tight;
 }
 
 p {
@@ -28,7 +32,7 @@ p {
 }
 
 ul {
-  @apply my-6 ml-6 list-disc [&>li]:mt-2;
+  @apply [&>li]:mt-2;
 }
 
 small {
@@ -45,4 +49,8 @@ code {
 
 .subtle {
   @apply text-sm text-slate-500 dark:text-slate-400;
+}
+
+[data-radix-scroll-area-viewport] > * {
+  @apply h-full;
 }
