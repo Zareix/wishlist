@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "next:build:dev": "NODE_ENV=development next build",
+    "next:build:prod": "NODE_ENV=production next build --no-lint",
     "next:dev": "next dev",
     "db:dev": "pscale connect wishlist dev",
     "dev": "concurrently pnpm:next:dev pnpm:db:dev",
