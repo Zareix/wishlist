@@ -19,12 +19,19 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import CurrencyIcon from '@/components/ui/currency-icon';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { LoadingFullPage } from '@/components/ui/loading';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type RouterOutputs, api } from '@/utils/api';
 
 const HomePage = () => {
+  const t = useTranslations('Index');
   const {
     data: categories,
     isLoading,
@@ -54,12 +61,12 @@ const HomePage = () => {
   return (
     <>
       <Head>
-        <title>Wishlist</title>
+        <title>{t('title')}</title>
         <meta name="description" content="Your new favorite wishlist" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Wishlist</h1>
+        <h1>{t('title')}</h1>
         {categories.length > 0 && (
           <Tabs defaultValue={categories[0]?.id} className="mt-4">
             <ScrollAreaHorizontal>
@@ -149,25 +156,50 @@ const ItemCard = ({
           <ScrollAreaHorizontal className="ml-auto w-1/3">
             <div className="flex h-full items-center gap-2">
               {item.images.map((image, index) => (
-                /* eslint-disable-next-line @next/next/no-img-element*/
-                <img
-                  key={image.id}
-                  src={image.image}
-                  alt={`${index} of ${item.name}`}
-                  className="max-h-28 rounded-sm"
-                />
+                <Dialog key={image.id}>
+                  <DialogTrigger asChild>
+                    {/* eslint-disable-next-line @next/next/no-img-element*/}
+                    <img
+                      src={image.image}
+                      alt={`${index} of ${item.name}`}
+                      className="max-h-28 rounded-sm"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    {/* eslint-disable-next-line @next/next/no-img-element*/}
+                    <img
+                      src={image.image}
+                      alt={`${index} of ${item.name}`}
+                      className="max-h-[70vh] rounded-sm"
+                    />
+                    <DialogFooter>
+                      <DialogTrigger asChild>
+                        <Button>Close</Button>
+                      </DialogTrigger>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               ))}
             </div>
           </ScrollAreaHorizontal>
         )}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button size="sm" variant="secondary">
+        <Button size="sm">
           <Edit className="h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>
   );
 };
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  return {
+    props: {
+      // eslint-disable-next-line
+      messages: (await import(`@/messages/${context.locale}.json`)).default,
+    },
+  };
+}
 
 export default HomePage;

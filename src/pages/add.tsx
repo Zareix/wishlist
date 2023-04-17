@@ -5,6 +5,8 @@ import {
   type WishlistItem,
 } from '@prisma/client';
 import { DollarSign, Euro, Loader2, Plus, Trash } from 'lucide-react';
+import { GetStaticPropsContext } from 'next';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -46,6 +48,7 @@ type Inputs = Pick<
 
 const AddPage = () => {
   const [isEuro, setIsEuro] = useState(true);
+  const t = useTranslations('Add');
   const router = useRouter();
   const {
     register,
@@ -94,22 +97,24 @@ const AddPage = () => {
 
   return (
     <main>
-      <h1>Add a new item</h1>
+      <h1>{t('title')}</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-6 lg:flex lg:flex-wrap lg:gap-4"
       >
         <div className=" flex flex-col items-start gap-4 lg:w-[40%]">
           <InputGroup>
-            <Label>Name</Label>
+            <Label>{t('form.name')}</Label>
             <Input
-              placeholder="Name"
+              placeholder={t('form.name')}
               {...register('name', { required: true })}
             />
-            {errors.name && <InputError>This filed is required</InputError>}
+            {errors.name && (
+              <InputError>{t('form.errorFieldRequired')}</InputError>
+            )}
           </InputGroup>
           <InputGroup>
-            <Label>Category</Label>
+            <Label>{t('form.category')}</Label>
             <div className="item-center flex gap-2">
               <Controller
                 control={control}
@@ -130,12 +135,16 @@ const AddPage = () => {
                             categoriesQuery.isLoading ? (
                               <div className="flex items-center gap-2">
                                 <Loading />
-                                <span>Loading categories...</span>
+                                <span>{t('form.categoryEmpty')}</span>
                               </div>
                             ) : categoriesQuery.data?.length === 0 ? (
-                              <span className="muted">No category</span>
+                              <span className="muted">
+                                {t('form.categoryEmpty')}
+                              </span>
                             ) : (
-                              <span className="muted">Select a category</span>
+                              <span className="muted">
+                                {t('form.categoryPlaceholder')}
+                              </span>
                             )
                           }
                         />
@@ -179,14 +188,14 @@ const AddPage = () => {
               />
             </div>
             {errors.categoryId && (
-              <InputError>This filed is required</InputError>
+              <InputError>{t('form.errorFieldRequired')}</InputError>
             )}
           </InputGroup>
           <InputGroup>
-            <Label>Price</Label>
+            <Label>{t('form.price')}</Label>
             <div className="flex items-center">
               <Input
-                placeholder="Price"
+                placeholder={t('form.price')}
                 type="number"
                 {...register('price', {
                   valueAsNumber: true,
@@ -206,8 +215,8 @@ const AddPage = () => {
 
         <Tabs defaultValue="links" className="mt-4 w-full lg:ml-auto lg:w-1/2">
           <TabsList>
-            <TabsTrigger value="links">Links</TabsTrigger>
-            <TabsTrigger value="images">Images</TabsTrigger>
+            <TabsTrigger value="links">{t('form.links')}</TabsTrigger>
+            <TabsTrigger value="images">{t('form.images')}</TabsTrigger>
           </TabsList>
           <TabsContent value="links" className="px-3">
             <div className="flex flex-col gap-4">
@@ -216,19 +225,19 @@ const AddPage = () => {
                   <div key={field.id} className="flex flex-wrap">
                     <div className="grid w-[85%] grid-cols-3 gap-1">
                       <Input
-                        placeholder="Name"
+                        placeholder={t('form.linkName')}
                         className="col-span-2"
                         {...register(`links.${index}.name`)}
                       />
                       <Input
-                        placeholder="Price"
+                        placeholder={t('form.linkPrice')}
                         type="number"
                         {...register(`links.${index}.price`, {
                           valueAsNumber: true,
                         })}
                       />
                       <Input
-                        placeholder="Link"
+                        placeholder={t('form.linkUrl')}
                         className="col-span-3"
                         {...register(`links.${index}.link`, {
                           required: true,
@@ -247,7 +256,7 @@ const AddPage = () => {
                     </Button>
                     {errors.links?.[index]?.link && (
                       <InputError className="w-full">
-                        This field is required
+                        {t('form.errorFieldRequired')}
                       </InputError>
                     )}
                   </div>
@@ -266,7 +275,7 @@ const AddPage = () => {
                 }
               >
                 <Plus className="mr-2 h-6 w-6" />
-                Add link
+                {t('form.linkAdd')}
               </Button>
             </div>
           </TabsContent>
@@ -278,7 +287,7 @@ const AddPage = () => {
                     <HoverCard openDelay={0} closeDelay={0}>
                       <HoverCardTrigger asChild>
                         <Input
-                          placeholder="Image URL"
+                          placeholder={t('form.imageURL')}
                           className="w-[85%]"
                           {...register(`images.${index}.image`, {
                             required: true,
@@ -305,7 +314,7 @@ const AddPage = () => {
                     </Button>
                     {errors.images?.[index]?.image && (
                       <InputError className="w-full">
-                        This field is required
+                        {t('form.errorFieldRequired')}
                       </InputError>
                     )}
                   </div>
@@ -327,7 +336,7 @@ const AddPage = () => {
                 }
               >
                 <Plus className="mr-2 h-6 w-6" />
-                Add image
+                {t('form.imageAdd')}
               </Button>
             </div>
           </TabsContent>
@@ -343,7 +352,7 @@ const AddPage = () => {
           ) : (
             <Plus className="mr-2 h-6 w-6" />
           )}
-          Add item
+          {t('form.submit')}
         </Button>
       </form>
     </main>
@@ -352,12 +361,13 @@ const AddPage = () => {
 
 const ItemImageCard = ({ image }: { image: string }) => {
   const [error, setError] = useState(false);
+  const t = useTranslations('Add');
 
   useEffect(() => {
     setError(false);
   }, [image]);
 
-  if (error) return <InputError>Error loading image</InputError>;
+  if (error) return <InputError>{t('form.imageLoadingError')}</InputError>;
 
   return (
     <div>
@@ -373,5 +383,14 @@ const ItemImageCard = ({ image }: { image: string }) => {
     </div>
   );
 };
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  return {
+    props: {
+      // eslint-disable-next-line
+      messages: (await import(`@/messages/${context.locale}.json`)).default,
+    },
+  };
+}
 
 export default AddPage;

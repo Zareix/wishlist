@@ -1,5 +1,6 @@
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
+import { type AbstractIntlMessages, NextIntlProvider } from 'next-intl';
 import { type AppType } from 'next/app';
 import { Inter } from 'next/font/google';
 
@@ -14,6 +15,7 @@ const font = Inter({
 
 const MyApp: AppType<{
   session: Session | null;
+  messages: AbstractIntlMessages;
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <SessionProvider session={session}>
@@ -22,9 +24,11 @@ const MyApp: AppType<{
           --font-sans: ${font.style.fontFamily};
         }
       `}</style>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <NextIntlProvider messages={pageProps.messages}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </NextIntlProvider>
     </SessionProvider>
   );
 };

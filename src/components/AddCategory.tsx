@@ -1,5 +1,6 @@
 import { type Category } from '@prisma/client';
 import { CheckCircle, Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -20,11 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { api } from '@/utils/api';
 
 type Inputs = Pick<Category, 'name' | 'parentCategoryId'>;
@@ -36,6 +32,7 @@ const AddCategory = ({
   categories: Array<Pick<Category, 'name' | 'id'>>;
   refetchCategories: () => void;
 }) => {
+  const t = useTranslations('AddCategory');
   const {
     register,
     handleSubmit,
@@ -75,33 +72,33 @@ const AddCategory = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a new category</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         {addCategoryMutation.isSuccess ? (
           <>
             <div className="mx-auto flex items-center justify-center gap-2">
               <CheckCircle className="h-6 w-6 text-green-500" />
-              Category added
+              {t('form.success')}
             </div>
           </>
         ) : (
           <div className="flex flex-col items-start gap-4">
             <InputGroup className="justify-items-start">
-              <Label>Name</Label>
+              <Label>{t('form.name')}</Label>
               <Input
-                placeholder="Name"
+                placeholder={t('form.name')}
                 {...register('name', {
-                  required: 'This field is required',
+                  required: t('form.errorRequired'),
                   pattern: {
                     value: /^[a-zA-Z0-9 ]+$/,
-                    message: 'Only alphanumeric characters',
+                    message: t('form.errorFormat'),
                   },
                 })}
               />
               {errors.name && <InputError>{errors.name.message}</InputError>}
             </InputGroup>
             <InputGroup className="justify-items-start">
-              <Label>Parent Category</Label>
+              <Label>{t('form.parentCategory')}</Label>
               <Controller
                 control={control}
                 name="parentCategoryId"
@@ -109,7 +106,9 @@ const AddCategory = ({
                   <>
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue
+                          placeholder={t('form.parentCategoryPlaceholder')}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => (
@@ -140,9 +139,9 @@ const AddCategory = ({
                   reset();
                 }}
                 variant="outline"
-                className="mx-auto mt-2"
+                className="mt-2"
               >
-                Close
+                {t('form.close')}
               </Button>
             </DialogTrigger>
           ) : addCategoryMutation.isError ? (
@@ -152,19 +151,34 @@ const AddCategory = ({
                 addCategoryMutation.reset();
               }}
               variant="destructive"
-              className="mx-auto mt-2"
+              className="mt-2"
             >
-              Reset
+              {t('form.reset')}
             </Button>
           ) : (
-            <Button
-              type="button"
-              className="ml-auto"
-              disabled={addCategoryMutation.isLoading}
-              onClick={() => handleSubmit(onSubmit)()}
-            >
-              Add category
-            </Button>
+            <div className="flex gap-2">
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    addCategoryMutation.reset();
+                    reset();
+                  }}
+                  variant="outline"
+                  className="w-1/2"
+                >
+                  {t('form.close')}
+                </Button>
+              </DialogTrigger>
+              <Button
+                type="button"
+                disabled={addCategoryMutation.isLoading}
+                onClick={() => handleSubmit(onSubmit)()}
+                className="w-1/2"
+              >
+                {t('form.submit')}
+              </Button>
+            </div>
           )}
         </DialogFooter>
       </DialogContent>

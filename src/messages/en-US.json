@@ -1,0 +1,68 @@
+{
+    "Add": {
+        "title": "Add a new item",
+        "form": {
+            "name": "Name",
+            "category": "Category",
+            "categoryPlaceholder": "Select a category",
+            "categoryLoading": "Loading categories...",
+            "categoryEmpty": "No category",
+            "price": "Price",
+            "links": "Links",
+            "linkAdd": "Add a link",
+            "linkName": "Name",
+            "linkUrl": "URL",
+            "linkPrice": "Price",
+            "images": "Images",
+            "imageAdd": "Add an image",
+            "imageURL": "Image URL",
+            "imageLoadingError": "Error loading image",
+            "submit": "Add item",
+            "errorFieldRequired": "This field is required"
+        }
+    },
+    "AddCategory": {
+        "title": "Add a new category",
+        "form": {
+            "name": "Name",
+            "parentCategoryPlaceholder": "Select a category",
+            "parentCategory": "Parent category",
+            "errorRequired": "This field is required",
+            "errorFormat": "Only alphanumeric characters",
+            "success": "Category added",
+            "close": "Close",
+            "reset": "Reset",
+            "submit": "Add category"
+        }
+    },
+    "Archive": {
+        "title": "Archive"
+    },
+    "Index": {
+        "title": "Wishlist"
+    },
+    "Layout": {
+        "nav": {
+            "home": "Home",
+            "add": "Add",
+            "archive": "Archive",
+            "settings": "Settings"
+        }
+    },
+    "Login": {
+        "title": "Login",
+        "errorLogin": "Something went wrong. Please try again.",
+        "form": {
+            "email": "Email",
+            "emailPlaceholder": "example@example.com",
+            "withEmail": "With Email magic link",
+            "withGoogle": "Login with Google",
+            "errorEmailRequired": "Email is required",
+            "errorEmailInvalid": "Email is invalid"
+        }
+    },
+    "Settings": {
+        "title": "Settings",
+        "logout": "Logout"
+    }
+}
