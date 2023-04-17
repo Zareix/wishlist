@@ -15,15 +15,15 @@ import {
 } from 'react-hook-form';
 
 import AddCategory from '@/components/AddCategory';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@/components/ui/HoverCard';
-import { Input, InputError, InputGroup } from '@/components/ui/Inputs';
-import { Label } from '@/components/ui/Label';
-import { Loading } from '@/components/ui/Loading';
+} from '@/components/ui/hover-card';
+import { Input, InputError, InputGroup } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loading } from '@/components/ui/loading';
 import {
   Select,
   SelectContent,
@@ -32,8 +32,8 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/Select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { api } from '@/utils/api';
 
 type Inputs = Pick<
@@ -133,9 +133,9 @@ const AddPage = () => {
                                 <span>Loading categories...</span>
                               </div>
                             ) : categoriesQuery.data?.length === 0 ? (
-                              <span className="subtle">No category</span>
+                              <span className="muted">No category</span>
                             ) : (
-                              <span className="subtle">Select a category</span>
+                              <span className="muted">Select a category</span>
                             )
                           }
                         />
@@ -195,6 +195,7 @@ const AddPage = () => {
               <Button
                 variant="ghost"
                 type="button"
+                className="px-1"
                 onClick={() => setIsEuro((x) => !x)}
               >
                 {isEuro ? <Euro /> : <DollarSign />}

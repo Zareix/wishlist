@@ -2,7 +2,7 @@ import { type Category } from '@prisma/client';
 import { CheckCircle, Plus } from 'lucide-react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,16 +10,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/Dialog';
-import { Input, InputError, InputGroup } from '@/components/ui/Inputs';
-import { Label } from '@/components/ui/Label';
+} from '@/components/ui/dialog';
+import { Input, InputError, InputGroup } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/Select';
+} from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { api } from '@/utils/api';
 
 type Inputs = Pick<Category, 'name' | 'parentCategoryId'>;
@@ -28,7 +33,7 @@ const AddCategory = ({
   categories,
   refetchCategories,
 }: {
-  categories: Category[];
+  categories: Array<Pick<Category, 'name' | 'id'>>;
   refetchCategories: () => void;
 }) => {
   const {

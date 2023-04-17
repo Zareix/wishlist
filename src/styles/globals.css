@@ -2,9 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  @apply bg-neutral-100 text-slate-900 dark:bg-slate-900 dark:text-neutral-50;
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 0 0% 90%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 98%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 83%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.85rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 213 31% 91%;
+
+    --muted: 216 34% 17%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 229 84% 5%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 28%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 213 31% 91%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
 }
 
 main {
@@ -16,7 +89,7 @@ h1 {
 }
 
 h2 {
-  @apply scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700;
+  @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
 }
 
 h3 {
@@ -40,17 +113,23 @@ small {
 }
 
 code {
-  @apply relative rounded bg-slate-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400;
+  @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
 }
 
 .large {
-  @apply text-lg font-semibold text-slate-900 dark:text-slate-50;
+  @apply text-lg font-semibold;
 }
 
-.subtle {
-  @apply text-sm text-slate-500 dark:text-slate-400;
+.muted {
+  @apply text-sm text-muted-foreground;
 }
 
 [data-radix-scroll-area-viewport] > * {
   @apply h-full;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply dark;
+  }
 }

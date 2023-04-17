@@ -3,10 +3,10 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/Button';
-import { Input, InputError, InputGroup } from '@/components/ui/Inputs';
-import { Label } from '@/components/ui/Label';
-import { Separator } from '@/components/ui/Separator';
+import { Button } from '@/components/ui/button';
+import { Input, InputError, InputGroup } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 const LoginPage = () => {
   const router = useRouter();

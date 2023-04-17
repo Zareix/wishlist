@@ -1,4 +1,7 @@
 import { TabsContent } from '@radix-ui/react-tabs';
+import { Edit } from 'lucide-react';
+import { type GetStaticPropsContext } from 'next';
+import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 
 import {
@@ -6,12 +9,19 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/Accordion';
-import { Button } from '@/components/ui/Button';
-import CurrencyIcon from '@/components/ui/CurrencyIcon';
-import { LoadingFullPage } from '@/components/ui/Loading';
-import { ScrollAreaHorizontal } from '@/components/ui/ScrollArea';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import CurrencyIcon from '@/components/ui/currency-icon';
+import { LoadingFullPage } from '@/components/ui/loading';
+import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type RouterOutputs, api } from '@/utils/api';
 
 const HomePage = () => {
@@ -95,9 +105,10 @@ const HomePage = () => {
 const CategoryContent = ({
   category,
 }: {
-  category:
-    | RouterOutputs['categories']['getAllComplete'][0]
-    | RouterOutputs['categories']['getAllComplete'][0]['subCategories'][0];
+  category: Pick<
+    RouterOutputs['categories']['getAllComplete'][0],
+    'id' | 'wishlistItems'
+  >;
 }) => {
   if (category.wishlistItems.length === 0) return <></>;
 
@@ -118,35 +129,44 @@ const ItemCard = ({
   item: RouterOutputs['categories']['getAllComplete'][0]['wishlistItems'][0];
 }) => {
   return (
-    <div className="mt-2 rounded-md border border-slate-200 px-3 py-2 dark:border-slate-700">
-      <h4 className="flex items-center">
-        {item.name}
-        {item.price && (
-          <>
-            <span className="subtle ml-auto">{item.price}</span>
-            <CurrencyIcon
-              currency={item.currency}
-              className="subtle ml-1 h-4 w-4"
-            />
-          </>
-        )}
-      </h4>
-      <div>
-        <ScrollAreaHorizontal className="ml-auto h-24 w-1/3 bg-slate-800">
-          <div className="flex h-full items-center">
-            {item.images.length > 0 &&
-              item.images.map((image, index) => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center">
+          {item.name}
+          {item.price && (
+            <>
+              <span className="muted ml-auto">{item.price}</span>
+              <CurrencyIcon
+                currency={item.currency}
+                className="muted h-4 w-4"
+              />
+            </>
+          )}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {item.images.length > 0 && (
+          <ScrollAreaHorizontal className="ml-auto w-1/3">
+            <div className="flex h-full items-center gap-2">
+              {item.images.map((image, index) => (
                 /* eslint-disable-next-line @next/next/no-img-element*/
                 <img
                   key={image.id}
                   src={image.image}
                   alt={`${index} of ${item.name}`}
+                  className="max-h-28 rounded-sm"
                 />
               ))}
-          </div>
-        </ScrollAreaHorizontal>
-      </div>
-    </div>
+            </div>
+          </ScrollAreaHorizontal>
+        )}
+      </CardContent>
+      <CardFooter className="flex justify-end gap-2">
+        <Button size="sm" variant="secondary">
+          <Edit className="h-4 w-4" />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

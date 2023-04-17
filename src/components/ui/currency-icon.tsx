@@ -1,17 +1,17 @@
 import { type EnumCurrency } from '@prisma/client';
-import { DollarSign, Euro } from 'lucide-react';
+import { DollarSign, Euro, type LucideProps } from 'lucide-react';
 
 const CurrencyIcon = ({
   currency,
   ...props
-}: React.SVGAttributes<HTMLOrSVGElement> & {
+}: LucideProps & {
   currency: EnumCurrency;
 }) => {
   switch (currency) {
     case 'EUR':
-      return <Euro {...props} />;
+      return <Euro strokeWidth={2.5} {...props} />;
     case 'USD':
-      return <DollarSign {...props} />;
+      return <DollarSign strokeWidth={2.5} {...props} />;
     default:
       return <></>;
   }

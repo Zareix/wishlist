@@ -3,9 +3,9 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 import LoginPage from '@/components/Layout/Login';
-import { Button } from '@/components/ui/Button';
-import { LoadingFullPage } from '@/components/ui/Loading';
-import { Separator } from '@/components/ui/Separator';
+import { Button } from '@/components/ui/button';
+import { LoadingFullPage } from '@/components/ui/loading';
+import { Separator } from '@/components/ui/separator';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { data, status } = useSession();
@@ -47,7 +47,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </Button>
             </Link>
           </nav>
-          <nav className="fixed inset-x-4 bottom-4 mx-auto flex max-w-sm items-center justify-center space-x-4 rounded-full bg-neutral-50 py-2 shadow-sm dark:border dark:border-slate-700 dark:bg-slate-950 lg:hidden">
+          <nav className="fixed inset-x-4 bottom-4 mx-auto flex max-w-sm items-center justify-center space-x-4 rounded-2xl bg-card py-2 shadow-sm dark:border dark:border-slate-700 dark:bg-slate-950 lg:hidden">
             <Link href="/">
               <Button variant="link">
                 <Home />
