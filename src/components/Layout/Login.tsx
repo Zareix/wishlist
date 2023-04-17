@@ -68,7 +68,7 @@ const LoginPage = () => {
             <InputError>{errors.email.message as string}</InputError>
           )}
         </InputGroup>
-        <Button type="submit" className="mt-2">
+        <Button type="submit" className="mt-2 w-full">
           <Mail className="mr-2 h-5 w-5 " />
           {t('form.withEmail')}
         </Button>

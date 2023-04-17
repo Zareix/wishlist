@@ -1,11 +1,10 @@
 import {
-  EnumCurrency,
   type ItemImage,
   type ItemLink,
   type WishlistItem,
 } from '@prisma/client';
 import { DollarSign, Euro, Loader2, Plus, Trash } from 'lucide-react';
-import { GetStaticPropsContext } from 'next';
+import { type GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -80,7 +79,7 @@ const AddPage = () => {
     addMutation
       .mutateAsync({
         ...data,
-        currency: isEuro ? EnumCurrency.EUR : EnumCurrency.USD,
+        currency: isEuro ? 'EUR' : 'USD',
         links: data.links.map((link) => {
           return {
             ...link,

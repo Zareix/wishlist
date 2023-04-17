@@ -48,6 +48,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.3.0",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/eslint": "^8.37.0",
     "@types/node": "^18.15.11",
