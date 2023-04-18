@@ -3,7 +3,7 @@ import {
   type ItemLink,
   type WishlistItem,
 } from '@prisma/client';
-import { DollarSign, Euro, Loader2, Plus, Trash } from 'lucide-react';
+import { DollarSign, Edit, Euro, Loader2, Plus, Trash } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -367,6 +367,8 @@ const AddEditItem = ({
       >
         {addMutation.isLoading ? (
           <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+        ) : item ? (
+          <Edit className="mr-2 h-6 w-6" />
         ) : (
           <Plus className="mr-2 h-6 w-6" />
         )}
