@@ -118,7 +118,7 @@ const ItemCard = ({
   };
 
   return (
-    <Card>
+    <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle className="flex items-center">
           {item.name}

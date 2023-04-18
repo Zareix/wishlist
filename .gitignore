@@ -42,3 +42,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 db_data/
+public/*.js
+public/*.map

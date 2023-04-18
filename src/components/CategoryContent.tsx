@@ -11,18 +11,17 @@ const CategoryContent = ({ categoryId }: { categoryId: string }) => {
   if (items.length === 0) return <></>;
 
   return (
-    <ul className="space-y-2">
+    <section className="mt-4 flex flex-wrap gap-2">
       {items.map((item) => (
-        <li key={item.id}>
-          <ItemCard
-            item={item}
-            refresh={() => {
-              itemsQuery.refetch().catch(console.error);
-            }}
-          />
-        </li>
+        <ItemCard
+          item={item}
+          key={item.id}
+          refresh={() => {
+            itemsQuery.refetch().catch(console.error);
+          }}
+        />
       ))}
-    </ul>
+    </section>
   );
 };
 
