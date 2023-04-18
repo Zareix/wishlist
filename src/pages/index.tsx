@@ -1,9 +1,9 @@
 import { TabsContent } from '@radix-ui/react-tabs';
-import { Edit } from 'lucide-react';
 import { type GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 
+import CategoryContent from '@/components/CategoryContent';
 import {
   Accordion,
   AccordionContent,
@@ -11,24 +11,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import CurrencyIcon from '@/components/ui/currency-icon';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { LoadingFullPage } from '@/components/ui/loading';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { type RouterOutputs, api } from '@/utils/api';
+import { api } from '@/utils/api';
 
 const HomePage = () => {
   const t = useTranslations('Index');
@@ -37,7 +23,7 @@ const HomePage = () => {
     isLoading,
     isSuccess,
     refetch,
-  } = api.categories.getAllComplete.useQuery();
+  } = api.categories.getAll.useQuery();
 
   if (isLoading) {
     return <LoadingFullPage />;
@@ -80,11 +66,11 @@ const HomePage = () => {
             </ScrollAreaHorizontal>
             {categories.map((category) => (
               <TabsContent key={category.id} value={category.id}>
-                <CategoryContent category={category} />
+                <CategoryContent categoryId={category.id} />
                 {category.subCategories.length > 0 && (
                   <Accordion type="multiple" className="mt-4">
                     {category.subCategories
-                      .filter((x) => x.wishlistItems.length > 0)
+                      .filter((x) => x._count.wishlistItems > 0)
                       .map((subCategory) => (
                         <AccordionItem
                           key={subCategory.id}
@@ -94,7 +80,7 @@ const HomePage = () => {
                             {subCategory.name}
                           </AccordionTrigger>
                           <AccordionContent>
-                            <CategoryContent category={subCategory} />
+                            <CategoryContent categoryId={subCategory.id} />
                           </AccordionContent>
                         </AccordionItem>
                       ))}
@@ -106,90 +92,6 @@ const HomePage = () => {
         )}
       </main>
     </>
-  );
-};
-
-const CategoryContent = ({
-  category,
-}: {
-  category: Pick<
-    RouterOutputs['categories']['getAllComplete'][0],
-    'id' | 'wishlistItems'
-  >;
-}) => {
-  if (category.wishlistItems.length === 0) return <></>;
-
-  return (
-    <ul className="space-y-2">
-      {category.wishlistItems.map((item) => (
-        <li key={item.id}>
-          <ItemCard item={item} />
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-const ItemCard = ({
-  item,
-}: {
-  item: RouterOutputs['categories']['getAllComplete'][0]['wishlistItems'][0];
-}) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          {item.name}
-          {item.price && (
-            <>
-              <span className="muted ml-auto">{item.price}</span>
-              <CurrencyIcon
-                currency={item.currency}
-                className="muted h-4 w-4"
-              />
-            </>
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {item.images.length > 0 && (
-          <ScrollAreaHorizontal className="ml-auto w-1/3">
-            <div className="flex h-full items-center gap-2">
-              {item.images.map((image, index) => (
-                <Dialog key={image.id}>
-                  <DialogTrigger asChild>
-                    {/* eslint-disable-next-line @next/next/no-img-element*/}
-                    <img
-                      src={image.image}
-                      alt={`${index} of ${item.name}`}
-                      className="max-h-28 rounded-sm"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    {/* eslint-disable-next-line @next/next/no-img-element*/}
-                    <img
-                      src={image.image}
-                      alt={`${index} of ${item.name}`}
-                      className="max-h-[70vh] rounded-sm"
-                    />
-                    <DialogFooter>
-                      <DialogTrigger asChild>
-                        <Button>Close</Button>
-                      </DialogTrigger>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              ))}
-            </div>
-          </ScrollAreaHorizontal>
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        <Button size="sm">
-          <Edit className="h-4 w-4" />
-        </Button>
-      </CardFooter>
-    </Card>
   );
 };
 

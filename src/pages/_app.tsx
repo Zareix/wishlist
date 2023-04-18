@@ -5,6 +5,7 @@ import { type AppType } from 'next/app';
 import { Inter } from 'next/font/google';
 
 import Layout from '@/components/Layout';
+import { Toaster } from '@/components/ui/toaster';
 import '@/styles/globals.css';
 import { api } from '@/utils/api';
 
@@ -28,6 +29,7 @@ const MyApp: AppType<{
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        <Toaster />
       </NextIntlProvider>
     </SessionProvider>
   );

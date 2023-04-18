@@ -17,8 +17,15 @@
             "imageAdd": "Add an image",
             "imageURL": "Image URL",
             "imageLoadingError": "Error loading image",
-            "submit": "Add item",
+            "submitEdit": "Edit item",
+            "submitAdd": "Add item",
             "errorFieldRequired": "This field is required"
+        },
+        "toast": {
+            "successAdd": "Item created",
+            "successAddDetails": "Item \"{name}\" has been created",
+            "successEdit": "Item updated",
+            "successEditDetails": "Item \"{name}\" has been updated"
         }
     },
     "AddCategory": {
@@ -36,7 +43,8 @@
         }
     },
     "Archive": {
-        "title": "Archive"
+        "title": "Archive",
+        "empty": "No archived item"
     },
     "Index": {
         "title": "Wishlist"

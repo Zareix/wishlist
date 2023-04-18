@@ -17,8 +17,15 @@
             "imageAdd": "Ajouter une image",
             "imageURL": "URL de l'image",
             "imageLoadingError": "Erreur lors du chargement de l'image",
-            "submit": "Ajouter",
+            "submitEdit": "Modifier",
+            "submitAdd": "Ajouter",
             "errorFieldRequired": "Ce champ est requis"
+        },
+        "toast": {
+            "successAdd": "Élément ajouté",
+            "successAddDetail": "\"{name}\" a été ajouté à la wishlist",
+            "successEdit": "Élément modifié",
+            "successEditDetails": "\"{name}\" a été modifié"
         }
     },
     "AddCategory": {
@@ -36,7 +43,8 @@
         }
     },
     "Archive": {
-        "title": "Archive"
+        "title": "Archive",
+        "empty": "Aucun élément dans l'archive"
     },
     "Index": {
         "title": "Wishlist"

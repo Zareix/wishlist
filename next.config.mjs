@@ -14,7 +14,7 @@ const config = {
     defaultLocale: 'en-US',
   },
   typescript: {
-    ignoreBuildErrors: process.env.NODE_ENV === 'production',
+    ignoreBuildErrors: process.env.SKIP_LINT === 'true',
   },
 };
 export default withBundleAnalyzer(config);

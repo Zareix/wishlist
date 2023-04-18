@@ -91,6 +91,7 @@ model WishlistItem {
     userId     String
     category   Category     @relation(fields: [categoryId], references: [id])
     categoryId String
+    state      State        @default(ACTIVE)
 
     @@index([categoryId])
     @@index([userId])
@@ -115,4 +116,10 @@ model Category {
 enum EnumCurrency {
     USD
     EUR
+}
+
+enum State {
+    ACTIVE
+    BOUGHT
+    CANCELED
 }

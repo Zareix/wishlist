@@ -27,27 +27,16 @@ export const categoriesRouter = createTRPCRouter({
       },
     });
   }),
-  getAllComplete: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.category.findMany({
+  getOne: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.category.findUnique({
       where: {
-        userId: ctx.session.user.id,
-        parentCategoryId: null,
+        id: input,
       },
       include: {
         wishlistItems: {
           include: {
             images: true,
             links: true,
-          },
-        },
-        subCategories: {
-          include: {
-            wishlistItems: {
-              include: {
-                images: true,
-                links: true,
-              },
-            },
           },
         },
       },
