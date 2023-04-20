@@ -23,6 +23,11 @@ const server = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   EMAIL_SERVER: z.string(),
   EMAIL_FROM: z.string(),
+  S3_ACCOUNT_ID: z.string(),
+  S3_ACCESS_KEY_ID: z.string(),
+  S3_SECRET_KEY: z.string(),
+  S3_BUCKET_NAME: z.string(),
+  S3_PUBLIC_URL: z.string(),
 });
 
 /**
@@ -30,7 +35,7 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+  NEXT_PUBLIC_S3_PUBLIC_URL: z.string(),
 });
 
 /**
@@ -48,6 +53,12 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   EMAIL_SERVER: process.env.EMAIL_SERVER,
   EMAIL_FROM: process.env.EMAIL_FROM,
+  S3_ACCOUNT_ID: process.env.S3_ACCOUNT_ID,
+  S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+  S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+  S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+  S3_PUBLIC_URL: process.env.S3_PUBLIC_URL,
+  NEXT_PUBLIC_S3_PUBLIC_URL: process.env.NEXT_PUBLIC_S3_PUBLIC_URL,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

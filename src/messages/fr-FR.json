@@ -24,7 +24,9 @@
         },
         "toast": {
             "success": "Élément ajouté",
-            "successDetail": "\"{name}\" a été ajouté à la wishlist"
+            "successDetail": "\"{name}\" a été ajouté à la wishlist",
+            "errorUploadImage": "Erreur lors de l'ajout de l'image",
+            "errorUploadImageDetails": "Une erreur est survenue lors de l'ajout de l'image : \"{message}\""
         }
     },
     "Edit": {
@@ -52,7 +54,9 @@
         },
         "toast": {
             "success": "Élément modifié",
-            "successDetails": "\"{name}\" a été modifié"
+            "successDetails": "\"{name}\" a été modifié",
+            "errorUploadImage": "Erreur lors de l'ajout de l'image",
+            "errorUploadImageDetails": "Une erreur est survenue lors de l'ajout de l'image : \"{message}\""
         }
     },
     "AddCategory": {

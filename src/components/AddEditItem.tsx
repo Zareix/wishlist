@@ -3,10 +3,20 @@ import {
   type ItemLink,
   type WishlistItem,
 } from '@prisma/client';
-import { DollarSign, Edit, Euro, Loader2, Plus, Trash } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import {
+  DollarSign,
+  Edit,
+  Euro,
+  Loader2,
+  Plus,
+  Trash,
+  Upload,
+  UploadIcon,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import {
   Controller,
   type SubmitHandler,
@@ -55,6 +65,7 @@ const AddEditItem = ({
   onFinish?: () => void;
 }) => {
   const [isEuro, setIsEuro] = useState((item?.currency ?? 'EUR') === 'EUR');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslations(item ? 'Edit' : 'Add');
   const router = useRouter();
   const {
@@ -85,6 +96,19 @@ const AddEditItem = ({
   const { toast } = useToast();
   const addMutation = api.wishlist.add.useMutation();
   const categoriesQuery = api.categories.getAll.useQuery();
+  const imageMutation = useMutation(['image', item?.id], (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+      return res.json() as Promise<{ url: string }>;
+    });
+  });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     addMutation
@@ -112,6 +136,28 @@ const AddEditItem = ({
       })
       .catch(console.error);
   };
+
+  const uploadImage: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    imageMutation
+      .mutateAsync(file)
+      .then((data) => {
+        if (!data.url) return;
+        appendImage({ image: data.url });
+        if (fileInputRef.current) fileInputRef.current.files = null;
+      })
+      .catch((e: Error) => {
+        toast({
+          title: t('toast.errorUploadImage'),
+          description: t('toast.errorUploadImageDetails', {
+            message: e.message,
+          }),
+        });
+        if (fileInputRef.current) fileInputRef.current.files = null;
+      });
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -335,24 +381,41 @@ const AddEditItem = ({
                 </div>
               );
             })}
-            <Button
-              variant="outline"
-              type="button"
-              className="ml-auto"
-              onClick={() =>
-                appendImage(
-                  {
-                    image: '',
-                  },
-                  {
-                    shouldFocus: false,
-                  },
-                )
-              }
-            >
-              <Plus className="mr-2 h-6 w-6" />
-              {t('form.imageAdd')}
-            </Button>
+            <div className="flex justify-end gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                hidden
+                onChange={uploadImage}
+              />
+              <Button
+                variant="outline"
+                type="button"
+                className="ml-auto"
+                onClick={() => {
+                  fileInputRef.current?.click();
+                }}
+              >
+                <UploadIcon className="h-6 w-6" />
+              </Button>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() =>
+                  appendImage(
+                    {
+                      image: '',
+                    },
+                    {
+                      shouldFocus: false,
+                    },
+                  )
+                }
+              >
+                <Plus className="mr-2 h-6 w-6" />
+                {t('form.imageAdd')}
+              </Button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

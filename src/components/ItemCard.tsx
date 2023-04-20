@@ -5,6 +5,7 @@ import {
   Edit,
   RotateCcw,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
 
@@ -33,6 +34,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import { ToastAction } from '@/components/ui/toast';
+import { env } from '@/env.mjs';
 import { useToast } from '@/hooks/use-toast';
 import { type RouterInputs, type RouterOutputs, api } from '@/utils/api';
 import { cn } from '@/utils/ui';
@@ -159,20 +161,44 @@ const ItemCard = ({
               {item.images.map((image, index) => (
                 <Dialog key={image.id}>
                   <DialogTrigger asChild>
-                    {/* eslint-disable-next-line @next/next/no-img-element*/}
-                    <img
-                      src={image.image}
-                      alt={`${index} of ${item.name}`}
-                      className="max-h-28 rounded-sm"
-                    />
+                    {new URL(image.image).hostname ===
+                    new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
+                      <div className="relative h-20 w-20 overflow-hidden rounded-sm">
+                        <Image
+                          src={image.image}
+                          alt={`${index} of ${item.name}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      /* eslint-disable-next-line @next/next/no-img-element*/
+                      <img
+                        src={image.image}
+                        alt={`${index} of ${item.name}`}
+                        className="h-20 w-20 rounded-sm object-cover"
+                      />
+                    )}
                   </DialogTrigger>
                   <DialogContent>
-                    {/* eslint-disable-next-line @next/next/no-img-element*/}
-                    <img
-                      src={image.image}
-                      alt={`${index} of ${item.name}`}
-                      className="mx-auto mt-4 max-h-[40vh] rounded-sm"
-                    />
+                    {new URL(image.image).hostname ===
+                    new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
+                      <div className="relative mx-auto mt-4 h-[40vh] w-full ">
+                        <Image
+                          src={image.image}
+                          alt={`${index} of ${item.name}`}
+                          fill
+                          className="mx-auto !w-auto rounded-sm object-contain"
+                        />
+                      </div>
+                    ) : (
+                      /* eslint-disable-next-line @next/next/no-img-element*/
+                      <img
+                        src={image.image}
+                        alt={`${index} of ${item.name}`}
+                        className="mx-auto mt-4 max-h-[40vh] rounded-sm"
+                      />
+                    )}
                     <DialogFooter>
                       <DialogTrigger asChild>
                         <Button variant="outline">Close</Button>
