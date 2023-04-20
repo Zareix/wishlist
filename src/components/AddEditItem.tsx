@@ -15,6 +15,7 @@ import {
   UploadIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import {
@@ -44,6 +45,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { env } from '@/env.mjs';
 import { useToast } from '@/hooks/use-toast';
 import { api } from '@/utils/api';
 
@@ -396,7 +398,11 @@ const AddEditItem = ({
                   fileInputRef.current?.click();
                 }}
               >
-                <UploadIcon className="h-6 w-6" />
+                {imageMutation.isLoading ? (
+                  <Loading />
+                ) : (
+                  <UploadIcon className="h-6 w-6" />
+                )}
               </Button>
               <Button
                 variant="outline"
@@ -448,13 +454,31 @@ const ItemImageCard = ({ image }: { image: string }) => {
 
   if (error) return <InputError>{t('form.imageLoadingError')}</InputError>;
 
+  try {
+    if (
+      new URL(image).hostname ===
+      new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname
+    )
+      return (
+        <div className="h-full">
+          <Image
+            src={image}
+            alt="Preview"
+            fill
+            sizes="250px"
+            className="!relative mx-auto max-h-32 !w-auto rounded-sm object-contain"
+          />
+        </div>
+      );
+  } catch (_e) {}
+
   return (
     <div>
       {/* eslint-disable-next-line @next/next/no-img-element*/}
       <img
         src={image}
         alt="Preview"
-        className="h-full max-h-32 w-full object-contain"
+        className="mx-auto h-full max-h-32 rounded-sm object-contain"
         onError={() => {
           setError(true);
         }}

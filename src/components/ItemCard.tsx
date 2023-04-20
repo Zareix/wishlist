@@ -188,6 +188,7 @@ const ItemCard = ({
                           src={image.image}
                           alt={`${index} of ${item.name}`}
                           fill
+                          sizes="(max-width: 640px) 100vw, 512px"
                           className="!relative rounded-sm object-contain"
                         />
                       </div>
