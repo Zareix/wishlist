@@ -1,5 +1,17 @@
 import Head from 'next/head';
 
+type PageSEOProps = {
+  title: string;
+};
+
+const PageSEO = ({ title }: PageSEOProps) => {
+  return (
+    <Head>
+      <title>Wishlist{title ? ` | ${title}` : ''}</title>
+    </Head>
+  );
+};
+
 const AppSEO = () => {
   return (
     <Head>
@@ -234,4 +246,4 @@ const AppSEO = () => {
   );
 };
 
-export { AppSEO };
+export { AppSEO, PageSEO };

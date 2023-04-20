@@ -2,15 +2,19 @@ import { type GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
 
 import ItemCard from '@/components/ItemCard';
+import { PageSEO } from '@/components/SEO';
 import { api } from '@/utils/api';
 
 const ArchivePage = () => {
   const t = useTranslations('Archive');
   return (
-    <main>
-      <h1>{t('title')}</h1>
-      <ArchiveContent />
-    </main>
+    <>
+      <PageSEO title={t('pageTitle')} />
+      <main>
+        <h1>{t('title')}</h1>
+        <ArchiveContent />
+      </main>
+    </>
   );
 };
 

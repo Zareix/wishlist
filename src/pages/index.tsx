@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 
 import CategoryContent from '@/components/CategoryContent';
+import { PageSEO } from '@/components/SEO';
 import {
   Accordion,
   AccordionContent,
@@ -46,11 +47,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Head>
-        <title>{t('title')}</title>
-        <meta name="description" content="Your new favorite wishlist" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <PageSEO title={t('pageTitle')} />
       <main>
         <h1>{t('title')}</h1>
         {categories.length > 0 && (

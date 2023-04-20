@@ -1,15 +1,20 @@
 import { type GetStaticPropsContext } from 'next';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 
 import AddEditItem from '@/components/AddEditItem';
+import { PageSEO } from '@/components/SEO';
 import { LoadingFullPage } from '@/components/ui/loading';
 import Page404 from '@/pages/404';
 import { api } from '@/utils/api';
 
 const EditItem = () => {
+  const t = useTranslations('Edit');
   const router = useRouter();
   const itemId = router.query.id as string;
-  const itemQuery = api.wishlist.getOne.useQuery(itemId);
+  const itemQuery = api.wishlist.getOne.useQuery(itemId, {
+    enabled: !(!itemId || itemId === ''),
+  });
   const item = itemQuery.data;
 
   if (itemQuery.isLoading) {
@@ -21,20 +26,22 @@ const EditItem = () => {
   }
 
   return (
-    <main>
-      <h1>
-        Editing{' '}
-        <span className="font-semibold text-secondary-foreground">
-          &apos;{item.name}&apos;
-        </span>
-      </h1>
-      <AddEditItem
-        item={item}
-        onFinish={() => {
-          itemQuery.refetch().catch(console.error);
-        }}
-      />
-    </main>
+    <>
+      <PageSEO title={t('pageTitle')} />
+      <main>
+        <h1>
+          {t('title', {
+            name: item.name,
+          })}
+        </h1>
+        <AddEditItem
+          item={item}
+          onFinish={() => {
+            itemQuery.refetch().catch(console.error);
+          }}
+        />
+      </main>
+    </>
   );
 };
 

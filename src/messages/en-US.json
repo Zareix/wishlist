@@ -1,5 +1,6 @@
 {
     "Add": {
+        "pageTitle": "New item",
         "title": "Add a new item",
         "form": {
             "name": "Name",
@@ -22,10 +23,36 @@
             "errorFieldRequired": "This field is required"
         },
         "toast": {
-            "successAdd": "Item created",
-            "successAddDetails": "Item \"{name}\" has been created",
-            "successEdit": "Item updated",
-            "successEditDetails": "Item \"{name}\" has been updated"
+            "success": "Item created",
+            "successDetails": "Item \"{name}\" has been created"
+        }
+    },
+    "Edit": {
+        "pageTitle": "Edit item",
+        "title": "Editing {name}",
+        "form": {
+            "name": "Name",
+            "category": "Category",
+            "categoryPlaceholder": "Select a category",
+            "categoryLoading": "Loading categories...",
+            "categoryEmpty": "No category",
+            "price": "Price",
+            "links": "Links",
+            "linkAdd": "Add a link",
+            "linkName": "Name",
+            "linkUrl": "URL",
+            "linkPrice": "Price",
+            "images": "Images",
+            "imageAdd": "Add an image",
+            "imageURL": "Image URL",
+            "imageLoadingError": "Error loading image",
+            "submitEdit": "Edit item",
+            "submitAdd": "Add item",
+            "errorFieldRequired": "This field is required"
+        },
+        "toast": {
+            "success": "Item updated",
+            "successDetails": "Item \"{name}\" has been updated"
         }
     },
     "AddCategory": {
@@ -43,10 +70,12 @@
         }
     },
     "Archive": {
+        "pageTitle": "Archive",
         "title": "Archive",
         "empty": "No archived item"
     },
     "Index": {
+        "pageTitle": "Home",
         "title": "Wishlist"
     },
     "Layout": {
@@ -58,6 +87,7 @@
         }
     },
     "Login": {
+        "pageTitle": "Login",
         "title": "Login",
         "errorLogin": "Something went wrong. Please try again.",
         "form": {
@@ -69,8 +99,24 @@
             "errorEmailInvalid": "Email is invalid"
         }
     },
+    "Offline": {
+        "pageTitle": "Offline",
+        "title": "Offline",
+        "message": "You are offline. Please check your connection."
+    },
     "Settings": {
+        "pageTitle": "Settings",
         "title": "Settings",
         "logout": "Logout"
+    },
+    "404": {
+        "pageTitle": "404",
+        "title": "404",
+        "message": "Page not found"
+    },
+    "500": {
+        "pageTitle": "500",
+        "title": "500",
+        "message": "Internal server error"
     }
 }

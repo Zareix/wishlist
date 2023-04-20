@@ -2,14 +2,18 @@ import { type GetStaticPropsContext } from 'next';
 import { useTranslations } from 'next-intl';
 
 import AddEditItem from '@/components/AddEditItem';
+import { PageSEO } from '@/components/SEO';
 
 const AddPage = () => {
   const t = useTranslations('Add');
   return (
-    <main>
-      <h1>{t('title')}</h1>
-      <AddEditItem />
-    </main>
+    <>
+      <PageSEO title={t('pageTitle')} />
+      <main>
+        <h1>{t('title')}</h1>
+        <AddEditItem />
+      </main>
+    </>
   );
 };
 

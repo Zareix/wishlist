@@ -55,7 +55,7 @@ const AddEditItem = ({
   onFinish?: () => void;
 }) => {
   const [isEuro, setIsEuro] = useState((item?.currency ?? 'EUR') === 'EUR');
-  const t = useTranslations('Add');
+  const t = useTranslations(item ? 'Edit' : 'Add');
   const router = useRouter();
   const {
     register,
@@ -103,13 +103,10 @@ const AddEditItem = ({
       .then(() => {
         router.push('/').catch(console.error);
         toast({
-          title: t(item ? 'toast.successEdit' : 'toast.successAdd'),
-          description: t(
-            item ? 'toast.successEditDetails' : 'toast.successAddDetails',
-            {
-              name: data.name,
-            },
-          ),
+          title: t('toast.success'),
+          description: t('toast.successDetails', {
+            name: data.name,
+          }),
         });
         onFinish?.();
       })

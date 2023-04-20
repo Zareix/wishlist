@@ -1,5 +1,6 @@
 {
     "Add": {
+        "pageTitle": "Ajouter",
         "title": "Ajouter un élément",
         "form": {
             "name": "Nom",
@@ -22,10 +23,36 @@
             "errorFieldRequired": "Ce champ est requis"
         },
         "toast": {
-            "successAdd": "Élément ajouté",
-            "successAddDetail": "\"{name}\" a été ajouté à la wishlist",
-            "successEdit": "Élément modifié",
-            "successEditDetails": "\"{name}\" a été modifié"
+            "success": "Élément ajouté",
+            "successDetail": "\"{name}\" a été ajouté à la wishlist"
+        }
+    },
+    "Edit": {
+        "pageTitle": "Éditer",
+        "title": "Éditer {name}",
+        "form": {
+            "name": "Nom",
+            "category": "Catégorie",
+            "categoryPlaceholder": "Sélectionner une catégorie",
+            "categoryLoading": "Chargement des catégories...",
+            "categoryEmpty": "Aucune catégorie",
+            "price": "Prix",
+            "links": "Liens",
+            "linkAdd": "Ajouter un lien",
+            "linkName": "Nom",
+            "linkUrl": "URL",
+            "linkPrice": "Prix",
+            "images": "Images",
+            "imageAdd": "Ajouter une image",
+            "imageURL": "URL de l'image",
+            "imageLoadingError": "Erreur lors du chargement de l'image",
+            "submitEdit": "Modifier",
+            "submitAdd": "Ajouter",
+            "errorFieldRequired": "Ce champ est requis"
+        },
+        "toast": {
+            "success": "Élément modifié",
+            "successDetails": "\"{name}\" a été modifié"
         }
     },
     "AddCategory": {
@@ -43,10 +70,12 @@
         }
     },
     "Archive": {
+        "pageTitle": "Archive",
         "title": "Archive",
         "empty": "Aucun élément dans l'archive"
     },
     "Index": {
+        "pageTitle": "Accueil",
         "title": "Wishlist"
     },
     "Layout": {
@@ -58,6 +87,7 @@
         }
     },
     "Login": {
+        "pageTitle": "Connexion",
         "title": "Connexion",
         "errorLogin": "Erreur lors de la connexion",
         "form": {
@@ -69,8 +99,24 @@
             "errorEmailInvalid": "L'email n'est pas valide"
         }
     },
+    "Offline": {
+        "pageTitle": "Hors ligne",
+        "title": "Vous êtes hors ligne",
+        "message": "Vous n'êtes pas connecté à internet. Veuillez vous connecter pour accéder à l'application"
+    },
     "Settings": {
+        "pageTitle": "Paramètres",
         "title": "Paramètres",
         "logout": "Se déconnecter"
+    },
+    "404": {
+        "pageTitle": "404",
+        "title": "404",
+        "message": "Page introuvable"
+    },
+    "500": {
+        "pageTitle": "500",
+        "title": "500",
+        "message": "Erreur interne du serveur"
     }
 }

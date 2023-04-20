@@ -1,10 +1,17 @@
 import { type GetStaticPropsContext } from 'next';
+import { useTranslations } from 'next-intl';
+
+import { PageSEO } from '@/components/SEO';
 
 const OfflinePage = () => {
+  const t = useTranslations('Offline');
   return (
-    <div>
-      <h1>Offline</h1>
-    </div>
+    <>
+      <PageSEO title={t('pageTitle')} />
+      <main>
+        <h1>{t('message')}</h1>
+      </main>
+    </>
   );
 };
 

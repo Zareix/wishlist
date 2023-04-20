@@ -6,7 +6,7 @@
     "next:build:dev": "next build",
     "next:build:prod": "SKIP_LINT=true next build --no-lint",
     "next:dev": "next dev",
-    "db:dev": "pscale connect wishlist dev",
+    "db:dev": "pscale connect wishlist dev --port 3306",
     "dev": "concurrently pnpm:next:dev pnpm:db:dev",
     "postinstall": "prisma generate",
     "prisma": "prisma",
