@@ -163,12 +163,12 @@ const ItemCard = ({
                   <DialogTrigger asChild>
                     {new URL(image.image).hostname ===
                     new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
-                      <div className="relative h-20 w-20 overflow-hidden rounded-sm">
+                      <div className="relative h-20 w-20">
                         <Image
                           src={image.image}
                           alt={`${index} of ${item.name}`}
                           fill
-                          className="object-cover"
+                          className="rounded-sm object-cover"
                         />
                       </div>
                     ) : (
@@ -183,12 +183,12 @@ const ItemCard = ({
                   <DialogContent>
                     {new URL(image.image).hostname ===
                     new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
-                      <div className="relative mx-auto mt-4 h-[40vh] w-full ">
+                      <div className="mx-auto mt-4 max-h-[40vh] ">
                         <Image
                           src={image.image}
                           alt={`${index} of ${item.name}`}
                           fill
-                          className="mx-auto !w-auto rounded-sm object-contain"
+                          className="!relative rounded-sm object-contain"
                         />
                       </div>
                     ) : (
