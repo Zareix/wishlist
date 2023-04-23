@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -47,7 +48,10 @@ model User {
     accounts      Account[]
     sessions      Session[]
     wishlistItems WishlistItem[]
-    categoris     Category[]
+    categories    Category[]
+
+    authorizeAccessTo User[] @relation("UserAccess")
+    hasAccessTo       User[] @relation("UserAccess")
 }
 
 model VerificationToken {
@@ -105,6 +109,7 @@ model Category {
     user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId           String
     wishlistItems    WishlistItem[]
+    public           Boolean        @default(false)
     parentCategoryId String?
     parentCategory   Category?      @relation("CategorySubCategory", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     subCategories    Category[]     @relation("CategorySubCategory")

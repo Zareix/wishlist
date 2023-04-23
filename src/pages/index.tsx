@@ -1,7 +1,11 @@
 import { TabsContent } from '@radix-ui/react-tabs';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { type GetStaticPropsContext } from 'next';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import Head from 'next/head';
+import { unescape } from 'querystring';
+import { useState } from 'react';
 
 import CategoryContent from '@/components/CategoryContent';
 import { PageSEO } from '@/components/SEO';
@@ -12,80 +16,118 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { LoadingFullPage } from '@/components/ui/loading';
+import { Loading, LoadingFullPage } from '@/components/ui/loading';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { api } from '@/utils/api';
 
 const HomePage = () => {
+  const [userId, setUserId] = useState<string>();
   const t = useTranslations('Index');
+  const session = useSession();
   const {
     data: categories,
     isLoading,
     isSuccess,
-    refetch,
-  } = api.categories.getAll.useQuery();
-
-  if (isLoading) {
-    return <LoadingFullPage />;
-  }
-
-  if (!isSuccess) {
-    return (
-      <main>
-        <h1 className="text-red-600">Something went wrong</h1>
-        <Button
-          onClick={() => {
-            refetch().catch(console.error);
-          }}
-        >
-          Refresh
-        </Button>
-      </main>
-    );
-  }
+  } = api.categories.getAll.useQuery({
+    userId,
+  });
 
   return (
     <>
       <PageSEO title={t('pageTitle')} />
       <main>
-        <h1>{t('title')}</h1>
-        {categories.length > 0 && (
-          <Tabs defaultValue={categories[0]?.id} className="mt-4">
-            <ScrollAreaHorizontal>
-              <TabsList>
-                {categories.map((category) => (
-                  <TabsTrigger key={category.id} value={category.id}>
-                    {category.name}
-                  </TabsTrigger>
+        <div className="flex">
+          <h1>{t('title')}</h1>
+          <span className="ml-auto">
+            <Select
+              defaultValue={session.data?.user.id}
+              onValueChange={(value) => {
+                if (value === session.data?.user.id) {
+                  setUserId(undefined);
+                  return;
+                }
+                setUserId(value);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a fruit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={session.data?.user.id ?? ''}>
+                  {t('myWishlist')}
+                </SelectItem>
+                {session.data?.user.hasAccessTo?.map((user) => (
+                  <SelectItem key={user.id} value={user.id}>
+                    {user.name ?? user.email}
+                  </SelectItem>
                 ))}
-              </TabsList>
-            </ScrollAreaHorizontal>
-            {categories.map((category) => (
-              <TabsContent key={category.id} value={category.id}>
-                <CategoryContent categoryId={category.id} />
-                {category.subCategories.length > 0 && (
-                  <Accordion type="multiple" className="mt-4">
-                    {category.subCategories
-                      .filter((x) => x._count.wishlistItems > 0)
-                      .map((subCategory) => (
-                        <AccordionItem
-                          key={subCategory.id}
-                          value={subCategory.id}
-                        >
-                          <AccordionTrigger>
-                            {subCategory.name}
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <CategoryContent categoryId={subCategory.id} />
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                  </Accordion>
-                )}
-              </TabsContent>
-            ))}
-          </Tabs>
+              </SelectContent>
+            </Select>
+          </span>
+        </div>
+        {isLoading ? (
+          <Loading />
+        ) : !isSuccess ? (
+          <>Error</>
+        ) : (
+          categories.length > 0 && (
+            <Tabs defaultValue={categories[0]?.id} className="mt-4">
+              <ScrollAreaHorizontal>
+                <TabsList>
+                  {categories.map((category) => (
+                    <TabsTrigger
+                      key={category.id}
+                      value={category.id}
+                      className="flex gap-1"
+                    >
+                      {category.name}
+                      {!category.public && <EyeOffIcon size={14} />}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </ScrollAreaHorizontal>
+              {categories.map((category) => (
+                <TabsContent key={category.id} value={category.id}>
+                  <CategoryContent categoryId={category.id} userId={userId} />
+                  {category.subCategories.length > 0 && (
+                    <Accordion type="multiple" className="mt-4">
+                      {category.subCategories
+                        .filter((x) => x._count.wishlistItems > 0)
+                        .map((subCategory) => (
+                          <AccordionItem
+                            key={subCategory.id}
+                            value={subCategory.id}
+                          >
+                            <AccordionTrigger>
+                              <div className="flex items-center gap-2">
+                                {subCategory.name}
+                                {!subCategory.public && (
+                                  <EyeOffIcon size={18} />
+                                )}
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <CategoryContent
+                                categoryId={subCategory.id}
+                                userId={userId}
+                              />
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                    </Accordion>
+                  )}
+                </TabsContent>
+              ))}
+            </Tabs>
+          )
         )}
       </main>
     </>

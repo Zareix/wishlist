@@ -22,14 +22,14 @@ declare module 'next-auth' {
     user: {
       id: string;
       // ...other properties
-      // role: UserRole;
+      hasAccessTo?: User[];
     } & DefaultSession['user'];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    hasAccessTo?: User[];
+  }
 }
 
 /**
@@ -39,11 +39,21 @@ declare module 'next-auth' {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: async ({ session, user }) => ({
       ...session,
       user: {
         ...session.user,
         id: user.id,
+        hasAccessTo: (
+          await prisma.user.findUnique({
+            where: {
+              id: user.id,
+            },
+            include: {
+              hasAccessTo: true,
+            },
+          })
+        )?.hasAccessTo,
       },
     }),
   },

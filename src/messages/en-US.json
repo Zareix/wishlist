@@ -79,6 +79,7 @@
         "empty": "No archived item"
     },
     "Index": {
+        "myWishlist": "My wishlist",
         "pageTitle": "Home",
         "title": "Wishlist"
     },
@@ -111,7 +112,17 @@
     "Settings": {
         "pageTitle": "Settings",
         "title": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "access": {
+            "emailRequired": "Email is required"
+        },
+        "categories": {
+            "name": "Name",
+            "visibility": "Visibility",
+            "info": "This is a parent category : Visibility only apply to root items, not the children categories' items.",
+            "public": "Public",
+            "private": "Private"
+        }
     },
     "404": {
         "pageTitle": "404",

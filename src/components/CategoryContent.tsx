@@ -1,9 +1,16 @@
 import ItemCard from '@/components/ItemCard';
 import { api } from '@/utils/api';
 
-const CategoryContent = ({ categoryId }: { categoryId: string }) => {
+const CategoryContent = ({
+  categoryId,
+  userId,
+}: {
+  categoryId: string;
+  userId?: string;
+}) => {
   const itemsQuery = api.wishlist.getAll.useQuery({
     categoryId,
+    userId,
   });
   const items = itemsQuery.data;
   if (itemsQuery.isLoading) return <></>;

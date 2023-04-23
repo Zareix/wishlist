@@ -34,9 +34,33 @@ export const wishlistRouter = createTRPCRouter({
           )
           .default([EnumState.ACTIVE]),
         includeCategory: z.boolean().default(false),
+        userId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
+      if (input.userId) {
+        if (
+          !ctx.session.user.hasAccessTo?.find(
+            (user) => user.id === input.userId,
+          )
+        ) {
+          throw new Error('Access denied');
+        }
+        return await ctx.prisma.wishlistItem.findMany({
+          where: {
+            userId: input.userId,
+            categoryId: input.categoryId,
+            state: {
+              in: input.states,
+            },
+          },
+          include: {
+            links: true,
+            images: true,
+            category: input.includeCategory,
+          },
+        });
+      }
       return await ctx.prisma.wishlistItem.findMany({
         where: {
           userId: ctx.session.user.id,

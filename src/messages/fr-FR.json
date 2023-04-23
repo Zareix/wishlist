@@ -79,6 +79,7 @@
         "empty": "Aucun élément dans l'archive"
     },
     "Index": {
+        "myWishlist": "Ma wishlist",
         "pageTitle": "Accueil",
         "title": "Wishlist"
     },
@@ -111,7 +112,17 @@
     "Settings": {
         "pageTitle": "Paramètres",
         "title": "Paramètres",
-        "logout": "Se déconnecter"
+        "logout": "Se déconnecter",
+        "access": {
+            "emailRequired": "Un email est requis"
+        },
+        "categories": {
+            "name": "Nom",
+            "visibility": "Visibilité",
+            "info": "Ceci est une catégorie parent : la visibilité ne s'applique que aux éléments racine, pas à ses enfants.",
+            "public": "Public",
+            "private": "Privé"
+        }
     },
     "404": {
         "pageTitle": "404",

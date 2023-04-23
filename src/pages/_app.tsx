@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google';
 import Layout from '@/components/Layout';
 import { AppSEO } from '@/components/SEO';
 import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import '@/styles/globals.css';
 import { api } from '@/utils/api';
 
@@ -27,12 +28,14 @@ const MyApp: AppType<{
           --font-sans: ${font.style.fontFamily};
         }
       `}</style>
-      <NextIntlProvider messages={pageProps.messages}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <Toaster />
-      </NextIntlProvider>
+      <TooltipProvider>
+        <NextIntlProvider messages={pageProps.messages}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+          <Toaster />
+        </NextIntlProvider>
+      </TooltipProvider>
     </SessionProvider>
   );
 };

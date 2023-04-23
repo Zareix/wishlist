@@ -31,13 +31,13 @@ const AppSEO = () => {
         rel="icon"
         type="image/png"
         sizes="32x32"
-        href="/icons/favicon-32x32.png"
+        href="/icons/ios/32.png"
       />
       <link
         rel="icon"
         type="image/png"
         sizes="16x16"
-        href="/icons/favicon-16x16.png"
+        href="/icons/ios/16.png"
       />
       <link rel="manifest" href="/manifest.json" />
       <link
