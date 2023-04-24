@@ -35,6 +35,7 @@ const EditItem = () => {
           })}
         </h1>
         <AddEditItem
+          editing
           item={item}
           onFinish={() => {
             itemQuery.refetch().catch(console.error);

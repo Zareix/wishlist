@@ -38,6 +38,7 @@
     "@trpc/react-query": "^10.21.1",
     "@trpc/server": "^10.21.1",
     "babel-loader": "^9.1.2",
+    "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.5.2",
     "clsx": "^1.2.1",
     "formidable": "^3.2.5",

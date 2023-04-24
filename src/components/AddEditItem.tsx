@@ -11,13 +11,17 @@ import {
   Loader2,
   Plus,
   Trash,
-  Upload,
   UploadIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react';
+import React, {
+  type ChangeEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Controller,
   type SubmitHandler,
@@ -60,15 +64,19 @@ type Inputs = Pick<
 const AddEditItem = ({
   item,
   onFinish,
+  editing,
 }: {
-  item?: Inputs & {
-    id: string;
-  };
+  item?: Partial<
+    Inputs & {
+      id: string;
+    }
+  >;
   onFinish?: () => void;
+  editing?: boolean;
 }) => {
   const [isEuro, setIsEuro] = useState((item?.currency ?? 'EUR') === 'EUR');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const t = useTranslations(item ? 'Edit' : 'Add');
+  const t = useTranslations(editing ? 'Edit' : 'Add');
   const router = useRouter();
   const {
     register,
@@ -262,6 +270,7 @@ const AddEditItem = ({
             <Input
               placeholder={t('form.price')}
               type="number"
+              step=".01"
               {...register('price', {
                 valueAsNumber: true,
               })}
@@ -297,6 +306,7 @@ const AddEditItem = ({
                     <Input
                       placeholder={t('form.linkPrice')}
                       type="number"
+                      step=".01"
                       {...register(`links.${index}.price`, {
                         valueAsNumber: true,
                       })}
@@ -433,12 +443,12 @@ const AddEditItem = ({
       >
         {addMutation.isLoading ? (
           <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-        ) : item ? (
+        ) : editing ? (
           <Edit className="mr-2 h-6 w-6" />
         ) : (
           <Plus className="mr-2 h-6 w-6" />
         )}
-        {item ? t('form.submitEdit') : t('form.submitAdd')}
+        {editing ? t('form.submitEdit') : t('form.submitAdd')}
       </Button>
     </form>
   );

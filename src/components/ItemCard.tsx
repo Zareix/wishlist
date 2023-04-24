@@ -43,9 +43,7 @@ const ItemCard = ({
   item,
   refresh: refreshCategory,
 }: {
-  item:
-    | NonNullable<RouterOutputs['categories']['getOne']>['wishlistItems'][0]
-    | NonNullable<RouterOutputs['wishlist']['getAll']>[0];
+  item: NonNullable<RouterOutputs['wishlist']['getAll']>[0];
   refresh: () => void;
 }) => {
   const { toast } = useToast();
@@ -122,16 +120,13 @@ const ItemCard = ({
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="flex items-center">
+        <CardTitle className="flex items-center gap-2">
           {item.name}
           {item.price && (
-            <>
-              <span className="muted ml-auto">{item.price}</span>
-              <CurrencyIcon
-                currency={item.currency}
-                className="muted h-4 w-4"
-              />
-            </>
+            <div className="muted ml-auto flex w-1/6 items-center">
+              <span>{item.price}</span>
+              <CurrencyIcon currency={item.currency} className="h-4 w-4" />
+            </div>
           )}
         </CardTitle>
       </CardHeader>
