@@ -18,20 +18,22 @@ const AddPage = () => {
   );
   const t = useTranslations('Add');
 
-  console.log(crawlerQuery.data);
-
   return (
     <>
       <PageSEO title={t('pageTitle')} />
       <main>
         <h1>{t('title')}</h1>
-        {crawlerQuery.isLoading ? (
-          <p className="flex items-center gap-2">
-            <Loading />
-            Crawling url
-          </p>
+        {url !== undefined && url !== '' && typeof url === 'string' ? (
+          crawlerQuery.isLoading ? (
+            <p className="flex items-center gap-2">
+              <Loading />
+              Crawling url
+            </p>
+          ) : (
+            <AddEditItem item={crawlerQuery.data} />
+          )
         ) : (
-          <AddEditItem item={crawlerQuery.data} />
+          <AddEditItem />
         )}
       </main>
     </>
