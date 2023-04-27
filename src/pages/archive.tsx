@@ -31,13 +31,7 @@ const ArchiveContent = () => {
   return (
     <section className="mt-4 grid gap-2">
       {itemsQuery.data.map((item) => (
-        <ItemCard
-          key={item.id}
-          item={item}
-          refresh={() => {
-            itemsQuery.refetch().catch(console.error);
-          }}
-        />
+        <ItemCard key={item.id} item={item} />
       ))}
     </section>
   );

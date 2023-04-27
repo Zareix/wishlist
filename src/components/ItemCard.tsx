@@ -33,6 +33,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ToastAction } from '@/components/ui/toast';
 import { env } from '@/env.mjs';
 import { useToast } from '@/hooks/use-toast';
@@ -41,14 +42,15 @@ import { cn } from '@/utils/ui';
 
 const ItemCard = ({
   item,
-  refresh: refreshCategory,
+  canEdit,
 }: {
   item: NonNullable<RouterOutputs['wishlist']['getAll']>[0];
-  refresh: () => void;
+  canEdit?: boolean;
 }) => {
   const { toast } = useToast();
   const categoriesQuery = api.categories.getAll.useQuery();
   const changeStateMutation = api.wishlist.changeState.useMutation();
+  const apiContext = api.useContext();
 
   const changeState = (
     state: NonNullable<RouterInputs['wishlist']['changeState']['state']>,
@@ -61,7 +63,9 @@ const ItemCard = ({
         state,
       })
       .then(() => {
-        refreshCategory();
+        apiContext.wishlist.getAll
+          .invalidate({ categoryId: item.categoryId })
+          .catch(console.error);
         if (silent) return;
         toast({
           title: 'Item updated',
@@ -97,7 +101,12 @@ const ItemCard = ({
         categoryId,
       })
       .then(() => {
-        refreshCategory();
+        apiContext.wishlist.getAll
+          .invalidate({ categoryId: categoryId })
+          .catch(console.error);
+        apiContext.wishlist.getAll
+          .invalidate({ categoryId: previousCategoryId })
+          .catch(console.error);
         if (silent) return;
         toast({
           title: 'Item moved',
@@ -118,7 +127,7 @@ const ItemCard = ({
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm animate-in fade-in slide-in-from-left-8 duration-500">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           {item.name}
@@ -131,7 +140,7 @@ const ItemCard = ({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex">
-        <div className="flex w-full flex-wrap items-start gap-1">
+        <div className="flex w-full flex-wrap content-start items-start gap-1 gap-y-2 pt-2">
           {item.links.map((link) => (
             <a
               key={link.id}
@@ -178,7 +187,7 @@ const ItemCard = ({
                   <DialogContent>
                     {new URL(image.image).hostname ===
                     new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
-                      <div className="mx-auto mt-4 max-h-[40vh] ">
+                      <div className="mx-auto mt-4 max-h-[40vh]">
                         <Image
                           src={image.image}
                           alt={`${index} of ${item.name}`}
@@ -195,11 +204,13 @@ const ItemCard = ({
                         className="mx-auto mt-4 max-h-[40vh] rounded-sm"
                       />
                     )}
-                    <DialogFooter>
-                      <DialogTrigger asChild>
-                        <Button variant="outline">Close</Button>
-                      </DialogTrigger>
-                    </DialogFooter>
+                    {canEdit && (
+                      <DialogFooter>
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Close</Button>
+                        </DialogTrigger>
+                      </DialogFooter>
+                    )}
                   </DialogContent>
                 </Dialog>
               ))}
@@ -310,5 +321,34 @@ const ItemCard = ({
     </Card>
   );
 };
+
+const ItemCardLoading = () => {
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Skeleton className="h-5 w-2/3" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex">
+        <div className="flex w-full flex-wrap content-start items-start gap-1 gap-y-2 pt-2">
+          <Skeleton className="h-4 w-2/4" />
+          <Skeleton className="h-4 w-1/4" />
+          <Skeleton className="h-4 w-1/3" />
+        </div>
+        <div className="ml-auto w-1/3">
+          <Skeleton className="h-20 w-20" />
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        <Button size="sm" disabled>
+          <Edit className="h-4 w-4" />
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+};
+
+export { ItemCardLoading };
 
 export default ItemCard;

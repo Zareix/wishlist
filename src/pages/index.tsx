@@ -96,33 +96,45 @@ const HomePage = () => {
               </ScrollAreaHorizontal>
               {categories.map((category) => (
                 <TabsContent key={category.id} value={category.id}>
-                  <CategoryContent categoryId={category.id} userId={userId} />
-                  {category.subCategories.length > 0 && (
-                    <Accordion type="multiple" className="mt-4">
-                      {category.subCategories
-                        .filter((x) => x._count.wishlistItems > 0)
-                        .map((subCategory) => (
-                          <AccordionItem
-                            key={subCategory.id}
-                            value={subCategory.id}
-                          >
-                            <AccordionTrigger>
-                              <div className="flex items-center gap-2">
-                                {subCategory.name}
-                                {!subCategory.public && (
-                                  <EyeOffIcon size={18} />
-                                )}
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <CategoryContent
-                                categoryId={subCategory.id}
-                                userId={userId}
-                              />
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
-                    </Accordion>
+                  {category._count.wishlistItems === 0 &&
+                  !category.subCategories.some(
+                    (x) => x._count.wishlistItems > 0,
+                  ) ? (
+                    <p className="ml-2 mt-4 text-destructive">{t('noItems')}</p>
+                  ) : (
+                    <>
+                      <CategoryContent
+                        categoryId={category.id}
+                        userId={userId}
+                      />
+                      {category.subCategories.length > 0 && (
+                        <Accordion type="multiple" className="mt-4">
+                          {category.subCategories
+                            .filter((x) => x._count.wishlistItems > 0)
+                            .map((subCategory) => (
+                              <AccordionItem
+                                key={subCategory.id}
+                                value={subCategory.id}
+                              >
+                                <AccordionTrigger>
+                                  <div className="flex items-center gap-2">
+                                    {subCategory.name}
+                                    {!subCategory.public && (
+                                      <EyeOffIcon size={18} />
+                                    )}
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                  <CategoryContent
+                                    categoryId={subCategory.id}
+                                    userId={userId}
+                                  />
+                                </AccordionContent>
+                              </AccordionItem>
+                            ))}
+                        </Accordion>
+                      )}
+                    </>
                   )}
                 </TabsContent>
               ))}

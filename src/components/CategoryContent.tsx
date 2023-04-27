@@ -1,4 +1,6 @@
-import ItemCard from '@/components/ItemCard';
+import { useSession } from 'next-auth/react';
+
+import ItemCard, { ItemCardLoading } from '@/components/ItemCard';
 import { api } from '@/utils/api';
 
 const CategoryContent = ({
@@ -8,12 +10,19 @@ const CategoryContent = ({
   categoryId: string;
   userId?: string;
 }) => {
+  const session = useSession();
   const itemsQuery = api.wishlist.getAll.useQuery({
     categoryId,
     userId,
   });
   const items = itemsQuery.data;
-  if (itemsQuery.isLoading) return <></>;
+  if (itemsQuery.isLoading)
+    return (
+      <section className="mt-4 flex flex-wrap gap-2">
+        <ItemCardLoading />
+      </section>
+    );
+
   if (!itemsQuery.isSuccess || !items) return <></>;
   if (items.length === 0) return <></>;
 
@@ -23,9 +32,7 @@ const CategoryContent = ({
         <ItemCard
           item={item}
           key={item.id}
-          refresh={() => {
-            itemsQuery.refetch().catch(console.error);
-          }}
+          canEdit={session.data?.user.id === userId}
         />
       ))}
     </section>
