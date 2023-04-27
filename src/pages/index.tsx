@@ -1,10 +1,8 @@
 import { TabsContent } from '@radix-ui/react-tabs';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeOffIcon } from 'lucide-react';
 import { type GetStaticPropsContext } from 'next';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import Head from 'next/head';
-import { unescape } from 'querystring';
 import { useState } from 'react';
 
 import CategoryContent from '@/components/CategoryContent';
@@ -15,8 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Loading, LoadingFullPage } from '@/components/ui/loading';
+import { Loading } from '@/components/ui/loading';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import {
   Select,

@@ -1,6 +1,5 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import formidable from 'formidable';
-import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import sharp from 'sharp';

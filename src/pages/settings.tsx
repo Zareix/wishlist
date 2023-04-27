@@ -4,7 +4,7 @@ import { type GetStaticPropsContext } from 'next';
 import { signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { PageSEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';

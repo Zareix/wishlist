@@ -1,5 +1,4 @@
 import { load } from 'cheerio';
-import { writeFile } from 'fs';
 import { z } from 'zod';
 
 import type AddEditItem from '@/components/AddEditItem';
