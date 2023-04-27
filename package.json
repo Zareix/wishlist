@@ -39,7 +39,7 @@
     "@trpc/server": "^10.21.1",
     "babel-loader": "^9.1.2",
     "cheerio": "1.0.0-rc.12",
-    "class-variance-authority": "^0.5.2",
+    "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "formidable": "^3.2.5",
     "lucide-react": "^0.176.0",

@@ -77,8 +77,8 @@ dependencies:
     specifier: 1.0.0-rc.12
     version: 1.0.0-rc.12
   class-variance-authority:
-    specifier: ^0.5.2
-    version: 0.5.2(typescript@5.0.4)
+    specifier: ^0.6.0
+    version: 0.6.0(typescript@5.0.4)
   clsx:
     specifier: ^1.2.1
     version: 1.2.1
@@ -4154,14 +4154,15 @@ packages:
     engines: {node: '>=6.0'}
     dev: false
 
-  /class-variance-authority@0.5.2(typescript@5.0.4):
-    resolution: {integrity: sha512-j7Qqw3NPbs4IpO80gvdACWmVvHiLLo5MECacUBLnJG17CrLpWaQ7/4OaWX6P0IO1j2nvZ7AuSfBS/ImtEUZJGA==}
+  /class-variance-authority@0.6.0(typescript@5.0.4):
+    resolution: {integrity: sha512-qdRDgfjx3GRb9fpwpSvn+YaidnT7IUJNe4wt5/SWwM+PmUwJUhQRk/8zAyNro0PmVfmen2635UboTjIBXXxy5A==}
     peerDependencies:
       typescript: '>= 4.5.5 < 6'
     peerDependenciesMeta:
       typescript:
         optional: true
     dependencies:
+      clsx: 1.2.1
       typescript: 5.0.4
     dev: false
 
