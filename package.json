@@ -7,11 +7,11 @@
     "next:build:prod": "SKIP_LINT=true next build --no-lint",
     "next:dev": "next dev",
     "db:dev": "pscale connect wishlist dev --port 3306",
-    "dev": "concurrently pnpm:next:dev pnpm:db:dev",
+    "dev": "concurrently pnpm:db:dev pnpm:next:dev",
     "postinstall": "prisma generate",
     "prisma": "prisma",
     "lint": "next lint",
-    "start": "next start"
+    "preview": "next start"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.317.0",

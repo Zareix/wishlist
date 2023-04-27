@@ -10,6 +10,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const withPWA = nextPWA({
+  disable: process.env.NODE_ENV === 'development',
   dest: 'public',
   cacheStartUrl: false,
 });

@@ -24,7 +24,7 @@
         },
         "toast": {
             "success": "Élément ajouté",
-            "successDetail": "\"{name}\" a été ajouté à la wishlist",
+            "successDetails": "\"{name}\" a été ajouté à la wishlist",
             "errorUploadImage": "Erreur lors de l'ajout de l'image",
             "errorUploadImageDetails": "Une erreur est survenue lors de l'ajout de l'image : \"{message}\""
         }
@@ -81,7 +81,8 @@
     "Index": {
         "myWishlist": "Ma wishlist",
         "pageTitle": "Accueil",
-        "title": "Wishlist"
+        "title": "Wishlist",
+        "noItems": "Aucun élément cette catégorie"
     },
     "Layout": {
         "nav": {

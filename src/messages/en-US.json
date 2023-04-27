@@ -81,7 +81,8 @@
     "Index": {
         "myWishlist": "My wishlist",
         "pageTitle": "Home",
-        "title": "Wishlist"
+        "title": "Wishlist",
+        "noItems": "No items in this category"
     },
     "Layout": {
         "nav": {
