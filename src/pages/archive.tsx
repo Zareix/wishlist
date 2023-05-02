@@ -28,10 +28,14 @@ const ArchiveContent = () => {
   if (!itemsQuery.isSuccess || !itemsQuery.data) return <></>;
   if (itemsQuery.data.length === 0) return <></>;
 
+  const items = itemsQuery.data.sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  );
+
   return (
     <section className="mt-4 grid gap-2">
-      {itemsQuery.data.map((item) => (
-        <ItemCard key={item.id} item={item} />
+      {items.map((item) => (
+        <ItemCard key={item.id} item={item} canEdit />
       ))}
     </section>
   );

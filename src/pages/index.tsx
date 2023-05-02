@@ -3,7 +3,7 @@ import { EyeOffIcon } from 'lucide-react';
 import { type GetStaticPropsContext } from 'next';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import CategoryContent from '@/components/CategoryContent';
 import { PageSEO } from '@/components/SEO';
@@ -26,8 +26,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { api } from '@/utils/api';
 
 const HomePage = () => {
-  const [userId, setUserId] = useState<string>();
   const t = useTranslations('Index');
+  const [userId, setUserId] = useState<string>();
   const session = useSession();
   const {
     data: categories,
@@ -36,6 +36,15 @@ const HomePage = () => {
   } = api.categories.getAll.useQuery({
     userId,
   });
+  const categoriesNonEmpty = useMemo(
+    () =>
+      categories?.filter(
+        (x) =>
+          x._count.wishlistItems > 0 ||
+          x.subCategories?.some((y) => y._count.wishlistItems > 0),
+      ) ?? [],
+    [categories],
+  );
 
   return (
     <>
@@ -43,32 +52,35 @@ const HomePage = () => {
       <main>
         <div className="flex">
           <h1>{t('title')}</h1>
-          <span className="ml-auto">
-            <Select
-              defaultValue={session.data?.user.id}
-              onValueChange={(value) => {
-                if (value === session.data?.user.id) {
-                  setUserId(undefined);
-                  return;
-                }
-                setUserId(value);
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a fruit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={session.data?.user.id ?? ''}>
-                  {t('myWishlist')}
-                </SelectItem>
-                {session.data?.user.hasAccessTo?.map((user) => (
-                  <SelectItem key={user.id} value={user.id}>
-                    {user.name ?? user.email}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </span>
+          {session.data?.user.hasAccessTo &&
+            session.data.user.hasAccessTo.length > 0 && (
+              <span className="ml-auto">
+                <Select
+                  defaultValue={session.data?.user.id}
+                  onValueChange={(value) => {
+                    if (value === session.data?.user.id) {
+                      setUserId(undefined);
+                      return;
+                    }
+                    setUserId(value);
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a fruit" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={session.data.user.id ?? ''}>
+                      {t('myWishlist')}
+                    </SelectItem>
+                    {session.data.user.hasAccessTo.map((user) => (
+                      <SelectItem key={user.id} value={user.id}>
+                        {user.name ?? user.email}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </span>
+            )}
         </div>
         {isLoading ? (
           <Loading />
@@ -76,10 +88,10 @@ const HomePage = () => {
           <>Error</>
         ) : (
           categories.length > 0 && (
-            <Tabs defaultValue={categories[0]?.id} className="mt-4">
+            <Tabs defaultValue={categoriesNonEmpty[0]?.id} className="mt-4">
               <ScrollAreaHorizontal>
                 <TabsList>
-                  {categories.map((category) => (
+                  {categoriesNonEmpty.map((category) => (
                     <TabsTrigger
                       key={category.id}
                       value={category.id}
@@ -91,14 +103,9 @@ const HomePage = () => {
                   ))}
                 </TabsList>
               </ScrollAreaHorizontal>
-              {categories.map((category) => (
+              {categoriesNonEmpty.map((category) => (
                 <TabsContent key={category.id} value={category.id}>
-                  {category._count.wishlistItems === 0 &&
-                  !category.subCategories.some(
-                    (x) => x._count.wishlistItems > 0,
-                  ) ? (
-                    <p className="ml-2 mt-4 text-destructive">{t('noItems')}</p>
-                  ) : (
+                  {
                     <>
                       <CategoryContent
                         categoryId={category.id}
@@ -132,7 +139,7 @@ const HomePage = () => {
                         </Accordion>
                       )}
                     </>
-                  )}
+                  }
                 </TabsContent>
               ))}
             </Tabs>

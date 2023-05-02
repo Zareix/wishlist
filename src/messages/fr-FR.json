@@ -82,7 +82,7 @@
         "myWishlist": "Ma wishlist",
         "pageTitle": "Accueil",
         "title": "Wishlist",
-        "noItems": "Aucun élément cette catégorie"
+        "noItems": "Aucun élément dans cette catégorie"
     },
     "Layout": {
         "nav": {
@@ -115,12 +115,17 @@
         "title": "Paramètres",
         "logout": "Se déconnecter",
         "access": {
-            "emailRequired": "Un email est requis"
+            "emailRequired": "Un email est requis",
+            "noOneAccess": "Personne n'a accès à votre wishlist",
+            "revoke": "Révoquer",
+            "share": "Partager",
+            "sharedWith": "Partagé avec",
+            "title": "Partage de wishlist"
         },
         "categories": {
             "name": "Nom",
             "visibility": "Visibilité",
-            "info": "Ceci est une catégorie parent : la visibilité ne s'applique que aux éléments racine, pas à ses enfants.",
+            "info": "Ceci est une catégorie parent : si elle est privée, ses enfants (même publics) seront cachés",
             "public": "Public",
             "private": "Privé"
         }

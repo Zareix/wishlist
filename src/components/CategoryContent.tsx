@@ -1,5 +1,3 @@
-import { useSession } from 'next-auth/react';
-
 import ItemCard, { ItemCardLoading } from '@/components/ItemCard';
 import { api } from '@/utils/api';
 
@@ -10,7 +8,6 @@ const CategoryContent = ({
   categoryId: string;
   userId?: string;
 }) => {
-  const session = useSession();
   const itemsQuery = api.wishlist.getAll.useQuery({
     categoryId,
     userId,
@@ -29,11 +26,7 @@ const CategoryContent = ({
   return (
     <section className="mt-4 flex flex-wrap gap-2">
       {items.map((item) => (
-        <ItemCard
-          item={item}
-          key={item.id}
-          canEdit={session.data?.user.id === userId}
-        />
+        <ItemCard item={item} key={item.id} canEdit={!userId} />
       ))}
     </section>
   );

@@ -31,7 +31,11 @@ export const categoriesRouter = createTRPCRouter({
               include: {
                 _count: {
                   select: {
-                    wishlistItems: true,
+                    wishlistItems: {
+                      where: {
+                        state: 'ACTIVE',
+                      },
+                    },
                   },
                 },
               },
@@ -41,7 +45,11 @@ export const categoriesRouter = createTRPCRouter({
             },
             _count: {
               select: {
-                wishlistItems: true,
+                wishlistItems: {
+                  where: {
+                    state: 'ACTIVE',
+                  },
+                },
               },
             },
           },
@@ -57,14 +65,22 @@ export const categoriesRouter = createTRPCRouter({
             include: {
               _count: {
                 select: {
-                  wishlistItems: true,
+                  wishlistItems: {
+                    where: {
+                      state: 'ACTIVE',
+                    },
+                  },
                 },
               },
             },
           },
           _count: {
             select: {
-              wishlistItems: true,
+              wishlistItems: {
+                where: {
+                  state: 'ACTIVE',
+                },
+              },
             },
           },
         },

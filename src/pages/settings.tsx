@@ -137,7 +137,7 @@ const SettingsPage = () => {
 };
 
 const UserAccess = () => {
-  const t = useTranslations('Settings');
+  const t = useTranslations('Settings.access');
   const {
     handleSubmit,
     register,
@@ -169,7 +169,7 @@ const UserAccess = () => {
 
   return (
     <>
-      <h2>User Access</h2>
+      <h2>{t('title')}</h2>
       <form onSubmit={handleSubmit(submit)} className="flex gap-2">
         <InputGroup>
           <Input
@@ -181,7 +181,7 @@ const UserAccess = () => {
           />
           <InputError>
             {errors.email ? (
-              <>{t('access.emailRequired')}</>
+              <>{t('emailRequired')}</>
             ) : authorizeAccessMutation.isError ? (
               <>Error: {authorizeAccessMutation.error?.message}</>
             ) : (
@@ -189,15 +189,17 @@ const UserAccess = () => {
             )}
           </InputError>
         </InputGroup>
-        <Button type="submit">Share</Button>
+        <Button type="submit">{t('share')}</Button>
       </form>
       {authorizedAccessToQuery.isLoading ? (
         <Loading className="mt-2" />
       ) : !authorizedAccessToQuery.isSuccess ? (
         <p>Error: {authorizedAccessToQuery.error.message}</p>
+      ) : authorizedAccessToQuery.data?.length === 0 ? (
+        <p className="mt-2">{t('noOneAccess')}</p>
       ) : (
         <>
-          <h3 className="mt-2">Shared with : </h3>
+          <h3 className="mt-2">{t('sharedWith')} : </h3>
           <ul>
             {authorizedAccessToQuery.data?.map((user) => (
               <li key={user.id} className="flex items-center gap-2">
@@ -209,7 +211,7 @@ const UserAccess = () => {
                   }}
                   className="ml-auto"
                 >
-                  Revoke
+                  {t('revoke')}
                 </Button>
               </li>
             ))}
