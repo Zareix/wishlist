@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 import CategoryContent from '@/components/CategoryContent';
+import { ItemCardLoading } from '@/components/ItemCard';
 import { PageSEO } from '@/components/SEO';
 import {
   Accordion,
@@ -22,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { api } from '@/utils/api';
 
@@ -83,7 +85,19 @@ const HomePage = () => {
             )}
         </div>
         {isLoading ? (
-          <Loading />
+          <Tabs defaultValue="loading" className="mt-4" key="loading">
+            <TabsList>
+              <TabsTrigger value="loading" className="flex gap-1">
+                <Skeleton className="h-5 w-16" />
+              </TabsTrigger>
+              <TabsTrigger value="loading1" className="flex gap-1">
+                <Skeleton className="h-5 w-16" />
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="loading" className="mt-4">
+              <ItemCardLoading />
+            </TabsContent>
+          </Tabs>
         ) : !isSuccess ? (
           <>Error</>
         ) : (
@@ -104,7 +118,11 @@ const HomePage = () => {
                 </TabsList>
               </ScrollAreaHorizontal>
               {categoriesNonEmpty.map((category) => (
-                <TabsContent key={category.id} value={category.id}>
+                <TabsContent
+                  key={category.id}
+                  value={category.id}
+                  className="lg:grid lg:grid-cols-2"
+                >
                   {
                     <>
                       <CategoryContent

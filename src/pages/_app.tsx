@@ -1,6 +1,7 @@
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { type AbstractIntlMessages, NextIntlProvider } from 'next-intl';
+import PlausibleProvider from 'next-plausible';
 import { type AppType } from 'next/app';
 import { Inter } from 'next/font/google';
 
@@ -21,22 +22,24 @@ const MyApp: AppType<{
   messages: AbstractIntlMessages;
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
-    <SessionProvider session={session}>
-      <AppSEO />
-      <style jsx global>{`
-        html {
-          --font-sans: ${font.style.fontFamily};
-        }
-      `}</style>
-      <TooltipProvider>
-        <NextIntlProvider messages={pageProps.messages}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-          <Toaster />
-        </NextIntlProvider>
-      </TooltipProvider>
-    </SessionProvider>
+    <PlausibleProvider domain="wishlist.raphael-catarino.fr">
+      <SessionProvider session={session}>
+        <AppSEO />
+        <style jsx global>{`
+          html {
+            --font-sans: ${font.style.fontFamily};
+          }
+        `}</style>
+        <TooltipProvider>
+          <NextIntlProvider messages={pageProps.messages}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            <Toaster />
+          </NextIntlProvider>
+        </TooltipProvider>
+      </SessionProvider>
+    </PlausibleProvider>
   );
 };
 

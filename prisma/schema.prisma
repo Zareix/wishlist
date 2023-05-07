@@ -96,6 +96,7 @@ model WishlistItem {
     category   Category     @relation(fields: [categoryId], references: [id])
     categoryId String
     state      State        @default(ACTIVE)
+    order      Int          @default(0)
 
     @@index([categoryId])
     @@index([userId])

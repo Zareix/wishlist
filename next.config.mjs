@@ -1,9 +1,16 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
+import { withPlausibleProxy } from 'next-plausible';
 import nextPWA from 'next-pwa';
 
 import { env } from './src/env.mjs';
 
 !process.env.SKIP_ENV_VALIDATION && (await import('./src/env.mjs'));
+
+const withPlausible = withPlausibleProxy({
+  subdirectory: 'events',
+  scriptName: 'script',
+  customDomain: 'https://plausible.raphael-catarino.fr',
+});
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -30,4 +37,4 @@ const config = {
   },
 };
 
-export default withBundleAnalyzer(withPWA(config));
+export default withBundleAnalyzer(withPlausible(withPWA(config)));

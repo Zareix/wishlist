@@ -1,4 +1,4 @@
-import { EnumCurrency, State as EnumState } from '@prisma/client';
+import { EnumCurrency, State as EnumState, WishlistItem } from '@prisma/client';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
@@ -54,6 +54,9 @@ export const wishlistRouter = createTRPCRouter({
               in: input.states,
             },
           },
+          orderBy: {
+            order: 'asc',
+          },
           include: {
             links: true,
             images: true,
@@ -68,6 +71,9 @@ export const wishlistRouter = createTRPCRouter({
           state: {
             in: input.states,
           },
+        },
+        orderBy: {
+          order: 'asc',
         },
         include: {
           links: true,
@@ -202,5 +208,21 @@ export const wishlistRouter = createTRPCRouter({
           updatedAt: new Date(),
         },
       });
+    }),
+  updateOrder: protectedProcedure
+    .input(z.array(z.string()))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.$transaction(
+        input.map((id, index) =>
+          ctx.prisma.wishlistItem.update({
+            where: {
+              id,
+            },
+            data: {
+              order: index,
+            },
+          }),
+        ),
+      );
     }),
 });

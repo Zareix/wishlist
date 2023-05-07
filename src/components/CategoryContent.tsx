@@ -1,3 +1,26 @@
+import {
+  DndContext,
+  type DragEndEvent,
+  type DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  type UniqueIdentifier,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  restrictToVerticalAxis,
+  restrictToWindowEdges,
+} from '@dnd-kit/modifiers';
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useEffect, useState } from 'react';
+
 import ItemCard, { ItemCardLoading } from '@/components/ItemCard';
 import { api } from '@/utils/api';
 
@@ -8,11 +31,43 @@ const CategoryContent = ({
   categoryId: string;
   userId?: string;
 }) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+  const updateOrderMutation = api.wishlist.updateOrder.useMutation();
   const itemsQuery = api.wishlist.getAll.useQuery({
     categoryId,
     userId,
   });
-  const items = itemsQuery.data;
+  const [items, setItems] = useState(itemsQuery.data ?? []);
+
+  useEffect(() => {
+    if (itemsQuery.isSuccess) {
+      setItems(itemsQuery.data ?? []);
+    }
+  }, [itemsQuery.isSuccess, itemsQuery.data]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setItems((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        updateOrderMutation
+          .mutateAsync(newItems.map((item) => item.id))
+          .then(() => itemsQuery.refetch())
+          .catch(console.error);
+        return newItems;
+      });
+    }
+  };
+
   if (itemsQuery.isLoading)
     return (
       <section className="mt-4 flex flex-wrap gap-2">
@@ -20,14 +75,23 @@ const CategoryContent = ({
       </section>
     );
 
-  if (!itemsQuery.isSuccess || !items) return <></>;
-  if (items.length === 0) return <></>;
+  if (!itemsQuery.isSuccess || !itemsQuery.data || !items) return <></>;
+  if (itemsQuery.data.length === 0) return <></>;
 
   return (
     <section className="mt-4 flex flex-wrap gap-2">
-      {items.map((item) => (
-        <ItemCard item={item} key={item.id} canEdit={!userId} />
-      ))}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+      >
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
+          {items.map((item) => (
+            <ItemCard item={item} key={item.id} canEdit={!userId} />
+          ))}
+        </SortableContext>
+      </DndContext>
     </section>
   );
 };

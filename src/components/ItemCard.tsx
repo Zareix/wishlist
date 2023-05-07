@@ -1,8 +1,11 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import {
   Archive,
   ArrowLeftRight,
   CheckCircle2,
   Edit,
+  GripHorizontalIcon,
   RotateCcw,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -51,6 +54,13 @@ const ItemCard = ({
   const categoriesQuery = api.categories.getAll.useQuery();
   const changeStateMutation = api.wishlist.changeState.useMutation();
   const apiContext = api.useContext();
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id, disabled: !canEdit });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
 
   const changeState = (
     state: NonNullable<RouterInputs['wishlist']['changeState']['state']>,
@@ -128,7 +138,12 @@ const ItemCard = ({
   };
 
   return (
-    <Card className="w-full max-w-sm animate-in fade-in slide-in-from-left-8 duration-500">
+    <Card
+      className="w-full max-w-sm"
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+    >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           {item.name}
@@ -217,7 +232,7 @@ const ItemCard = ({
           </ScrollAreaHorizontal>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end gap-2">
+      <CardFooter className="relative flex justify-end gap-2">
         {item.state !== 'ACTIVE' && (
           <div className="mr-auto">
             <span
@@ -236,92 +251,103 @@ const ItemCard = ({
           </div>
         )}
         {canEdit && (
-          <DropdownMenu
-            onOpenChange={(open) => {
-              if (!open) return;
-              apiContext.wishlist.getOne.prefetch(item.id).catch(console.error);
-            }}
-          >
-            <DropdownMenuTrigger asChild>
-              <Button size="sm">
-                <Edit className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {item.state === 'ACTIVE' ? (
-                <>
-                  <DropdownMenuItem asChild>
-                    <Link href={`/edit/${item.id}`}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      <span>Edit</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  {categoriesQuery.data && (
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>
-                        <ArrowLeftRight className="mr-2 h-4 w-4" />
-                        <span>Move</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          {categoriesQuery.data &&
-                            categoriesQuery.data.map((category, index) => (
-                              <Fragment key={category.id}>
-                                <DropdownMenuItem
-                                  className="font-semibold text-slate-900 dark:text-slate-300"
-                                  onClick={() => {
-                                    moveToCategory(category.id, category.name);
-                                  }}
-                                >
-                                  {category.name}
-                                </DropdownMenuItem>
-                                {category.subCategories.map((subCategory) => (
+          <>
+            <div className="absolute left-1/2 top-4 -translate-x-1/2 cursor-grab touch-none text-muted-foreground hover:text-foreground">
+              <GripHorizontalIcon {...listeners} />
+            </div>
+            <DropdownMenu
+              onOpenChange={(open) => {
+                if (!open) return;
+                apiContext.wishlist.getOne
+                  .prefetch(item.id)
+                  .catch(console.error);
+              }}
+            >
+              <DropdownMenuTrigger asChild>
+                <Button size="sm">
+                  <Edit className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {item.state === 'ACTIVE' ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/edit/${item.id}`}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        <span>Edit</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    {categoriesQuery.data && (
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                          <ArrowLeftRight className="mr-2 h-4 w-4" />
+                          <span>Move</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent>
+                            {categoriesQuery.data &&
+                              categoriesQuery.data.map((category, index) => (
+                                <Fragment key={category.id}>
                                   <DropdownMenuItem
-                                    key={subCategory.id}
-                                    className="ml-2"
+                                    className="font-semibold text-slate-900 dark:text-slate-300"
                                     onClick={() => {
                                       moveToCategory(
-                                        subCategory.id,
-                                        subCategory.name,
+                                        category.id,
+                                        category.name,
                                       );
                                     }}
                                   >
-                                    {subCategory.name}
+                                    {category.name}
                                   </DropdownMenuItem>
-                                ))}
-                                {index < categoriesQuery.data.length - 1 && (
-                                  <DropdownMenuSeparator />
-                                )}
-                              </Fragment>
-                            ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                  )}
-                  <DropdownMenuItem onClick={() => changeState('BOUGHT')}>
-                    <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                    <span>Validate</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeState('CANCELED')}>
-                    <Archive className="mr-2 h-4 w-4 text-destructive" />
-                    <span>Archive</span>
-                  </DropdownMenuItem>
-                </>
-              ) : (
-                <>
-                  <DropdownMenuItem onClick={() => changeState('ACTIVE')}>
-                    <RotateCcw className="mr-2 h-4 w-4" />
-                    Restore{' '}
-                    {'category' in item && (
-                      <>
-                        in <span className="italic">{item.category.name}</span>
-                      </>
+                                  {category.subCategories.map((subCategory) => (
+                                    <DropdownMenuItem
+                                      key={subCategory.id}
+                                      className="ml-2"
+                                      onClick={() => {
+                                        moveToCategory(
+                                          subCategory.id,
+                                          subCategory.name,
+                                        );
+                                      }}
+                                    >
+                                      {subCategory.name}
+                                    </DropdownMenuItem>
+                                  ))}
+                                  {index < categoriesQuery.data.length - 1 && (
+                                    <DropdownMenuSeparator />
+                                  )}
+                                </Fragment>
+                              ))}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
                     )}
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                    <DropdownMenuItem onClick={() => changeState('BOUGHT')}>
+                      <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
+                      <span>Validate</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => changeState('CANCELED')}>
+                      <Archive className="mr-2 h-4 w-4 text-destructive" />
+                      <span>Archive</span>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem onClick={() => changeState('ACTIVE')}>
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      Restore{' '}
+                      {'category' in item && (
+                        <>
+                          in{' '}
+                          <span className="italic">{item.category.name}</span>
+                        </>
+                      )}
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         )}
       </CardFooter>
     </Card>
