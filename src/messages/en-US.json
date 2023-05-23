@@ -84,6 +84,18 @@
         "title": "Wishlist",
         "noItems": "No items in this category"
     },
+    "ItemCard": {
+        "actions": {
+            "edit": "Edit",
+            "move": "Move",
+            "validate": "Validate",
+            "archive": "Archive",
+            "restore": "Restore",
+            "restoreIn": "Restore in \"{category}\"",
+            "dialogClose": "Close",
+            "on": "on {date}"
+        }
+    },
     "Layout": {
         "nav": {
             "home": "Home",

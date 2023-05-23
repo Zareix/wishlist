@@ -1,10 +1,8 @@
 import {
   DndContext,
   type DragEndEvent,
-  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
-  type UniqueIdentifier,
   closestCenter,
   useSensor,
   useSensors,
@@ -70,7 +68,7 @@ const CategoryContent = ({
 
   if (itemsQuery.isLoading)
     return (
-      <section className="mt-4 flex flex-wrap gap-2">
+      <section className=" justify-start">
         <ItemCardLoading />
       </section>
     );
@@ -79,7 +77,7 @@ const CategoryContent = ({
   if (itemsQuery.data.length === 0) return <></>;
 
   return (
-    <section className="mt-4 flex flex-wrap gap-2">
+    <section className="mt-4 flex flex-wrap justify-start gap-2">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -88,7 +86,12 @@ const CategoryContent = ({
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {items.map((item) => (
-            <ItemCard item={item} key={item.id} canEdit={!userId} />
+            <ItemCard
+              item={item}
+              key={item.id}
+              canEdit={!userId}
+              isDraggable={!userId}
+            />
           ))}
         </SortableContext>
       </DndContext>

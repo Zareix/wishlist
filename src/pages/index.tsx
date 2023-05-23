@@ -14,7 +14,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Loading } from '@/components/ui/loading';
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import {
   Select,

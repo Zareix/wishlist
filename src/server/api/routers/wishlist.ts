@@ -1,4 +1,4 @@
-import { EnumCurrency, State as EnumState, WishlistItem } from '@prisma/client';
+import { EnumCurrency, State as EnumState } from '@prisma/client';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';

@@ -49,8 +49,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { env } from '@/env.mjs';
 import { useToast } from '@/hooks/use-toast';
+import { isImageFromS3 } from '@/utils';
 import { api } from '@/utils/api';
 
 type Inputs = Pick<
@@ -465,10 +465,7 @@ const ItemImageCard = ({ image }: { image: string }) => {
   if (error) return <InputError>{t('form.imageLoadingError')}</InputError>;
 
   try {
-    if (
-      new URL(image).hostname ===
-      new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname
-    )
+    if (isImageFromS3(image))
       return (
         <div className="h-full">
           <Image

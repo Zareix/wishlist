@@ -8,6 +8,7 @@ import {
   GripHorizontalIcon,
   RotateCcw,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
@@ -38,24 +39,27 @@ import {
 import { ScrollAreaHorizontal } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ToastAction } from '@/components/ui/toast';
-import { env } from '@/env.mjs';
 import { useToast } from '@/hooks/use-toast';
+import { isImageFromS3 } from '@/utils';
 import { type RouterInputs, type RouterOutputs, api } from '@/utils/api';
 import { cn } from '@/utils/ui';
 
 const ItemCard = ({
   item,
   canEdit,
+  isDraggable = false,
 }: {
   item: NonNullable<RouterOutputs['wishlist']['getAll']>[0];
   canEdit?: boolean;
+  isDraggable?: boolean;
 }) => {
+  const t = useTranslations('ItemCard');
   const { toast } = useToast();
   const categoriesQuery = api.categories.getAll.useQuery();
   const changeStateMutation = api.wishlist.changeState.useMutation();
   const apiContext = api.useContext();
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: item.id, disabled: !canEdit });
+    useSortable({ id: item.id, disabled: isDraggable });
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -181,8 +185,7 @@ const ItemCard = ({
               {item.images.map((image, index) => (
                 <Dialog key={image.id}>
                   <DialogTrigger asChild>
-                    {new URL(image.image).hostname ===
-                    new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
+                    {isImageFromS3(image.image) ? (
                       <div className="relative h-20 w-20">
                         <Image
                           src={image.image}
@@ -201,9 +204,8 @@ const ItemCard = ({
                     )}
                   </DialogTrigger>
                   <DialogContent>
-                    {new URL(image.image).hostname ===
-                    new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname ? (
-                      <div className="mx-auto mt-4 max-h-[40vh]">
+                    {isImageFromS3(image.image) ? (
+                      <div className="mx-auto mt-4 h-[40vh] max-w-[90%]">
                         <Image
                           src={image.image}
                           alt={`${index} of ${item.name}`}
@@ -222,7 +224,9 @@ const ItemCard = ({
                     )}
                     <DialogFooter>
                       <DialogTrigger asChild>
-                        <Button variant="outline">Close</Button>
+                        <Button variant="outline">
+                          {t('actions.dialogClose')}
+                        </Button>
                       </DialogTrigger>
                     </DialogFooter>
                   </DialogContent>
@@ -246,15 +250,19 @@ const ItemCard = ({
               {item.state}
             </span>
             <span className="muted ml-1">
-              on {new Date(item.updatedAt).toLocaleDateString()}
+              {t('actions.on', {
+                date: new Date(item.updatedAt).toLocaleDateString(),
+              })}
             </span>
+          </div>
+        )}
+        {isDraggable && (
+          <div className="absolute left-1/2 top-4 -translate-x-1/2 cursor-grab touch-none text-muted-foreground hover:text-foreground">
+            <GripHorizontalIcon {...listeners} />
           </div>
         )}
         {canEdit && (
           <>
-            <div className="absolute left-1/2 top-4 -translate-x-1/2 cursor-grab touch-none text-muted-foreground hover:text-foreground">
-              <GripHorizontalIcon {...listeners} />
-            </div>
             <DropdownMenu
               onOpenChange={(open) => {
                 if (!open) return;
@@ -274,14 +282,14 @@ const ItemCard = ({
                     <DropdownMenuItem asChild>
                       <Link href={`/edit/${item.id}`}>
                         <Edit className="mr-2 h-4 w-4" />
-                        <span>Edit</span>
+                        <span>{t('actions.edit')}</span>
                       </Link>
                     </DropdownMenuItem>
                     {categoriesQuery.data && (
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
                           <ArrowLeftRight className="mr-2 h-4 w-4" />
-                          <span>Move</span>
+                          <span>{t('actions.move')}</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent>
@@ -324,23 +332,26 @@ const ItemCard = ({
                     )}
                     <DropdownMenuItem onClick={() => changeState('BOUGHT')}>
                       <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                      <span>Validate</span>
+                      <span>{t('actions.validate')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => changeState('CANCELED')}>
                       <Archive className="mr-2 h-4 w-4 text-destructive" />
-                      <span>Archive</span>
+                      <span>{t('actions.archive')}</span>
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem onClick={() => changeState('ACTIVE')}>
                       <RotateCcw className="mr-2 h-4 w-4" />
-                      Restore{' '}
-                      {'category' in item && (
+
+                      {'category' in item ? (
                         <>
-                          in{' '}
-                          <span className="italic">{item.category.name}</span>
+                          {t('actions.restoreIn', {
+                            category: item.category.name,
+                          })}
                         </>
+                      ) : (
+                        <>{t('actions.restore')}</>
                       )}
                     </DropdownMenuItem>
                   </>

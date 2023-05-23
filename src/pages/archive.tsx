@@ -35,7 +35,7 @@ const ArchiveContent = () => {
   return (
     <section className="mt-4 grid gap-2">
       {items.map((item) => (
-        <ItemCard key={item.id} item={item} canEdit />
+        <ItemCard key={item.id} item={item} canEdit isDraggable={false} />
       ))}
     </section>
   );
