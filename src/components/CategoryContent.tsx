@@ -77,7 +77,7 @@ const CategoryContent = ({
   if (itemsQuery.data.length === 0) return <></>;
 
   return (
-    <section className="mt-4 flex flex-wrap justify-start gap-2">
+    <section className="mt-4 flex flex-wrap content-start gap-2">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
