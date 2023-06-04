@@ -59,7 +59,7 @@ const ItemCard = ({
   const changeStateMutation = api.wishlist.changeState.useMutation();
   const apiContext = api.useContext();
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: item.id, disabled: isDraggable });
+    useSortable({ id: item.id, disabled: !isDraggable });
 
   const style = {
     transform: CSS.Translate.toString(transform),
