@@ -1,0 +1,155 @@
+{
+    "Add": {
+        "pageTitle": "New item",
+        "title": "Add a new item",
+        "form": {
+            "name": "Name",
+            "category": "Category",
+            "categoryPlaceholder": "Select a category",
+            "categoryLoading": "Loading categories...",
+            "categoryEmpty": "No category",
+            "price": "Price",
+            "links": "Links",
+            "linkAdd": "Add a link",
+            "linkName": "Name",
+            "linkUrl": "URL",
+            "linkPrice": "Price",
+            "images": "Images",
+            "imageAdd": "Add an image",
+            "imageURL": "Image URL",
+            "imageLoadingError": "Error loading image",
+            "submitEdit": "Edit item",
+            "submitAdd": "Add item",
+            "errorFieldRequired": "This field is required"
+        },
+        "toast": {
+            "success": "Item created",
+            "successDetails": "Item \"{name}\" has been created",
+            "errorUploadImage": "Error uploading image",
+            "errorUploadImageDetails": "Error uploading image : \"{message}\""
+        }
+    },
+    "Edit": {
+        "pageTitle": "Edit item",
+        "title": "Editing {name}",
+        "form": {
+            "name": "Name",
+            "category": "Category",
+            "categoryPlaceholder": "Select a category",
+            "categoryLoading": "Loading categories...",
+            "categoryEmpty": "No category",
+            "price": "Price",
+            "links": "Links",
+            "linkAdd": "Add a link",
+            "linkName": "Name",
+            "linkUrl": "URL",
+            "linkPrice": "Price",
+            "images": "Images",
+            "imageAdd": "Add an image",
+            "imageURL": "Image URL",
+            "imageLoadingError": "Error loading image",
+            "submitEdit": "Edit item",
+            "submitAdd": "Add item",
+            "errorFieldRequired": "This field is required"
+        },
+        "toast": {
+            "success": "Item updated",
+            "successDetails": "Item \"{name}\" has been updated",
+            "errorUploadImage": "Error uploading image",
+            "errorUploadImageDetails": "Error uploading image : \"{message}\""
+        }
+    },
+    "AddCategory": {
+        "title": "Add a new category",
+        "form": {
+            "name": "Name",
+            "parentCategoryPlaceholder": "Select a category",
+            "parentCategory": "Parent category",
+            "errorRequired": "This field is required",
+            "errorFormat": "Only alphanumeric characters",
+            "success": "Category added",
+            "close": "Close",
+            "reset": "Reset",
+            "submit": "Add category"
+        }
+    },
+    "Archive": {
+        "pageTitle": "Archive",
+        "title": "Archive",
+        "empty": "No archived item"
+    },
+    "Index": {
+        "myWishlist": "My wishlist",
+        "pageTitle": "Home",
+        "title": "Wishlist",
+        "noItems": "No items in this category"
+    },
+    "ItemCard": {
+        "actions": {
+            "edit": "Edit",
+            "move": "Move",
+            "validate": "Validate",
+            "archive": "Archive",
+            "restore": "Restore",
+            "restoreIn": "Restore in \"{category}\"",
+            "dialogClose": "Close",
+            "on": "on {date}"
+        }
+    },
+    "Layout": {
+        "nav": {
+            "home": "Home",
+            "add": "Add",
+            "archive": "Archive",
+            "settings": "Settings"
+        }
+    },
+    "Login": {
+        "pageTitle": "Login",
+        "title": "Login",
+        "errorLogin": "Something went wrong. Please try again.",
+        "form": {
+            "email": "Email",
+            "emailPlaceholder": "example@example.com",
+            "withEmail": "With Email magic link",
+            "withGoogle": "Login with Google",
+            "errorEmailRequired": "Email is required",
+            "errorEmailInvalid": "Email is invalid"
+        }
+    },
+    "Offline": {
+        "pageTitle": "Offline",
+        "title": "Offline",
+        "message": "You are offline. Please check your connection."
+    },
+    "Settings": {
+        "pageTitle": "Settings",
+        "title": "Settings",
+        "logout": "Logout",
+        "categories": {
+            "name": "Name",
+            "visibility": "Visibility",
+            "info": "This is a parent category : if private all subcategories (even public ones) will be hidden",
+            "public": "Public",
+            "private": "Private"
+        },
+        "access": {
+            "emailRequired": "Email is required",
+            "noOneAccess": "No one has access to your wishlist",
+            "revoke": "Revoke",
+            "share": "Share",
+            "sharedWith": "Shared with",
+            "title": "User access"
+        }
+    },
+    "404": {
+        "pageTitle": "404",
+        "title": "404",
+        "message": "Page not found"
+    },
+    "500": {
+        "pageTitle": "500",
+        "title": "500",
+        "message": "Internal server error"
+    }
+}

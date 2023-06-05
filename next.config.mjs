@@ -1,4 +1,5 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
+import nextIntl from 'next-intl/plugin';
 import { withPlausibleProxy } from 'next-plausible';
 import nextPWA from 'next-pwa';
 
@@ -22,19 +23,22 @@ const withPWA = nextPWA({
   cacheStartUrl: false,
 });
 
+const withNextIntl = nextIntl('./src/i18n/index.ts');
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  i18n: {
-    locales: ['en-US', 'fr-FR'],
-    defaultLocale: 'en-US',
-  },
+  // i18n: {
+  //   locales: ['en-US', 'fr-FR'],
+  //   defaultLocale: 'en-US',
+  // },
   images: {
     domains: [new URL(env.S3_PUBLIC_URL).hostname],
   },
   typescript: {
     ignoreBuildErrors: process.env.SKIP_LINT === 'true',
   },
+  experimental: { serverActions: true },
 };
 
-export default withBundleAnalyzer(withPlausible(withPWA(config)));
+export default withBundleAnalyzer(withPlausible(withPWA(withNextIntl(config))));

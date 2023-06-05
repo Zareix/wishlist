@@ -1,5 +1,8 @@
+'use client';
+
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import type { Category } from '@prisma/client';
 import {
   Archive,
   ArrowLeftRight,
@@ -8,10 +11,9 @@ import {
   GripHorizontalIcon,
   RotateCcw,
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment } from 'react';
+import { Fragment, useTransition } from 'react';
 
 import { badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,23 +43,29 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { isImageFromS3 } from '@/utils';
-import { type RouterInputs, type RouterOutputs, api } from '@/utils/api';
+import { changeItemState } from '@/utils/actions';
+import { type RouterInputs, type RouterOutputs } from '@/utils/api';
 import { cn } from '@/utils/ui';
 
 const ItemCard = ({
+  messages,
   item,
+  categories,
   canEdit,
   isDraggable = false,
 }: {
+  messages: IntlMessages['ItemCard'];
   item: NonNullable<RouterOutputs['wishlist']['getAll']>[0];
+  categories: Array<
+    Category & {
+      subCategories: Category[];
+    }
+  >;
   canEdit?: boolean;
   isDraggable?: boolean;
 }) => {
-  const t = useTranslations('ItemCard');
+  const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
-  const categoriesQuery = api.categories.getAll.useQuery();
-  const changeStateMutation = api.wishlist.changeState.useMutation();
-  const apiContext = api.useContext();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: item.id, disabled: !isDraggable });
 
@@ -71,32 +79,30 @@ const ItemCard = ({
     silent?: boolean,
   ) => {
     const previousState = item.state;
-    changeStateMutation
-      .mutateAsync({
-        id: item.id,
-        state,
-      })
-      .then(() => {
-        apiContext.wishlist.getAll
-          .invalidate({ categoryId: item.categoryId })
-          .catch(console.error);
-        if (silent) return;
-        toast({
-          title: 'Item updated',
-          description: `Item ${item.name} has been ${
-            state === 'ACTIVE' ? 'restored' : state.toLowerCase()
-          }.`,
-          action: (
-            <ToastAction
-              altText="Undo"
-              onClick={() => changeState(previousState, true)}
-            >
-              Undo
-            </ToastAction>
-          ),
-        });
-      })
-      .catch(console.error);
+    startTransition(() => {
+      changeItemState({ id: item.id, state })
+        .then(() => {
+          // apiContext.wishlist.getAll
+          //   .invalidate({ categoryId: item.categoryId })
+          //   .catch(console.error);
+          if (silent) return;
+          toast({
+            title: 'Item updated',
+            description: `Item ${item.name} has been ${
+              state === 'ACTIVE' ? 'restored' : state.toLowerCase()
+            }.`,
+            action: (
+              <ToastAction
+                altText="Undo"
+                onClick={() => changeState(previousState, true)}
+              >
+                Undo
+              </ToastAction>
+            ),
+          });
+        })
+        .catch(console.error);
+    });
   };
 
   const moveToCategory = (
@@ -106,39 +112,36 @@ const ItemCard = ({
   ) => {
     const previousCategoryId = item.categoryId;
     const previousCategoryName =
-      categoriesQuery.data?.find(
-        (category) => category.id === previousCategoryId,
-      )?.name ?? 'Unknown';
-    changeStateMutation
-      .mutateAsync({
-        id: item.id,
-        categoryId,
-      })
-      .then(() => {
-        apiContext.wishlist.getAll
-          .invalidate({ categoryId: categoryId })
-          .catch(console.error);
-        apiContext.wishlist.getAll
-          .invalidate({ categoryId: previousCategoryId })
-          .catch(console.error);
-        apiContext.categories.getAll.invalidate().catch(console.error);
-        if (silent) return;
-        toast({
-          title: 'Item moved',
-          description: `Item ${item.name} has been moved to category ${categoryName}.`,
-          action: (
-            <ToastAction
-              altText="Undo"
-              onClick={() =>
-                moveToCategory(previousCategoryId, previousCategoryName, true)
-              }
-            >
-              Undo
-            </ToastAction>
-          ),
-        });
-      })
-      .catch(console.error);
+      categories.find((category) => category.id === previousCategoryId)?.name ??
+      'Unknown';
+    startTransition(() => {
+      changeItemState({ id: item.id, categoryId })
+        .then(() => {
+          // apiContext.wishlist.getAll
+          //   .invalidate({ categoryId: categoryId })
+          //   .catch(console.error);
+          // apiContext.wishlist.getAll
+          //   .invalidate({ categoryId: previousCategoryId })
+          //   .catch(console.error);
+          // apiContext.categories.getAll.invalidate().catch(console.error);
+          if (silent) return;
+          toast({
+            title: 'Item moved',
+            description: `Item ${item.name} has been moved to category ${categoryName}.`,
+            action: (
+              <ToastAction
+                altText="Undo"
+                onClick={() =>
+                  moveToCategory(previousCategoryId, previousCategoryName, true)
+                }
+              >
+                Undo
+              </ToastAction>
+            ),
+          });
+        })
+        .catch(console.error);
+    });
   };
 
   return (
@@ -225,7 +228,7 @@ const ItemCard = ({
                     <DialogFooter>
                       <DialogTrigger asChild>
                         <Button variant="outline">
-                          {t('actions.dialogClose')}
+                          {messages.actions.dialogClose}
                         </Button>
                       </DialogTrigger>
                     </DialogFooter>
@@ -249,11 +252,7 @@ const ItemCard = ({
             >
               {item.state}
             </span>
-            <span className="muted ml-1">
-              {t('actions.on', {
-                date: new Date(item.updatedAt).toLocaleDateString(),
-              })}
-            </span>
+            <span className="muted ml-1">{messages.actions.on}</span>
           </div>
         )}
         {isDraggable && (
@@ -264,12 +263,12 @@ const ItemCard = ({
         {canEdit && (
           <>
             <DropdownMenu
-              onOpenChange={(open) => {
-                if (!open) return;
-                apiContext.wishlist.getOne
-                  .prefetch(item.id)
-                  .catch(console.error);
-              }}
+            // onOpenChange={(open) => {
+            //   if (!open) return;
+            //   apiContext.wishlist.getOne
+            //     .prefetch(item.id)
+            //     .catch(console.error);
+            // }}
             >
               <DropdownMenuTrigger asChild>
                 <Button size="sm">
@@ -282,61 +281,57 @@ const ItemCard = ({
                     <DropdownMenuItem asChild>
                       <Link href={`/edit/${item.id}`}>
                         <Edit className="mr-2 h-4 w-4" />
-                        <span>{t('actions.edit')}</span>
+                        <span>{messages.actions.edit}</span>
                       </Link>
                     </DropdownMenuItem>
-                    {categoriesQuery.data && (
+                    {categories && (
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
                           <ArrowLeftRight className="mr-2 h-4 w-4" />
-                          <span>{t('actions.move')}</span>
+                          <span>{messages.actions.move}</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent>
-                            {categoriesQuery.data &&
-                              categoriesQuery.data.map((category, index) => (
-                                <Fragment key={category.id}>
+                            {categories.map((category, index) => (
+                              <Fragment key={category.id}>
+                                <DropdownMenuItem
+                                  className="font-semibold text-slate-900 dark:text-slate-300"
+                                  onClick={() => {
+                                    moveToCategory(category.id, category.name);
+                                  }}
+                                >
+                                  {category.name}
+                                </DropdownMenuItem>
+                                {category.subCategories.map((subCategory) => (
                                   <DropdownMenuItem
-                                    className="font-semibold text-slate-900 dark:text-slate-300"
+                                    key={subCategory.id}
+                                    className="ml-2"
                                     onClick={() => {
                                       moveToCategory(
-                                        category.id,
-                                        category.name,
+                                        subCategory.id,
+                                        subCategory.name,
                                       );
                                     }}
                                   >
-                                    {category.name}
+                                    {subCategory.name}
                                   </DropdownMenuItem>
-                                  {category.subCategories.map((subCategory) => (
-                                    <DropdownMenuItem
-                                      key={subCategory.id}
-                                      className="ml-2"
-                                      onClick={() => {
-                                        moveToCategory(
-                                          subCategory.id,
-                                          subCategory.name,
-                                        );
-                                      }}
-                                    >
-                                      {subCategory.name}
-                                    </DropdownMenuItem>
-                                  ))}
-                                  {index < categoriesQuery.data.length - 1 && (
-                                    <DropdownMenuSeparator />
-                                  )}
-                                </Fragment>
-                              ))}
+                                ))}
+                                {index < categories.length - 1 && (
+                                  <DropdownMenuSeparator />
+                                )}
+                              </Fragment>
+                            ))}
                           </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                       </DropdownMenuSub>
                     )}
                     <DropdownMenuItem onClick={() => changeState('BOUGHT')}>
                       <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                      <span>{t('actions.validate')}</span>
+                      <span>{messages.actions.validate}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => changeState('CANCELED')}>
                       <Archive className="mr-2 h-4 w-4 text-destructive" />
-                      <span>{t('actions.archive')}</span>
+                      <span>{messages.actions.archive}</span>
                     </DropdownMenuItem>
                   </>
                 ) : (
@@ -345,13 +340,9 @@ const ItemCard = ({
                       <RotateCcw className="mr-2 h-4 w-4" />
 
                       {'category' in item ? (
-                        <>
-                          {t('actions.restoreIn', {
-                            category: item.category.name,
-                          })}
-                        </>
+                        <>{messages.actions.restoreIn}</>
                       ) : (
-                        <>{t('actions.restore')}</>
+                        <>{messages.actions.restore}</>
                       )}
                     </DropdownMenuItem>
                   </>
