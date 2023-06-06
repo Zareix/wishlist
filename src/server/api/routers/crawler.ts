@@ -1,30 +1,8 @@
 import { load } from 'cheerio';
-import { z } from 'zod';
 
 import type AddEditItem from '@/components/AddEditItem';
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 
-export const crawlerRouter = createTRPCRouter({
-  crawl: protectedProcedure
-    .input(
-      z.object({
-        url: z.string(),
-      }),
-    )
-    .query(async ({ input }) => {
-      if (input.url.startsWith('https://www.amazon')) {
-        return amazonProductCrawler(input.url);
-      }
-
-      if (input.url.startsWith('https://www.citadium.com')) {
-        return citadiumProductCrawler(input.url);
-      }
-
-      return;
-    }),
-});
-
-const amazonProductCrawler = async (
+export const amazonProductCrawler = async (
   url: string,
 ): Promise<Parameters<typeof AddEditItem>['0']['item']> => {
   const $ = load(await fetch(url).then((res) => res.text()));
@@ -70,7 +48,7 @@ const amazonProductCrawler = async (
   };
 };
 
-const citadiumProductCrawler = async (
+export const citadiumProductCrawler = async (
   url: string,
 ): Promise<Parameters<typeof AddEditItem>['0']['item']> => {
   const $ = load(await fetch(url).then((res) => res.text()));

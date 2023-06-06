@@ -1,7 +1,10 @@
-import {
-  type ItemImage,
-  type ItemLink,
-  type WishlistItem,
+'use client';
+
+import type {
+  Category,
+  ItemImage,
+  ItemLink,
+  WishlistItem,
 } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -13,7 +16,6 @@ import {
   Trash,
   UploadIcon,
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, {
@@ -21,6 +23,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useTransition,
 } from 'react';
 import {
   Controller,
@@ -51,7 +54,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { isImageFromS3 } from '@/utils';
-import { api } from '@/utils/api';
+import { addWishlistItem } from '@/utils/actions';
 
 type Inputs = Pick<
   WishlistItem,
@@ -62,21 +65,29 @@ type Inputs = Pick<
 };
 
 const AddEditItem = ({
+  messages,
   item,
+  categories,
   onFinish,
   editing,
 }: {
+  messages: IntlMessages['Add'] | IntlMessages['Edit'];
   item?: Partial<
     Inputs & {
       id: string;
     }
   >;
+  categories: Array<
+    Category & {
+      subCategories: Array<Category>;
+    }
+  >;
   onFinish?: () => void;
   editing?: boolean;
 }) => {
+  const [isPending, startTransition] = useTransition();
   const [isEuro, setIsEuro] = useState((item?.currency ?? 'EUR') === 'EUR');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const t = useTranslations(editing ? 'Edit' : 'Add');
   const router = useRouter();
   const {
     register,
@@ -104,8 +115,6 @@ const AddEditItem = ({
     name: 'images',
   });
   const { toast } = useToast();
-  const addMutation = api.wishlist.add.useMutation();
-  const categoriesQuery = api.categories.getAll.useQuery();
   const imageMutation = useMutation(['image', item?.id], (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -121,8 +130,8 @@ const AddEditItem = ({
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    addMutation
-      .mutateAsync({
+    startTransition(() => {
+      addWishlistItem({
         ...data,
         id: item?.id,
         currency: isEuro ? 'EUR' : 'USD',
@@ -134,17 +143,19 @@ const AddEditItem = ({
         }),
         price: isNaN(data.price ?? 0) ? undefined : data.price ?? undefined,
       })
-      .then(() => {
-        router.push('/').catch(console.error);
-        toast({
-          title: t('toast.success'),
-          description: t('toast.successDetails', {
-            name: data.name,
-          }),
-        });
-        onFinish?.();
-      })
-      .catch(console.error);
+        .then(() => {
+          router.push('/').catch(console.error);
+          //     toast({
+          //       title: messages.toast.success,
+          //       description: messages.toast.successDetails,
+          //       // {
+          //       //   name: data.name,
+          //       // }),
+          //     });
+          //     onFinish?.();
+        })
+        .catch(console.error);
+    });
   };
 
   const uploadImage: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -159,10 +170,11 @@ const AddEditItem = ({
       })
       .catch((e: Error) => {
         toast({
-          title: t('toast.errorUploadImage'),
-          description: t('toast.errorUploadImageDetails', {
-            message: e.message,
-          }),
+          title: messages.toast.errorUploadImage,
+          description: messages.toast.errorUploadImageDetails,
+          // {
+          //   message: e.message,
+          // }),
         });
         if (fileInputRef.current) fileInputRef.current.files = null;
       });
@@ -175,17 +187,17 @@ const AddEditItem = ({
     >
       <div className=" flex flex-col items-start gap-4 lg:w-[40%]">
         <InputGroup>
-          <Label>{t('form.name')}</Label>
+          <Label>{messages.form.name}</Label>
           <Input
-            placeholder={t('form.name')}
+            placeholder={messages.form.name}
             {...register('name', { required: true })}
           />
           {errors.name && (
-            <InputError>{t('form.errorFieldRequired')}</InputError>
+            <InputError>{messages.form.errorFieldRequired}</InputError>
           )}
         </InputGroup>
         <InputGroup>
-          <Label>{t('form.category')}</Label>
+          <Label>{messages.form.category}</Label>
           <div className="item-center flex gap-2">
             <Controller
               control={control}
@@ -195,65 +207,54 @@ const AddEditItem = ({
               render={({ field }) => (
                 <>
                   <Select
-                    disabled={
-                      categoriesQuery.isLoading ||
-                      categoriesQuery.data?.length === 0
-                    }
+                    disabled={categories?.length === 0}
                     onValueChange={field.onChange}
                     value={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          categoriesQuery.isLoading ? (
-                            <div className="flex items-center gap-2">
-                              <Loading />
-                              <span>{t('form.categoryEmpty')}</span>
-                            </div>
-                          ) : categoriesQuery.data?.length === 0 ? (
+                          categories?.length === 0 ? (
                             <span className="muted">
-                              {t('form.categoryEmpty')}
+                              {messages.form.categoryEmpty}
                             </span>
                           ) : (
                             <span className="muted">
-                              {t('form.categoryPlaceholder')}
+                              {messages.form.categoryPlaceholder}
                             </span>
                           )
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoriesQuery.data &&
-                        categoriesQuery.data.map((category, index) => (
-                          <React.Fragment key={category.id}>
-                            <SelectGroup>
+                      {categories.map((category, index) => (
+                        <React.Fragment key={category.id}>
+                          <SelectGroup>
+                            <SelectItem
+                              value={category.id}
+                              className="font-semibold text-slate-900 dark:text-slate-300"
+                            >
+                              {category.name}
+                            </SelectItem>
+                            {category.subCategories.map((subCategory) => (
                               <SelectItem
-                                value={category.id}
-                                className="font-semibold text-slate-900 dark:text-slate-300"
+                                value={subCategory.id}
+                                key={subCategory.id}
+                                className="ml-2"
                               >
-                                {category.name}
+                                {subCategory.name}
                               </SelectItem>
-                              {category.subCategories.map((subCategory) => (
-                                <SelectItem
-                                  value={subCategory.id}
-                                  key={subCategory.id}
-                                  className="ml-2"
-                                >
-                                  {subCategory.name}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                            {index < categoriesQuery.data.length - 1 && (
-                              <SelectSeparator />
-                            )}
-                          </React.Fragment>
-                        ))}
+                            ))}
+                          </SelectGroup>
+                          {index < categories.length - 1 && <SelectSeparator />}
+                        </React.Fragment>
+                      ))}
                     </SelectContent>
                   </Select>
                   <AddCategory
-                    categories={categoriesQuery.data ?? []}
+                    categories={categories ?? []}
                     refetchCategories={() => {
-                      categoriesQuery.refetch().catch(console.error);
+                      // categoriesQuery.refetch().catch(console.error);
                     }}
                   />
                 </>
@@ -261,14 +262,14 @@ const AddEditItem = ({
             />
           </div>
           {errors.categoryId && (
-            <InputError>{t('form.errorFieldRequired')}</InputError>
+            <InputError>{messages.form.errorFieldRequired}</InputError>
           )}
         </InputGroup>
         <InputGroup>
-          <Label>{t('form.price')}</Label>
+          <Label>{messages.form.price}</Label>
           <div className="flex items-center">
             <Input
-              placeholder={t('form.price')}
+              placeholder={messages.form.price}
               type="number"
               step=".01"
               {...register('price', {
@@ -289,8 +290,8 @@ const AddEditItem = ({
 
       <Tabs defaultValue="links" className="mt-4 w-full lg:ml-auto lg:w-1/2">
         <TabsList>
-          <TabsTrigger value="links">{t('form.links')}</TabsTrigger>
-          <TabsTrigger value="images">{t('form.images')}</TabsTrigger>
+          <TabsTrigger value="links">{messages.form.links}</TabsTrigger>
+          <TabsTrigger value="images">{messages.form.images}</TabsTrigger>
         </TabsList>
         <TabsContent value="links" className="px-3">
           <div className="flex flex-col gap-4">
@@ -299,12 +300,12 @@ const AddEditItem = ({
                 <div key={field.id} className="flex flex-wrap">
                   <div className="grid w-[85%] grid-cols-3 gap-1">
                     <Input
-                      placeholder={t('form.linkName')}
+                      placeholder={messages.form.linkName}
                       className="col-span-2"
                       {...register(`links.${index}.name`)}
                     />
                     <Input
-                      placeholder={t('form.linkPrice')}
+                      placeholder={messages.form.linkPrice}
                       type="number"
                       step=".01"
                       {...register(`links.${index}.price`, {
@@ -312,7 +313,7 @@ const AddEditItem = ({
                       })}
                     />
                     <Input
-                      placeholder={t('form.linkUrl')}
+                      placeholder={messages.form.linkUrl}
                       className="col-span-3"
                       {...register(`links.${index}.link`, {
                         required: true,
@@ -331,7 +332,7 @@ const AddEditItem = ({
                   </Button>
                   {errors.links?.[index]?.link && (
                     <InputError className="w-full">
-                      {t('form.errorFieldRequired')}
+                      {messages.form.errorFieldRequired}
                     </InputError>
                   )}
                 </div>
@@ -350,7 +351,7 @@ const AddEditItem = ({
               }
             >
               <Plus className="mr-2 h-6 w-6" />
-              {t('form.linkAdd')}
+              {messages.form.linkAdd}
             </Button>
           </div>
         </TabsContent>
@@ -362,7 +363,7 @@ const AddEditItem = ({
                   <HoverCard openDelay={0} closeDelay={0}>
                     <HoverCardTrigger asChild>
                       <Input
-                        placeholder={t('form.imageURL')}
+                        placeholder={messages.form.imageURL}
                         className="w-[85%]"
                         {...register(`images.${index}.image`, {
                           required: true,
@@ -371,7 +372,10 @@ const AddEditItem = ({
                     </HoverCardTrigger>
                     {watch(`images.${index}.image`) && (
                       <HoverCardContent side="top">
-                        <ItemImageCard image={watch(`images.${index}.image`)} />
+                        <ItemImageCard
+                          image={watch(`images.${index}.image`)}
+                          messages={messages}
+                        />
                       </HoverCardContent>
                     )}
                   </HoverCard>
@@ -387,7 +391,7 @@ const AddEditItem = ({
                   </Button>
                   {errors.images?.[index]?.image && (
                     <InputError className="w-full">
-                      {t('form.errorFieldRequired')}
+                      {messages.form.errorFieldRequired}
                     </InputError>
                   )}
                 </div>
@@ -429,40 +433,41 @@ const AddEditItem = ({
                 }
               >
                 <Plus className="mr-2 h-6 w-6" />
-                {t('form.imageAdd')}
+                {messages.form.imageAdd}
               </Button>
             </div>
           </div>
         </TabsContent>
       </Tabs>
 
-      <Button
-        disabled={addMutation.isLoading}
-        type="submit"
-        className="ml-auto mt-4"
-      >
-        {addMutation.isLoading ? (
+      <Button disabled={isPending} type="submit" className="ml-auto mt-4">
+        {isPending ? (
           <Loader2 className="mr-2 h-6 w-6 animate-spin" />
         ) : editing ? (
           <Edit className="mr-2 h-6 w-6" />
         ) : (
           <Plus className="mr-2 h-6 w-6" />
         )}
-        {editing ? t('form.submitEdit') : t('form.submitAdd')}
+        {editing ? messages.form.submitEdit : messages.form.submitAdd}
       </Button>
     </form>
   );
 };
 
-const ItemImageCard = ({ image }: { image: string }) => {
+const ItemImageCard = ({
+  messages,
+  image,
+}: {
+  messages: IntlMessages['Add'];
+  image: string;
+}) => {
   const [error, setError] = useState(false);
-  const t = useTranslations('Add');
 
   useEffect(() => {
     setError(false);
   }, [image]);
 
-  if (error) return <InputError>{t('form.imageLoadingError')}</InputError>;
+  if (error) return <InputError>{messages.form.imageLoadingError}</InputError>;
 
   try {
     if (isImageFromS3(image))

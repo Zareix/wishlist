@@ -31,28 +31,7 @@ const ArchivePage = async () => {
       parentCategoryId: null,
     },
     include: {
-      subCategories: {
-        include: {
-          _count: {
-            select: {
-              wishlistItems: {
-                where: {
-                  state: 'ACTIVE',
-                },
-              },
-            },
-          },
-        },
-      },
-      _count: {
-        select: {
-          wishlistItems: {
-            where: {
-              state: 'ACTIVE',
-            },
-          },
-        },
-      },
+      subCategories: true,
     },
   });
 

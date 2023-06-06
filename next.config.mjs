@@ -17,11 +17,11 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const withPWA = nextPWA({
-  disable: process.env.NODE_ENV === 'development',
-  dest: 'public',
-  cacheStartUrl: false,
-});
+// const withPWA = nextPWA({
+//   disable: process.env.NODE_ENV === 'development',
+//   dest: 'public',
+//   cacheStartUrl: false,
+// });
 
 const withNextIntl = nextIntl('./src/i18n/index.ts');
 
@@ -41,4 +41,4 @@ const config = {
   experimental: { serverActions: true },
 };
 
-export default withBundleAnalyzer(withPlausible(withPWA(withNextIntl(config))));
+export default withBundleAnalyzer(withPlausible(withNextIntl(config)));
