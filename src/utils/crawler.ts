@@ -55,7 +55,9 @@ export const citadiumProductCrawler = async (
 
   const productTitle = $('main h1').first();
   const name = productTitle.text().trim();
-  const priceString = productTitle.next().next().text().trim();
+  const priceString = productTitle.next().text().trim();
+  console.log('price', priceString);
+
   const price = priceString
     ? parseFloat(priceString.replace(',', '.').replace(/[$€£]/g, ''))
     : 0;

@@ -2,12 +2,10 @@
 
 import { type EnumCurrency, type State } from '@prisma/client';
 
-import {
-  amazonProductCrawler,
-  citadiumProductCrawler,
-} from '@/server/api/routers/crawler';
-import { getServerSideAuthSession } from '@/server/auth';
+import { getServerActionSession } from '@/server/auth';
 import { prisma } from '@/server/db';
+
+import { amazonProductCrawler, citadiumProductCrawler } from './crawler';
 
 export const changeItemState = ({
   id,
@@ -30,7 +28,7 @@ export const changeItemState = ({
   });
 
 export const authorizeAccess = async ({ email }: { email: string }) => {
-  const session = await getServerSideAuthSession();
+  const session = await getServerActionSession();
   const user = await prisma.user.findUnique({
     where: {
       email: email,
@@ -54,7 +52,7 @@ export const authorizeAccess = async ({ email }: { email: string }) => {
 };
 
 export const revokeAccess = async ({ userId }: { userId: string }) => {
-  const session = await getServerSideAuthSession();
+  const session = await getServerActionSession();
   return await prisma.user.update({
     where: {
       id: session?.user.id,
@@ -121,7 +119,7 @@ export const addWishlistItem = async ({
     link: string;
   }[];
 }) => {
-  const session = await getServerSideAuthSession();
+  const session = await getServerActionSession();
   if (!session) {
     throw new Error('User not found');
   }
@@ -196,4 +194,45 @@ export const addWishlistItem = async ({
     },
   });
   return item;
+};
+
+export const updateOrder = (ids: string[]) =>
+  prisma.$transaction(
+    ids.map((id, index) =>
+      prisma.wishlistItem.update({
+        where: {
+          id,
+        },
+        data: {
+          order: index,
+        },
+      }),
+    ),
+  );
+
+export const addCategory = async ({
+  name,
+  parentCategoryId,
+}: {
+  name: string;
+  parentCategoryId: string | null;
+}) => {
+  const session = await getServerActionSession();
+  if (
+    await prisma.category.findFirst({
+      where: {
+        name: name,
+        userId: session?.user.id,
+      },
+    })
+  ) {
+    throw new Error('Category already exists');
+  }
+  return prisma.category.create({
+    data: {
+      name: name,
+      userId: session?.user.id ?? '',
+      parentCategoryId: parentCategoryId,
+    },
+  });
 };

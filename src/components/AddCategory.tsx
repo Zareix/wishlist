@@ -1,6 +1,8 @@
 import { type Category } from '@prisma/client';
 import { CheckCircle, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { Fragment, useState, useTransition } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -21,18 +23,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { api } from '@/utils/api';
+import { addCategory } from '@/utils/actions';
 
 type Inputs = Pick<Category, 'name' | 'parentCategoryId'>;
 
 const AddCategory = ({
+  messages,
   categories,
-  refetchCategories,
 }: {
+  messages: IntlMessages['AddCategory'];
   categories: Array<Pick<Category, 'name' | 'id'>>;
-  refetchCategories: () => void;
 }) => {
-  const t = useTranslations('AddCategory');
+  const [isPending, startTransition] = useTransition();
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -41,7 +46,6 @@ const AddCategory = ({
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  const addCategoryMutation = api.categories.create.useMutation();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (
@@ -55,12 +59,16 @@ const AddCategory = ({
         message: 'This category already exists',
       });
     }
-    addCategoryMutation
-      .mutateAsync(data)
-      .then(() => {
-        refetchCategories();
-      })
-      .catch(console.error);
+    startTransition(() => {
+      addCategory(data)
+        .then(() => {
+          router.refresh();
+          setIsSuccess(true);
+        })
+        .catch(() => {
+          setIsError(true);
+        });
+    });
   };
 
   return (
@@ -72,33 +80,33 @@ const AddCategory = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogTitle>{messages.title}</DialogTitle>
         </DialogHeader>
-        {addCategoryMutation.isSuccess ? (
+        {isSuccess ? (
           <>
             <div className="mx-auto flex items-center justify-center gap-2">
               <CheckCircle className="h-6 w-6 text-green-500" />
-              {t('form.success')}
+              {messages.form.success}
             </div>
           </>
         ) : (
           <div className="flex flex-col items-start gap-4">
             <InputGroup className="justify-items-start">
-              <Label>{t('form.name')}</Label>
+              <Label>{messages.form.name}</Label>
               <Input
-                placeholder={t('form.name')}
+                placeholder={messages.form.name}
                 {...register('name', {
-                  required: t('form.errorRequired'),
+                  required: messages.form.errorRequired,
                   pattern: {
                     value: /^[a-zA-Z0-9 ]+$/,
-                    message: t('form.errorFormat'),
+                    message: messages.form.errorFormat,
                   },
                 })}
               />
               {errors.name && <InputError>{errors.name.message}</InputError>}
             </InputGroup>
             <InputGroup className="justify-items-start">
-              <Label>{t('form.parentCategory')}</Label>
+              <Label>{messages.form.parentCategory}</Label>
               <Controller
                 control={control}
                 name="parentCategoryId"
@@ -107,16 +115,14 @@ const AddCategory = ({
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue
-                          placeholder={t('form.parentCategoryPlaceholder')}
+                          placeholder={messages.form.parentCategoryPlaceholder}
                         />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => (
-                          <>
-                            <SelectItem value={category.id} key={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          </>
+                          <SelectItem value={category.id} key={category.id}>
+                            {category.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -130,53 +136,42 @@ const AddCategory = ({
           </div>
         )}
         <DialogFooter>
-          {addCategoryMutation.isSuccess ? (
+          {isSuccess ? (
             <DialogTrigger asChild>
               <Button
                 type="button"
                 onClick={() => {
-                  addCategoryMutation.reset();
+                  reset();
                   reset();
                 }}
                 variant="outline"
                 className="mt-2"
               >
-                {t('form.close')}
+                {messages.form.close}
               </Button>
             </DialogTrigger>
-          ) : addCategoryMutation.isError ? (
-            <Button
-              type="button"
-              onClick={() => {
-                addCategoryMutation.reset();
-              }}
-              variant="destructive"
-              className="mt-2"
-            >
-              {t('form.reset')}
-            </Button>
           ) : (
             <div className="flex gap-2">
               <DialogTrigger asChild>
                 <Button
                   type="button"
                   onClick={() => {
-                    addCategoryMutation.reset();
+                    reset();
                     reset();
                   }}
                   variant="outline"
                   className="w-1/2"
                 >
-                  {t('form.close')}
+                  {messages.form.close}
                 </Button>
               </DialogTrigger>
               <Button
                 type="button"
-                disabled={addCategoryMutation.isLoading}
+                disabled={isPending}
                 onClick={() => handleSubmit(onSubmit)()}
                 className="w-1/2"
               >
-                {t('form.submit')}
+                {messages.form.submit}
               </Button>
             </div>
           )}

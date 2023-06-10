@@ -2,7 +2,13 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { Category } from '@prisma/client';
+import type {
+  Category,
+  ItemImage,
+  ItemLink,
+  State,
+  WishlistItem,
+} from '@prisma/client';
 import {
   Archive,
   ArrowLeftRight,
@@ -13,6 +19,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Fragment, useTransition } from 'react';
 
 import { badgeVariants } from '@/components/ui/badge';
@@ -44,7 +51,6 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
 import { isImageFromS3 } from '@/utils';
 import { changeItemState } from '@/utils/actions';
-import { type RouterInputs, type RouterOutputs } from '@/utils/api';
 import { cn } from '@/utils/ui';
 
 const ItemCard = ({
@@ -55,7 +61,11 @@ const ItemCard = ({
   isDraggable = false,
 }: {
   messages: IntlMessages['ItemCard'];
-  item: NonNullable<RouterOutputs['wishlist']['getAll']>[0];
+  item: WishlistItem & {
+    images: ItemImage[];
+    links: ItemLink[];
+    category: Category;
+  };
   categories: Array<
     Category & {
       subCategories: Category[];
@@ -64,7 +74,8 @@ const ItemCard = ({
   canEdit?: boolean;
   isDraggable?: boolean;
 }) => {
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
   const { toast } = useToast();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: item.id, disabled: !isDraggable });
@@ -74,17 +85,12 @@ const ItemCard = ({
     transition,
   };
 
-  const changeState = (
-    state: NonNullable<RouterInputs['wishlist']['changeState']['state']>,
-    silent?: boolean,
-  ) => {
+  const changeState = (state: State, silent?: boolean) => {
     const previousState = item.state;
     startTransition(() => {
       changeItemState({ id: item.id, state })
         .then(() => {
-          // apiContext.wishlist.getAll
-          //   .invalidate({ categoryId: item.categoryId })
-          //   .catch(console.error);
+          router.refresh();
           if (silent) return;
           toast({
             title: 'Item updated',
@@ -117,13 +123,7 @@ const ItemCard = ({
     startTransition(() => {
       changeItemState({ id: item.id, categoryId })
         .then(() => {
-          // apiContext.wishlist.getAll
-          //   .invalidate({ categoryId: categoryId })
-          //   .catch(console.error);
-          // apiContext.wishlist.getAll
-          //   .invalidate({ categoryId: previousCategoryId })
-          //   .catch(console.error);
-          // apiContext.categories.getAll.invalidate().catch(console.error);
+          router.refresh();
           if (silent) return;
           toast({
             title: 'Item moved',

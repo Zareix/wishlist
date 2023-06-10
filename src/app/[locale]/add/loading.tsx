@@ -1,12 +1,11 @@
-import React from 'react';
+import { Loading } from '@/components/ui/loading';
 
-const Loading = () => {
+const LoadingAdd = () => {
   return (
     <p className="flex items-center gap-2">
       <Loading />
-      Crawling url
     </p>
   );
 };
 
-export default Loading;
+export default LoadingAdd;

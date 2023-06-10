@@ -1,7 +1,6 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
 import nextIntl from 'next-intl/plugin';
 import { withPlausibleProxy } from 'next-plausible';
-import nextPWA from 'next-pwa';
 
 import { env } from './src/env.mjs';
 
@@ -17,21 +16,11 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-// const withPWA = nextPWA({
-//   disable: process.env.NODE_ENV === 'development',
-//   dest: 'public',
-//   cacheStartUrl: false,
-// });
-
 const withNextIntl = nextIntl('./src/i18n/index.ts');
 
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  // i18n: {
-  //   locales: ['en-US', 'fr-FR'],
-  //   defaultLocale: 'en-US',
-  // },
   images: {
     domains: [new URL(env.S3_PUBLIC_URL).hostname],
   },
@@ -41,4 +30,6 @@ const config = {
   experimental: { serverActions: true },
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default withBundleAnalyzer(withPlausible(withNextIntl(config)));

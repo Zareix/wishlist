@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DndContext,
   type DragEndEvent,
@@ -17,64 +19,63 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useEffect, useState } from 'react';
+import {
+  type Category,
+  type ItemImage,
+  type ItemLink,
+  type WishlistItem,
+} from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useTransition } from 'react';
 
-import ItemCard, { ItemCardLoading } from '@/components/ItemCard';
-import { api } from '@/utils/api';
+import ItemCard from '@/components/ItemCard';
+import { updateOrder as updateOrderAction } from '@/utils/actions';
 
 const CategoryContent = ({
-  categoryId,
+  messages,
+  items: initialItems,
   userId,
+  categories,
 }: {
-  categoryId: string;
+  messages: Parameters<typeof ItemCard>[0]['messages'];
+  items: (WishlistItem & {
+    category: Category;
+    images: ItemImage[];
+    links: ItemLink[];
+  })[];
   userId?: string;
+  categories: Parameters<typeof ItemCard>[0]['categories'];
 }) => {
+  const [, startTransition] = useTransition();
+  const router = useRouter();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
-  const updateOrderMutation = api.wishlist.updateOrder.useMutation();
-  const itemsQuery = api.wishlist.getAll.useQuery({
-    categoryId,
-    userId,
-  });
-  const [items, setItems] = useState(itemsQuery.data ?? []);
+  const [items, setItems] = useState(initialItems);
 
-  useEffect(() => {
-    if (itemsQuery.isSuccess) {
-      setItems(itemsQuery.data ?? []);
-    }
-  }, [itemsQuery.isSuccess, itemsQuery.data]);
+  const updateOrder = (ids: string[]) => {
+    startTransition(() => {
+      updateOrderAction(ids)
+        .then(() => router.refresh())
+        .catch(console.error);
+    });
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
 
-        const newItems = arrayMove(items, oldIndex, newIndex);
-        updateOrderMutation
-          .mutateAsync(newItems.map((item) => item.id))
-          .then(() => itemsQuery.refetch())
-          .catch(console.error);
-        return newItems;
-      });
+      const newItems = arrayMove(items, oldIndex, newIndex);
+      setItems(newItems);
+      updateOrder(newItems.map((item) => item.id));
     }
   };
-
-  if (itemsQuery.isLoading)
-    return (
-      <section className=" justify-start">
-        <ItemCardLoading />
-      </section>
-    );
-
-  if (!itemsQuery.isSuccess || !itemsQuery.data || !items) return <></>;
-  if (itemsQuery.data.length === 0) return <></>;
 
   return (
     <section className="mt-4 flex flex-wrap content-start gap-2">
@@ -87,6 +88,8 @@ const CategoryContent = ({
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {items.map((item) => (
             <ItemCard
+              messages={messages}
+              categories={categories}
               item={item}
               key={item.id}
               canEdit={!userId}

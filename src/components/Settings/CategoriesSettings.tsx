@@ -2,6 +2,7 @@
 
 import { type Category } from '@prisma/client';
 import { InfoIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useTransition } from 'react';
 
 import {
@@ -24,13 +25,14 @@ const CategoriesSettings = ({
     }
   >;
 }) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const changeCategoryVisibility = (categoryId: string, isPublic: boolean) => {
     startTransition(() => {
       changeCategoryVisibilityAction({ categoryId, isPublic })
         .then(() => {
-          // categoriesQuery.refetch().catch(console.error);
+          router.refresh();
         })
         .catch(console.error);
     });

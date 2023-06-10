@@ -1,26 +1,19 @@
 import { getTranslations } from 'next-intl/server';
+import { notFound } from 'next/navigation';
 
 import AddEditItem from '@/components/AddEditItem';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
-import { crawlUrl } from '@/utils/actions';
 
 const AddPage = async ({
-  searchParams,
+  params: { id },
 }: {
-  searchParams?: {
-    url?: string;
+  params: {
+    id: string;
   };
 }) => {
-  const url = searchParams?.url;
-  const urlDefined = typeof url === 'string' && url.length > 0;
   const messagesAdd = await getTranslations('Add');
   const messagesAddCategory = await getTranslations('AddCategory');
-
-  let crawledItem;
-  if (urlDefined) {
-    crawledItem = await crawlUrl({ url });
-  }
 
   const categories = await prisma.category.findMany({
     where: {
@@ -31,6 +24,25 @@ const AddPage = async ({
       subCategories: true,
     },
   });
+
+  const item = await prisma.wishlistItem.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      images: true,
+      links: true,
+    },
+  });
+
+  if (!item) {
+    notFound();
+  }
+
+  const session = await getServerSideAuthSession();
+  if (item.userId !== session?.user.id) {
+    notFound();
+  }
 
   const messages: Parameters<typeof AddEditItem>['0']['messages'] = {
     addCategory: {
@@ -86,15 +98,12 @@ const AddPage = async ({
       {/* <PageSEO title={t('pageTitle')} /> */}
       <main>
         <h1>{messagesAdd('title')}</h1>
-        {urlDefined ? (
-          <AddEditItem
-            item={crawledItem}
-            messages={messages}
-            categories={categories}
-          />
-        ) : (
-          <AddEditItem messages={messages} categories={categories} />
-        )}
+        <AddEditItem
+          messages={messages}
+          item={item}
+          editing
+          categories={categories}
+        />
       </main>
     </>
   );

@@ -17,7 +17,7 @@ import {
   UploadIcon,
 } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, {
   type ChangeEventHandler,
   useEffect,
@@ -68,10 +68,12 @@ const AddEditItem = ({
   messages,
   item,
   categories,
-  onFinish,
   editing,
 }: {
-  messages: IntlMessages['Add'] | IntlMessages['Edit'];
+  messages: {
+    addEdit: IntlMessages['Add'] | IntlMessages['Edit'];
+    addCategory: IntlMessages['AddCategory'];
+  };
   item?: Partial<
     Inputs & {
       id: string;
@@ -82,7 +84,6 @@ const AddEditItem = ({
       subCategories: Array<Category>;
     }
   >;
-  onFinish?: () => void;
   editing?: boolean;
 }) => {
   const [isPending, startTransition] = useTransition();
@@ -144,15 +145,14 @@ const AddEditItem = ({
         price: isNaN(data.price ?? 0) ? undefined : data.price ?? undefined,
       })
         .then(() => {
-          router.push('/').catch(console.error);
-          //     toast({
-          //       title: messages.toast.success,
-          //       description: messages.toast.successDetails,
-          //       // {
-          //       //   name: data.name,
-          //       // }),
-          //     });
-          //     onFinish?.();
+          router.push('/');
+          toast({
+            title: messages.addEdit.toast.success,
+            description: messages.addEdit.toast.successDetails,
+            // {
+            //   name: data.name,
+            // }),
+          });
         })
         .catch(console.error);
     });
@@ -170,8 +170,8 @@ const AddEditItem = ({
       })
       .catch((e: Error) => {
         toast({
-          title: messages.toast.errorUploadImage,
-          description: messages.toast.errorUploadImageDetails,
+          title: messages.addEdit.toast.errorUploadImage,
+          description: messages.addEdit.toast.errorUploadImageDetails,
           // {
           //   message: e.message,
           // }),
@@ -187,17 +187,17 @@ const AddEditItem = ({
     >
       <div className=" flex flex-col items-start gap-4 lg:w-[40%]">
         <InputGroup>
-          <Label>{messages.form.name}</Label>
+          <Label>{messages.addEdit.form.name}</Label>
           <Input
-            placeholder={messages.form.name}
+            placeholder={messages.addEdit.form.name}
             {...register('name', { required: true })}
           />
           {errors.name && (
-            <InputError>{messages.form.errorFieldRequired}</InputError>
+            <InputError>{messages.addEdit.form.errorFieldRequired}</InputError>
           )}
         </InputGroup>
         <InputGroup>
-          <Label>{messages.form.category}</Label>
+          <Label>{messages.addEdit.form.category}</Label>
           <div className="item-center flex gap-2">
             <Controller
               control={control}
@@ -216,11 +216,11 @@ const AddEditItem = ({
                         placeholder={
                           categories?.length === 0 ? (
                             <span className="muted">
-                              {messages.form.categoryEmpty}
+                              {messages.addEdit.form.categoryEmpty}
                             </span>
                           ) : (
                             <span className="muted">
-                              {messages.form.categoryPlaceholder}
+                              {messages.addEdit.form.categoryPlaceholder}
                             </span>
                           )
                         }
@@ -252,24 +252,22 @@ const AddEditItem = ({
                     </SelectContent>
                   </Select>
                   <AddCategory
+                    messages={messages.addCategory}
                     categories={categories ?? []}
-                    refetchCategories={() => {
-                      // categoriesQuery.refetch().catch(console.error);
-                    }}
                   />
                 </>
               )}
             />
           </div>
           {errors.categoryId && (
-            <InputError>{messages.form.errorFieldRequired}</InputError>
+            <InputError>{messages.addEdit.form.errorFieldRequired}</InputError>
           )}
         </InputGroup>
         <InputGroup>
-          <Label>{messages.form.price}</Label>
+          <Label>{messages.addEdit.form.price}</Label>
           <div className="flex items-center">
             <Input
-              placeholder={messages.form.price}
+              placeholder={messages.addEdit.form.price}
               type="number"
               step=".01"
               {...register('price', {
@@ -290,8 +288,10 @@ const AddEditItem = ({
 
       <Tabs defaultValue="links" className="mt-4 w-full lg:ml-auto lg:w-1/2">
         <TabsList>
-          <TabsTrigger value="links">{messages.form.links}</TabsTrigger>
-          <TabsTrigger value="images">{messages.form.images}</TabsTrigger>
+          <TabsTrigger value="links">{messages.addEdit.form.links}</TabsTrigger>
+          <TabsTrigger value="images">
+            {messages.addEdit.form.images}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="links" className="px-3">
           <div className="flex flex-col gap-4">
@@ -300,12 +300,12 @@ const AddEditItem = ({
                 <div key={field.id} className="flex flex-wrap">
                   <div className="grid w-[85%] grid-cols-3 gap-1">
                     <Input
-                      placeholder={messages.form.linkName}
+                      placeholder={messages.addEdit.form.linkName}
                       className="col-span-2"
                       {...register(`links.${index}.name`)}
                     />
                     <Input
-                      placeholder={messages.form.linkPrice}
+                      placeholder={messages.addEdit.form.linkPrice}
                       type="number"
                       step=".01"
                       {...register(`links.${index}.price`, {
@@ -313,7 +313,7 @@ const AddEditItem = ({
                       })}
                     />
                     <Input
-                      placeholder={messages.form.linkUrl}
+                      placeholder={messages.addEdit.form.linkUrl}
                       className="col-span-3"
                       {...register(`links.${index}.link`, {
                         required: true,
@@ -332,7 +332,7 @@ const AddEditItem = ({
                   </Button>
                   {errors.links?.[index]?.link && (
                     <InputError className="w-full">
-                      {messages.form.errorFieldRequired}
+                      {messages.addEdit.form.errorFieldRequired}
                     </InputError>
                   )}
                 </div>
@@ -351,7 +351,7 @@ const AddEditItem = ({
               }
             >
               <Plus className="mr-2 h-6 w-6" />
-              {messages.form.linkAdd}
+              {messages.addEdit.form.linkAdd}
             </Button>
           </div>
         </TabsContent>
@@ -363,7 +363,7 @@ const AddEditItem = ({
                   <HoverCard openDelay={0} closeDelay={0}>
                     <HoverCardTrigger asChild>
                       <Input
-                        placeholder={messages.form.imageURL}
+                        placeholder={messages.addEdit.form.imageURL}
                         className="w-[85%]"
                         {...register(`images.${index}.image`, {
                           required: true,
@@ -374,7 +374,7 @@ const AddEditItem = ({
                       <HoverCardContent side="top">
                         <ItemImageCard
                           image={watch(`images.${index}.image`)}
-                          messages={messages}
+                          messages={messages.addEdit}
                         />
                       </HoverCardContent>
                     )}
@@ -391,7 +391,7 @@ const AddEditItem = ({
                   </Button>
                   {errors.images?.[index]?.image && (
                     <InputError className="w-full">
-                      {messages.form.errorFieldRequired}
+                      {messages.addEdit.form.errorFieldRequired}
                     </InputError>
                   )}
                 </div>
@@ -433,7 +433,7 @@ const AddEditItem = ({
                 }
               >
                 <Plus className="mr-2 h-6 w-6" />
-                {messages.form.imageAdd}
+                {messages.addEdit.form.imageAdd}
               </Button>
             </div>
           </div>
@@ -448,7 +448,9 @@ const AddEditItem = ({
         ) : (
           <Plus className="mr-2 h-6 w-6" />
         )}
-        {editing ? messages.form.submitEdit : messages.form.submitAdd}
+        {editing
+          ? messages.addEdit.form.submitEdit
+          : messages.addEdit.form.submitAdd}
       </Button>
     </form>
   );

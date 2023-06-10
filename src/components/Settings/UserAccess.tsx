@@ -1,6 +1,7 @@
 'use client';
 
 import { type User } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
@@ -18,6 +19,7 @@ const UserAccess = ({
   messages: IntlMessages['Settings']['access'];
   authorizedAccessTo: Pick<User, 'id' | 'email'>[];
 }) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const {
     handleSubmit,
@@ -33,7 +35,7 @@ const UserAccess = ({
     startTransition(() => {
       authorizeAccess(data)
         .then(() => {
-          //    authorizedAccessToQuery.refetch().catch(console.error);
+          router.refresh();
         })
         .catch(console.error);
     });
@@ -43,7 +45,7 @@ const UserAccess = ({
     startTransition(() => {
       revokeAccessAction({ userId })
         .then(() => {
-          //    authorizedAccessToQuery.refetch().catch(console.error);
+          router.refresh();
         })
         .catch(console.error);
     });
