@@ -1,6 +1,5 @@
 import { type Category } from '@prisma/client';
 import { CheckCircle, Plus } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Fragment, useState, useTransition } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
@@ -35,7 +34,7 @@ const AddCategory = ({
   categories: Array<Pick<Category, 'name' | 'id'>>;
 }) => {
   const [isPending, startTransition] = useTransition();
-  const [isError, setIsError] = useState(false);
+  const [, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
   const {

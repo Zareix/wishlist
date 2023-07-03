@@ -157,7 +157,8 @@ export const addWishlistItem = async ({
         currency: currency,
         links: {
           create: links.map((link) => ({
-            ...link,
+            link: link.link,
+            price: link.price,
             name:
               link.name && link.name !== ''
                 ? link.name
@@ -165,7 +166,9 @@ export const addWishlistItem = async ({
           })),
         },
         images: {
-          create: images,
+          create: images.map((image) => ({
+            image: image.image,
+          })),
         },
         categoryId: categoryId,
       },

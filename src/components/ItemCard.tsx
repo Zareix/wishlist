@@ -188,23 +188,23 @@ const ItemCard = ({
               {item.images.map((image, index) => (
                 <Dialog key={image.id}>
                   <DialogTrigger asChild>
-                    {isImageFromS3(image.image) ? (
-                      <div className="relative h-20 w-20">
+                    <div className="relative h-20 w-20">
+                      {isImageFromS3(image.image) ? (
                         <Image
                           src={image.image}
                           alt={`${index} of ${item.name}`}
                           fill
-                          className="rounded-sm object-cover"
+                          className="h-full w-full rounded-sm object-cover"
                         />
-                      </div>
-                    ) : (
-                      /* eslint-disable-next-line @next/next/no-img-element*/
-                      <img
-                        src={image.image}
-                        alt={`${index} of ${item.name}`}
-                        className="h-20 w-20 rounded-sm object-cover"
-                      />
-                    )}
+                      ) : (
+                        /* eslint-disable-next-line @next/next/no-img-element*/
+                        <img
+                          src={image.image}
+                          alt={`${index} of ${item.name}`}
+                          className="h-full w-full rounded-sm object-cover"
+                        />
+                      )}
+                    </div>
                   </DialogTrigger>
                   <DialogContent>
                     {isImageFromS3(image.image) ? (

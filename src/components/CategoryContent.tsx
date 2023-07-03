@@ -26,7 +26,7 @@ import {
   type WishlistItem,
 } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 import ItemCard from '@/components/ItemCard';
 import { updateOrder as updateOrderAction } from '@/utils/actions';
@@ -78,7 +78,7 @@ const CategoryContent = ({
   };
 
   return (
-    <section className="mt-4 flex flex-wrap content-start gap-2">
+    <section className="mt-4 flex flex-col gap-2">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
