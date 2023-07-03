@@ -1,7 +1,5 @@
 import { useTranslations } from 'next-intl';
 
-import { PageSEO } from '@/components/SEO';
-
 export default function Page404() {
   const t = useTranslations('404');
   return (

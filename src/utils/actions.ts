@@ -1,6 +1,7 @@
 'use server';
 
 import { type EnumCurrency, type State } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 import { getServerActionSession } from '@/server/auth';
 import { prisma } from '@/server/db';
@@ -15,8 +16,8 @@ export const changeItemState = ({
   id: string;
   state?: State;
   categoryId?: string;
-}) =>
-  prisma.wishlistItem.update({
+}) => {
+  const item = prisma.wishlistItem.update({
     where: {
       id: id,
     },
@@ -26,6 +27,10 @@ export const changeItemState = ({
       updatedAt: new Date(),
     },
   });
+  revalidatePath('/');
+  revalidatePath('/archive');
+  return item;
+};
 
 export const authorizeAccess = async ({ email }: { email: string }) => {
   const session = await getServerActionSession();
@@ -146,7 +151,7 @@ export const addWishlistItem = async ({
         wishlistItemId: id,
       },
     });
-    return await prisma.wishlistItem.update({
+    const newItem = await prisma.wishlistItem.update({
       where: {
         id: id,
       },
@@ -173,6 +178,8 @@ export const addWishlistItem = async ({
         categoryId: categoryId,
       },
     });
+    revalidatePath('/');
+    return newItem;
   }
 
   const item = await prisma.wishlistItem.create({
@@ -196,6 +203,7 @@ export const addWishlistItem = async ({
       categoryId,
     },
   });
+  revalidatePath('/');
   return item;
 };
 

@@ -20,7 +20,7 @@ const UserAccess = ({
   authorizedAccessTo: Pick<User, 'id' | 'email'>[];
 }) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const {
     handleSubmit,
     register,

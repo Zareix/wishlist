@@ -16,6 +16,7 @@ import {
   Trash,
   UploadIcon,
 } from 'lucide-react';
+import { revalidatePath } from 'next/cache';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, {
@@ -145,7 +146,6 @@ const AddEditItem = ({
         price: isNaN(data.price ?? 0) ? undefined : data.price ?? undefined,
       })
         .then(() => {
-          router.push('/');
           toast({
             title: messages.addEdit.toast.success,
             description: messages.addEdit.toast.successDetails,
@@ -153,6 +153,7 @@ const AddEditItem = ({
             //   name: data.name,
             // }),
           });
+          router.push('/');
         })
         .catch(console.error);
     });
@@ -168,7 +169,7 @@ const AddEditItem = ({
         appendImage({ image: data.url });
         if (fileInputRef.current) fileInputRef.current.files = null;
       })
-      .catch((e: Error) => {
+      .catch((_e: Error) => {
         toast({
           title: messages.addEdit.toast.errorUploadImage,
           description: messages.addEdit.toast.errorUploadImageDetails,

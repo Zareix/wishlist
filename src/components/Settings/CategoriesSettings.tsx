@@ -26,7 +26,7 @@ const CategoriesSettings = ({
   >;
 }) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const changeCategoryVisibility = (categoryId: string, isPublic: boolean) => {
     startTransition(() => {
