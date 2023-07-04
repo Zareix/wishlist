@@ -1,13 +1,14 @@
-import { getTranslations } from 'next-intl/server';
+import { useLocale } from 'next-intl';
 
 import HomePageContent from '@/components/HomePageContent';
-import { PageSEO } from '@/components/SEO';
 import { getServerSideAuthSession } from '@/server/auth';
 import { getCategories } from '@/utils/data';
+import { getTranslator } from 'next-intl/server';
 
 const HomePage = async () => {
-  const t = await getTranslations('Index');
-  const tItemCard = await getTranslations('ItemCard');
+  const locale = useLocale();
+  const t = await getTranslator(locale,'Index');
+  const tItemCard = await getTranslator(locale,'ItemCard');
   const session = await getServerSideAuthSession();
   const categories = await getCategories(session?.user.id ?? '');
   const categoriesNonEmpty = categories?.filter(
@@ -30,7 +31,6 @@ const HomePage = async () => {
 
   return (
     <>
-      <PageSEO title={t('pageTitle')} />
       <main>
         <div className="flex">
           <h1>{t('title')}</h1>

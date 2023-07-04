@@ -24,9 +24,9 @@
         },
         "toast": {
             "success": "Item created",
-            "successDetails": "Item \"{name}\" has been created",
+            "successDetails": "Item has been created",
             "errorUploadImage": "Error uploading image",
-            "errorUploadImageDetails": "Error uploading image : \"{message}\""
+            "errorUploadImageDetails": "Error uploading image"
         }
     },
     "Edit": {
@@ -54,9 +54,9 @@
         },
         "toast": {
             "success": "Item updated",
-            "successDetails": "Item \"{name}\" has been updated",
+            "successDetails": "Item has been updated",
             "errorUploadImage": "Error uploading image",
-            "errorUploadImageDetails": "Error uploading image : \"{message}\""
+            "errorUploadImageDetails": "Error uploading image"
         }
     },
     "AddCategory": {

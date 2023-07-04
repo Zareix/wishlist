@@ -1,13 +1,14 @@
-import { getTranslations } from 'next-intl/server';
+import { useLocale } from 'next-intl';
 
 import ItemCard from '@/components/ItemCard';
-import { PageSEO } from '@/components/SEO';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
+import { getTranslator } from 'next-intl/server';
 
 const ArchivePage = async () => {
-  const t = await getTranslations('Archive');
-  const tItemCard = await getTranslations('ItemCard');
+  const locale = useLocale();
+  const t = await getTranslator(locale,'Archive');
+  const tItemCard = await getTranslator(locale,'ItemCard');
 
   const items = (
     await prisma.wishlistItem.findMany({
@@ -37,7 +38,6 @@ const ArchivePage = async () => {
 
   return (
     <>
-      <PageSEO title={t('pageTitle')} />
       <main>
         <h1>{t('title')}</h1>
         <section className="mt-4 grid gap-2">

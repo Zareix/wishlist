@@ -1,9 +1,10 @@
-import { getTranslations } from 'next-intl/server';
+import { useLocale, } from 'next-intl';
 import { notFound } from 'next/navigation';
 
 import AddEditItem from '@/components/AddEditItem';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
+import { getTranslator } from 'next-intl/server';
 
 const AddPage = async ({
   params: { id },
@@ -12,8 +13,9 @@ const AddPage = async ({
     id: string;
   };
 }) => {
-  const messagesAdd = await getTranslations('Add');
-  const messagesAddCategory = await getTranslations('AddCategory');
+  const locale = useLocale();
+  const messagesAdd = await getTranslator(locale, 'Add');
+  const messagesAddCategory = await getTranslator(locale, 'AddCategory');
 
   const categories = await prisma.category.findMany({
     where: {
@@ -95,7 +97,6 @@ const AddPage = async ({
 
   return (
     <>
-      {/* <PageSEO title={t('pageTitle')} /> */}
       <main>
         <h1>{messagesAdd('title')}</h1>
         <AddEditItem

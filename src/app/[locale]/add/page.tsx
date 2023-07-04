@@ -1,9 +1,10 @@
-import { getTranslations } from 'next-intl/server';
+import { useLocale } from 'next-intl';
 
 import AddEditItem from '@/components/AddEditItem';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
 import { crawlUrl } from '@/utils/actions';
+import { getTranslator } from 'next-intl/server';
 
 const AddPage = async ({
   searchParams,
@@ -12,10 +13,11 @@ const AddPage = async ({
     url?: string;
   };
 }) => {
+  const locale = useLocale();
   const url = searchParams?.url;
   const urlDefined = typeof url === 'string' && url.length > 0;
-  const messagesAdd = await getTranslations('Add');
-  const messagesAddCategory = await getTranslations('AddCategory');
+  const messagesAdd = await getTranslator(locale,'Add');
+  const messagesAddCategory = await getTranslator(locale,'AddCategory');
 
   let crawledItem;
   if (urlDefined) {
@@ -83,7 +85,6 @@ const AddPage = async ({
 
   return (
     <>
-      {/* <PageSEO title={t('pageTitle')} /> */}
       <main>
         <h1>{messagesAdd('title')}</h1>
         {urlDefined ? (

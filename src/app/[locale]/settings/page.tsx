@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { useLocale } from 'next-intl';
 
 import CategoriesSettings from '@/components/Settings/CategoriesSettings';
 import SignOut from '@/components/Settings/SignOut';
@@ -6,9 +6,11 @@ import UserAccess from '@/components/Settings/UserAccess';
 import { Separator } from '@/components/ui/separator';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
+import { getTranslator } from 'next-intl/server';
 
 const SettingsPage = async () => {
-  const t = await getTranslations('Settings');
+  const locale = useLocale();
+  const t = await getTranslator(locale,'Settings');
   const session = await getServerSideAuthSession();
 
   const authorizedAccessTo = (
@@ -34,7 +36,6 @@ const SettingsPage = async () => {
 
   return (
     <>
-      {/* <PageSEO title={t('pageTitle')} /> */}
       <main>
         <h1>{t('title')}</h1>
         <CategoriesSettings

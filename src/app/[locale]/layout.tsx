@@ -1,7 +1,7 @@
 import { HomeIcon, PlusIcon, SettingsIcon } from 'lucide-react';
 import { ArchiveIcon } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
+import { getTranslator } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
@@ -36,12 +36,11 @@ export default async function RootLayout({
     redirect('/api/auth/signin');
   }
 
-  const t = await getTranslations('Layout');
+  const t =  await getTranslator(locale, "Layout");
 
   return (
     <Providers>
       <html lang={locale} className={font.className}>
-        {/* <AppSEO /> */}
         <body>
           <div className="container mx-auto lg:ml-[18vw] lg:max-w-4xl xl:max-w-5xl">
             {children}
