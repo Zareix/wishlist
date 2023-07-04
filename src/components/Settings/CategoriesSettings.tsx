@@ -18,7 +18,7 @@ const CategoriesSettings = ({
   messages,
   categories,
 }: {
-  messages: IntlMessages['Settings']['categories'];
+  messages: IntlMessages['settings']['categories'];
   categories: Array<
     Category & {
       subCategories: Array<Category>;

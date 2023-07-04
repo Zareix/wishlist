@@ -1,5 +1,4 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
-import nextIntl from 'next-intl/plugin';
 import { withPlausibleProxy } from 'next-plausible';
 
 import { env } from './src/env.mjs';
@@ -16,7 +15,6 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const withNextIntl = nextIntl('./src/i18n/index.ts');
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -32,4 +30,4 @@ const config = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export default withBundleAnalyzer(withPlausible(withNextIntl(config)));
+export default withBundleAnalyzer(withPlausible(config));

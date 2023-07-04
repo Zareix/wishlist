@@ -1,14 +1,17 @@
-import { useLocale } from 'next-intl';
-
 import HomePageContent from '@/components/HomePageContent';
+import { useTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { getCategories } from '@/utils/data';
-import { getTranslator } from 'next-intl/server';
 
-const HomePage = async () => {
-  const locale = useLocale();
-  const t = await getTranslator(locale,'Index');
-  const tItemCard = await getTranslator(locale,'ItemCard');
+export const dynamic = 'force-dynamic';
+
+const HomePage = async ({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) => {
+  const { t } = await useTranslation(locale, 'index');
+  const { t: tItemCard } = await useTranslation(locale, 'itemCard');
   const session = await getServerSideAuthSession();
   const categories = await getCategories(session?.user.id ?? '');
   const categoriesNonEmpty = categories?.filter(

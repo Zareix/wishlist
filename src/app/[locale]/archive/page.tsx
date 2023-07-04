@@ -1,14 +1,17 @@
-import { useLocale } from 'next-intl';
-
 import ItemCard from '@/components/ItemCard';
+import { useTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
-import { getTranslator } from 'next-intl/server';
 
-const ArchivePage = async () => {
-  const locale = useLocale();
-  const t = await getTranslator(locale,'Archive');
-  const tItemCard = await getTranslator(locale,'ItemCard');
+export const dynamic = 'force-dynamic';
+
+const ArchivePage = async ({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) => {
+  const { t } = await useTranslation(locale, 'archive');
+  const { t: tItemCard } = await useTranslation(locale, 'itemCard');
 
   const items = (
     await prisma.wishlistItem.findMany({

@@ -1,0 +1,44 @@
+{
+    "pageTitle": "New item",
+    "title": "Add a new item",
+    "form": {
+        "name": "Name",
+        "category": "Category",
+        "categoryPlaceholder": "Select a category",
+        "categoryLoading": "Loading categories...",
+        "categoryEmpty": "No category",
+        "price": "Price",
+        "links": "Links",
+        "linkAdd": "Add a link",
+        "linkName": "Name",
+        "linkUrl": "URL",
+        "linkPrice": "Price",
+        "images": "Images",
+        "imageAdd": "Add an image",
+        "imageURL": "Image URL",
+        "imageLoadingError": "Error loading image",
+        "submitEdit": "Edit item",
+        "submitAdd": "Add item",
+        "errorFieldRequired": "This field is required"
+    },
+    "toast": {
+        "success": "Item created",
+        "successDetails": "Item has been created",
+        "errorUploadImage": "Error uploading image",
+        "errorUploadImageDetails": "Error uploading image"
+    },
+    "addCategory": {
+        "title": "Add a new category",
+        "form": {
+            "name": "Name",
+            "parentCategoryPlaceholder": "Select a category",
+            "parentCategory": "Parent category",
+            "errorRequired": "This field is required",
+            "errorFormat": "Only alphanumeric characters",
+            "success": "Category added",
+            "close": "Close",
+            "reset": "Reset",
+            "submit": "Add category"
+        }
+    }
+}

@@ -1,16 +1,21 @@
-import { useLocale } from 'next-intl';
-
 import CategoriesSettings from '@/components/Settings/CategoriesSettings';
 import SignOut from '@/components/Settings/SignOut';
 import UserAccess from '@/components/Settings/UserAccess';
 import { Separator } from '@/components/ui/separator';
+import { useTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
-import { getTranslator } from 'next-intl/server';
 
-const SettingsPage = async () => {
-  const locale = useLocale();
-  const t = await getTranslator(locale,'Settings');
+export const dynamic = 'force-dynamic';
+
+const SettingsPage = async ({
+  params: { locale },
+}: {
+  params: {
+    locale: string;
+  };
+}) => {
+  const { t } = await useTranslation(locale, 'settings');
   const session = await getServerSideAuthSession();
 
   const authorizedAccessTo = (

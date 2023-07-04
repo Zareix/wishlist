@@ -1,0 +1,30 @@
+{
+    "pageTitle": "Éditer",
+    "title": "Éditer {{name}}",
+    "form": {
+        "name": "Nom",
+        "category": "Catégorie",
+        "categoryPlaceholder": "Sélectionner une catégorie",
+        "categoryLoading": "Chargement des catégories...",
+        "categoryEmpty": "Aucune catégorie",
+        "price": "Prix",
+        "links": "Liens",
+        "linkAdd": "Ajouter un lien",
+        "linkName": "Nom",
+        "linkUrl": "URL",
+        "linkPrice": "Prix",
+        "images": "Images",
+        "imageAdd": "Ajouter une image",
+        "imageURL": "URL de l'image",
+        "imageLoadingError": "Erreur lors du chargement de l'image",
+        "submitEdit": "Modifier",
+        "submitAdd": "Ajouter",
+        "errorFieldRequired": "Ce champ est requis"
+    },
+    "toast": {
+        "success": "Élément modifié",
+        "successDetails": "Item a été modifié",
+        "errorUploadImage": "Erreur lors de l'ajout de l'image",
+        "errorUploadImageDetails": "Une erreur est survenue lors de l'ajout de l'image"
+    }
+}

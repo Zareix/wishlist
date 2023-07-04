@@ -1,0 +1,30 @@
+{
+    "pageTitle": "Edit item",
+    "title": "Editing {{name}}",
+    "form": {
+        "name": "Name",
+        "category": "Category",
+        "categoryPlaceholder": "Select a category",
+        "categoryLoading": "Loading categories...",
+        "categoryEmpty": "No category",
+        "price": "Price",
+        "links": "Links",
+        "linkAdd": "Add a link",
+        "linkName": "Name",
+        "linkUrl": "URL",
+        "linkPrice": "Price",
+        "images": "Images",
+        "imageAdd": "Add an image",
+        "imageURL": "Image URL",
+        "imageLoadingError": "Error loading image",
+        "submitEdit": "Edit item",
+        "submitAdd": "Add item",
+        "errorFieldRequired": "This field is required"
+    },
+    "toast": {
+        "success": "Item updated",
+        "successDetails": "Item has been updated",
+        "errorUploadImage": "Error uploading image",
+        "errorUploadImageDetails": "Error uploading image"
+    }
+}

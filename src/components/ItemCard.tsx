@@ -60,7 +60,7 @@ const ItemCard = ({
   canEdit,
   isDraggable = false,
 }: {
-  messages: IntlMessages['ItemCard'];
+  messages: IntlMessages['itemCard'];
   item: WishlistItem & {
     images: ItemImage[];
     links: ItemLink[];

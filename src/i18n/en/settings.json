@@ -1,0 +1,20 @@
+{
+  "pageTitle": "Settings",
+  "title": "Settings",
+  "logout": "Logout",
+  "categories": {
+    "name": "Name",
+    "visibility": "Visibility",
+    "info": "This is a parent category : if private all subcategories (even public ones) will be hidden",
+    "public": "Public",
+    "private": "Private"
+  },
+  "access": {
+    "emailRequired": "Email is required",
+    "noOneAccess": "No one has access to your wishlist",
+    "revoke": "Revoke",
+    "share": "Share",
+    "sharedWith": "Shared with",
+    "title": "User access"
+  }
+}

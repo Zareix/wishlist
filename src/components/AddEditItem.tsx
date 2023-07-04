@@ -16,7 +16,6 @@ import {
   Trash,
   UploadIcon,
 } from 'lucide-react';
-import { revalidatePath } from 'next/cache';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, {
@@ -72,8 +71,8 @@ const AddEditItem = ({
   editing,
 }: {
   messages: {
-    addEdit: IntlMessages['Add'] | IntlMessages['Edit'];
-    addCategory: IntlMessages['AddCategory'];
+    addEdit: IntlMessages['add'] | IntlMessages['edit'];
+    addCategory: IntlMessages['add']['addCategory'];
   };
   item?: Partial<
     Inputs & {
@@ -461,7 +460,7 @@ const ItemImageCard = ({
   messages,
   image,
 }: {
-  messages: IntlMessages['Add'];
+  messages: IntlMessages['add'] | IntlMessages['edit'];
   image: string;
 }) => {
   const [error, setError] = useState(false);

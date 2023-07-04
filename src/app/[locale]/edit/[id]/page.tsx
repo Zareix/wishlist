@@ -1,21 +1,21 @@
-import { useLocale, } from 'next-intl';
 import { notFound } from 'next/navigation';
 
 import AddEditItem from '@/components/AddEditItem';
+import { useTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
-import { getTranslator } from 'next-intl/server';
+
+export const dynamic = 'force-dynamic';
 
 const AddPage = async ({
-  params: { id },
+  params: { id, locale },
 }: {
   params: {
     id: string;
+    locale: string;
   };
 }) => {
-  const locale = useLocale();
-  const messagesAdd = await getTranslator(locale, 'Add');
-  const messagesAddCategory = await getTranslator(locale, 'AddCategory');
+  const { t } = await useTranslation(locale, 'edit');
 
   const categories = await prisma.category.findMany({
     where: {
@@ -49,48 +49,50 @@ const AddPage = async ({
   const messages: Parameters<typeof AddEditItem>['0']['messages'] = {
     addCategory: {
       form: {
-        close: messagesAddCategory('form.close'),
-        errorFormat: messagesAddCategory('form.errorFormat'),
-        errorRequired: messagesAddCategory('form.errorRequired'),
-        name: messagesAddCategory('form.name'),
-        parentCategory: messagesAddCategory('form.parentCategory'),
-        parentCategoryPlaceholder: messagesAddCategory(
-          'form.parentCategoryPlaceholder',
+        close: t('addCategory.form.close'),
+        errorFormat: t('addCategory.form.errorFormat'),
+        errorRequired: t('addCategory.form.errorRequired'),
+        name: t('addCategory.form.name'),
+        parentCategory: t('addCategory.form.parentCategory'),
+        parentCategoryPlaceholder: t(
+          'addCategory.form.parentCategoryPlaceholder',
         ),
-        reset: messagesAddCategory('form.reset'),
-        submit: messagesAddCategory('form.submit'),
-        success: messagesAddCategory('form.success'),
+        reset: t('addCategory.form.reset'),
+        submit: t('addCategory.form.submit'),
+        success: t('addCategory.form.success'),
       },
-      title: messagesAddCategory('title'),
+      title: t('addCategory.title'),
     },
     addEdit: {
-      title: messagesAdd('title'),
+      title: t('title', {
+        name: item.name,
+      }),
       form: {
-        category: messagesAdd('form.category'),
-        categoryEmpty: messagesAdd('form.categoryEmpty'),
-        categoryLoading: messagesAdd('form.categoryLoading'),
-        categoryPlaceholder: messagesAdd('form.categoryPlaceholder'),
-        errorFieldRequired: messagesAdd('form.errorFieldRequired'),
-        imageAdd: messagesAdd('form.imageAdd'),
-        imageLoadingError: messagesAdd('form.imageLoadingError'),
-        images: messagesAdd('form.images'),
-        imageURL: messagesAdd('form.imageURL'),
-        linkAdd: messagesAdd('form.linkAdd'),
-        linkName: messagesAdd('form.linkName'),
-        linkPrice: messagesAdd('form.linkPrice'),
-        links: messagesAdd('form.links'),
-        linkUrl: messagesAdd('form.linkUrl'),
-        name: messagesAdd('form.name'),
-        price: messagesAdd('form.price'),
-        submitAdd: messagesAdd('form.submitAdd'),
-        submitEdit: messagesAdd('form.submitEdit'),
+        category: t('form.category'),
+        categoryEmpty: t('form.categoryEmpty'),
+        categoryLoading: t('form.categoryLoading'),
+        categoryPlaceholder: t('form.categoryPlaceholder'),
+        errorFieldRequired: t('form.errorFieldRequired'),
+        imageAdd: t('form.imageAdd'),
+        imageLoadingError: t('form.imageLoadingError'),
+        images: t('form.images'),
+        imageURL: t('form.imageURL'),
+        linkAdd: t('form.linkAdd'),
+        linkName: t('form.linkName'),
+        linkPrice: t('form.linkPrice'),
+        links: t('form.links'),
+        linkUrl: t('form.linkUrl'),
+        name: t('form.name'),
+        price: t('form.price'),
+        submitAdd: t('form.submitAdd'),
+        submitEdit: t('form.submitEdit'),
       },
-      pageTitle: messagesAdd('pageTitle'),
+      pageTitle: t('pageTitle'),
       toast: {
-        errorUploadImage: messagesAdd('toast.errorUploadImage'),
-        errorUploadImageDetails: messagesAdd('toast.errorUploadImageDetails'),
-        success: messagesAdd('toast.success'),
-        successDetails: messagesAdd('toast.successDetails'),
+        errorUploadImage: t('toast.errorUploadImage'),
+        errorUploadImageDetails: t('toast.errorUploadImageDetails'),
+        success: t('toast.success'),
+        successDetails: t('toast.successDetails'),
       },
     },
   };
@@ -98,7 +100,11 @@ const AddPage = async ({
   return (
     <>
       <main>
-        <h1>{messagesAdd('title')}</h1>
+        <h1>
+          {t('title', {
+            name: item.name,
+          })}
+        </h1>
         <AddEditItem
           messages={messages}
           item={item}

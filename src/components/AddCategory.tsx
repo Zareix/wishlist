@@ -30,7 +30,7 @@ const AddCategory = ({
   messages,
   categories,
 }: {
-  messages: IntlMessages['AddCategory'];
+  messages: IntlMessages['add']['addCategory'];
   categories: Array<Pick<Category, 'name' | 'id'>>;
 }) => {
   const [isPending, startTransition] = useTransition();

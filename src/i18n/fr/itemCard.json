@@ -1,0 +1,12 @@
+{
+    "actions": {
+        "edit": "Editer",
+        "move": "Déplacer",
+        "validate": "Valider",
+        "archive": "Archiver",
+        "restore": "Restaurer",
+        "restoreIn": "Restaurer dans \"{{category}}\"",
+        "dialogClose": "Fermer",
+        "on": "le {{date}}"
+    }
+}

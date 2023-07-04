@@ -16,7 +16,7 @@ const UserAccess = ({
   messages,
   authorizedAccessTo,
 }: {
-  messages: IntlMessages['Settings']['access'];
+  messages: IntlMessages['settings']['access'];
   authorizedAccessTo: Pick<User, 'id' | 'email'>[];
 }) => {
   const router = useRouter();

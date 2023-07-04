@@ -1,10 +1,16 @@
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/i18n';
+import { fallbackLng } from '@/i18n/settings';
 
-export default function Page404() {
-  const t = useTranslations('404');
+export default async function Page404({
+  params: { locale },
+}: {
+  params: {
+    locale: string;
+  };
+}) {
+  const { t } = await useTranslation(locale ?? fallbackLng, 'not-found');
   return (
     <>
-      {/* <PageSEO title={t('pageTitle')} /> */}
       <main>
         <h1>{t('title')}</h1>
       </main>

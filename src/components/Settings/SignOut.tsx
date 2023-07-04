@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 const SignOut = ({
   messages,
 }: {
-  messages: IntlMessages['Settings']['logout'];
+  messages: IntlMessages['settings']['logout'];
 }) => {
   return (
     <div className="flex justify-center">
