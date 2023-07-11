@@ -80,9 +80,9 @@ const HomePageContent = ({
                             <AccordionContent>
                               <CategoryContent
                                 messages={itemMessages}
-                                items={category.wishlistItems.map((x) => ({
+                                items={subCategory.wishlistItems.map((x) => ({
                                   ...x,
-                                  category,
+                                  category: subCategory,
                                 }))}
                                 userId={userId}
                                 categories={categories}
