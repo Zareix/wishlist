@@ -41,7 +41,7 @@
     "accept-language": "^3.0.18",
     "babel-loader": "^9.1.2",
     "cheerio": "1.0.0-rc.12",
-    "class-variance-authority": "^0.6.1",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
     "formidable": "^2.1.2",
     "i18next": "^23.2.7",
