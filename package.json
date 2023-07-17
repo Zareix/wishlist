@@ -42,7 +42,7 @@
     "babel-loader": "^9.1.2",
     "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^1.2.1",
+    "clsx": "^2.0.0",
     "formidable": "^2.1.2",
     "i18next": "^23.2.7",
     "i18next-resources-to-backend": "^1.1.4",
