@@ -1,6 +1,7 @@
 import { dir } from 'i18next';
 import { HomeIcon, PlusIcon, SettingsIcon } from 'lucide-react';
 import { ArchiveIcon } from 'lucide-react';
+import PlausibleProvider from 'next-plausible';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -43,6 +44,9 @@ export default async function RootLayout({
   return (
     <Providers>
       <html lang={locale} dir={dir(locale)} className={font.className}>
+        <head>
+          <PlausibleProvider domain="wishlist.raphael-catarino.fr" />
+        </head>
         <body>
           <div className="container mx-auto lg:ml-[18vw] lg:max-w-4xl xl:max-w-5xl">
             {children}
