@@ -1,4 +1,4 @@
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { fallbackLng } from '@/i18n/settings';
 
 export default async function Page404({
@@ -8,7 +8,7 @@ export default async function Page404({
     locale: string;
   };
 }) {
-  const { t } = await useTranslation(locale ?? fallbackLng, 'not-found');
+  const { t } = await getTranslation(locale ?? fallbackLng, 'not-found');
   return (
     <>
       <main>

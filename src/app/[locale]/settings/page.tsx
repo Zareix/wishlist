@@ -2,7 +2,7 @@ import CategoriesSettings from '@/components/Settings/CategoriesSettings';
 import SignOut from '@/components/Settings/SignOut';
 import UserAccess from '@/components/Settings/UserAccess';
 import { Separator } from '@/components/ui/separator';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
 
@@ -15,7 +15,7 @@ const SettingsPage = async ({
     locale: string;
   };
 }) => {
-  const { t } = await useTranslation(locale, 'settings');
+  const { t } = await getTranslation(locale, 'settings');
   const session = await getServerSideAuthSession();
 
   const authorizedAccessTo = (

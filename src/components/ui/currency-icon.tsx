@@ -1,10 +1,11 @@
 import { type EnumCurrency } from '@prisma/client';
-import { DollarSign, Euro, type LucideProps } from 'lucide-react';
+import { DollarSign, Euro } from 'lucide-react';
+import type { ComponentProps } from 'react';
 
 const CurrencyIcon = ({
   currency,
   ...props
-}: LucideProps & {
+}: ComponentProps<typeof Euro> & {
   currency: EnumCurrency;
 }) => {
   switch (currency) {

@@ -22,7 +22,7 @@ type Options = {
   keyPrefix?: string;
 };
 
-export async function useTranslation(
+export async function getTranslation(
   locale: string,
   ns: string | string[],
   options: Options | undefined = {},

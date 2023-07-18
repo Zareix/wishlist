@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import AddEditItem from '@/components/AddEditItem';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
 
@@ -15,7 +15,7 @@ const AddPage = async ({
     locale: string;
   };
 }) => {
-  const { t } = await useTranslation(locale, 'edit');
+  const { t } = await getTranslation(locale, 'edit');
 
   const categories = await prisma.category.findMany({
     where: {

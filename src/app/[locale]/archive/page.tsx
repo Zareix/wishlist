@@ -1,5 +1,5 @@
 import ItemCard from '@/components/ItemCard';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
 
@@ -10,8 +10,8 @@ const ArchivePage = async ({
 }: {
   params: { locale: string };
 }) => {
-  const { t } = await useTranslation(locale, 'archive');
-  const { t: tItemCard } = await useTranslation(locale, 'itemCard');
+  const { t } = await getTranslation(locale, 'archive');
+  const { t: tItemCard } = await getTranslation(locale, 'itemCard');
 
   const items = (
     await prisma.wishlistItem.findMany({

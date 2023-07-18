@@ -1,5 +1,5 @@
 import AddEditItem from '@/components/AddEditItem';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { prisma } from '@/server/db';
 import { crawlUrl } from '@/utils/actions';
@@ -17,7 +17,7 @@ const AddPage = async ({
 }) => {
   const url = searchParams?.url;
   const urlDefined = typeof url === 'string' && url.length > 0;
-  const { t } = await useTranslation(locale, 'add');
+  const { t } = await getTranslation(locale, 'add');
 
   let crawledItem;
   if (urlDefined) {

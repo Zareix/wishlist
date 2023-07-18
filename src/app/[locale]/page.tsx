@@ -1,5 +1,5 @@
 import HomePageContent from '@/components/HomePageContent';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { getCategories } from '@/utils/data';
 
@@ -10,8 +10,8 @@ const HomePage = async ({
 }: {
   params: { locale: string };
 }) => {
-  const { t } = await useTranslation(locale, 'index');
-  const { t: tItemCard } = await useTranslation(locale, 'itemCard');
+  const { t } = await getTranslation(locale, 'index');
+  const { t: tItemCard } = await getTranslation(locale, 'itemCard');
   const session = await getServerSideAuthSession();
   const categories = await getCategories(session?.user.id ?? '');
   const categoriesNonEmpty = categories?.filter(

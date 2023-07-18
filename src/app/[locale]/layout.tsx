@@ -10,7 +10,7 @@ import Providers from '@/app/[locale]/provider';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Toaster } from '@/components/ui/toaster';
-import { useTranslation } from '@/i18n';
+import { getTranslation } from '@/i18n';
 import { languages } from '@/i18n/settings';
 import { getServerSideAuthSession } from '@/server/auth';
 import '@/styles/globals.css';
@@ -39,7 +39,7 @@ export default async function RootLayout({
     redirect('/api/auth/signin');
   }
 
-  const { t } = await useTranslation(locale, 'root-layout');
+  const { t } = await getTranslation(locale, 'root-layout');
 
   return (
     <Providers>
