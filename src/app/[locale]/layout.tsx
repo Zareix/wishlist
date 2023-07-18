@@ -45,7 +45,7 @@ export default async function RootLayout({
     <Providers>
       <html lang={locale} dir={dir(locale)} className={font.className}>
         <head>
-          <PlausibleProvider domain="wishlist.raphael-catarino.fr" />
+          <PlausibleProvider domain="wishlist.raphael-catarino.fr" selfHosted />
         </head>
         <body>
           <div className="container mx-auto lg:ml-[18vw] lg:max-w-4xl xl:max-w-5xl">
