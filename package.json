@@ -46,7 +46,7 @@
     "formidable": "^2.1.2",
     "i18next": "^23.2.11",
     "i18next-resources-to-backend": "^1.1.4",
-    "lucide-react": "^0.269.0",
+    "lucide-react": "^0.270.0",
     "million": "^2.5.13",
     "next": "^13.4.10",
     "next-auth": "^4.22.1",
