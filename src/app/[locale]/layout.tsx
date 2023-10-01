@@ -20,7 +20,7 @@ const font = Inter({
   subsets: ['latin'],
 });
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 export function generateStaticParams() {
   return languages.map((lng) => ({ lng }));

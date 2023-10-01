@@ -4,7 +4,7 @@ import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { getCategories } from '@/utils/data';
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 const HomePage = async ({
   params: { locale },
