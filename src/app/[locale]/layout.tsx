@@ -77,7 +77,7 @@ export default async function RootLayout({
               </Button>
             </Link>
           </nav>
-          <nav className="fixed inset-x-4 bottom-4 mx-auto flex max-w-sm items-center justify-center space-x-4 rounded-2xl bg-card py-2 shadow-sm dark:border dark:border-slate-700 dark:bg-slate-950 lg:hidden">
+          <nav className="fixed bottom-0 flex w-full items-center justify-center space-x-4 bg-card py-2 pb-4 shadow-sm dark:border-t dark:border-slate-700 dark:bg-slate-950 lg:hidden">
             <Link href={`/${locale}/`}>
               <Button variant="link">
                 <HomeIcon />

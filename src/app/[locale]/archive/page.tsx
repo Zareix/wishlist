@@ -40,38 +40,36 @@ const ArchivePage = async ({
   });
 
   return (
-    <>
-      <main>
-        <h1>{t('title')}</h1>
-        <section className="mt-4 grid gap-2">
-          {items.map((item) => (
-            <ItemCard
-              key={item.id}
-              messages={{
-                actions: {
-                  archive: tItemCard('actions.archive'),
-                  dialogClose: tItemCard('actions.dialogClose'),
-                  edit: tItemCard('actions.edit'),
-                  move: tItemCard('actions.move'),
-                  on: tItemCard('actions.on', {
-                    date: new Date(item.updatedAt).toLocaleDateString(),
-                  }),
-                  restore: tItemCard('actions.restore'),
-                  restoreIn: tItemCard('actions.restoreIn', {
-                    category: item.category.name,
-                  }),
-                  validate: tItemCard('actions.validate'),
-                },
-              }}
-              item={item}
-              categories={categories}
-              canEdit
-              isDraggable={false}
-            />
-          ))}
-        </section>
-      </main>
-    </>
+    <main>
+      <h1>{t('title')}</h1>
+      <section className="mt-4 grid gap-2 lg:grid-cols-2">
+        {items.map((item) => (
+          <ItemCard
+            key={item.id}
+            messages={{
+              actions: {
+                archive: tItemCard('actions.archive'),
+                dialogClose: tItemCard('actions.dialogClose'),
+                edit: tItemCard('actions.edit'),
+                move: tItemCard('actions.move'),
+                on: tItemCard('actions.on', {
+                  date: new Date(item.updatedAt).toLocaleDateString(),
+                }),
+                restore: tItemCard('actions.restore'),
+                restoreIn: tItemCard('actions.restoreIn', {
+                  category: item.category.name,
+                }),
+                validate: tItemCard('actions.validate'),
+              },
+            }}
+            item={item}
+            categories={categories}
+            canEdit
+            isDraggable={false}
+          />
+        ))}
+      </section>
+    </main>
   );
 };
 
