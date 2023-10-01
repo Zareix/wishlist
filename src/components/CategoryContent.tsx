@@ -25,6 +25,7 @@ import {
   type ItemLink,
   type WishlistItem,
 } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
@@ -46,6 +47,7 @@ const CategoryContent = ({
   userId?: string;
   categories: Parameters<typeof ItemCard>[0]['categories'];
 }) => {
+  const { data: session } = useSession();
   const [, startTransition] = useTransition();
   const router = useRouter();
   const sensors = useSensors(
@@ -92,8 +94,8 @@ const CategoryContent = ({
               categories={categories}
               item={item}
               key={item.id}
-              canEdit={!userId}
-              isDraggable={!userId}
+              canEdit={session?.user.id === userId}
+              isDraggable={session?.user.id === userId}
             />
           ))}
         </SortableContext>

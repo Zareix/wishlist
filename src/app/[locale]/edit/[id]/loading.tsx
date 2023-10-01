@@ -1,7 +1,7 @@
 import { LoadingFullPage } from '@/components/ui/loading';
 
-const LoadingAdd = () => {
+const LoadingEdit = () => {
   return <LoadingFullPage />;
 };
 
-export default LoadingAdd;
+export default LoadingEdit;

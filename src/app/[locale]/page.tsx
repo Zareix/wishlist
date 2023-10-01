@@ -1,24 +1,36 @@
 import HomePageContent from '@/components/HomePageContent';
+import ListUserSelection from '@/components/ListUserSelection';
 import { getTranslation } from '@/i18n';
 import { getServerSideAuthSession } from '@/server/auth';
 import { getCategories } from '@/utils/data';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 const HomePage = async ({
   params: { locale },
+  searchParams,
 }: {
   params: { locale: string };
+  searchParams: {
+    selectedCategoryId?: string;
+    selectedUserId?: string;
+  };
 }) => {
   const { t } = await getTranslation(locale, 'index');
   const { t: tItemCard } = await getTranslation(locale, 'itemCard');
   const session = await getServerSideAuthSession();
-  const categories = await getCategories(session?.user.id ?? '');
+  const selectedUserId = searchParams.selectedUserId ?? session?.user.id ?? '';
+  const selectedCategoryId = searchParams.selectedCategoryId;
+  const categories = await getCategories(
+    selectedUserId,
+    selectedUserId !== session?.user.id ? true : undefined,
+  );
   const categoriesNonEmpty = categories?.filter(
     (x) =>
       x.wishlistItems.length > 0 ||
       x.subCategories?.some((y) => y.wishlistItems.length > 0),
   );
+
   const itemMessages = {
     actions: {
       archive: tItemCard('actions.archive'),
@@ -37,39 +49,14 @@ const HomePage = async ({
       <main>
         <div className="flex">
           <h1>{t('title')}</h1>
-          {/* {session?.user.hasAccessTo && session.user.hasAccessTo.length > 0 && (
-            <span className="ml-auto">
-              <Select
-                defaultValue={session?.user.id}
-                onValueChange={(value) => {
-                  if (value === session?.user.id) {
-                    setUserId(undefined);
-                    return;
-                  }
-                  setUserId(value);
-                }}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a fruit" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={session.user.id ?? ''}>
-                    {t('myWishlist')}
-                  </SelectItem>
-                  {session.user.hasAccessTo.map((user) => (
-                    <SelectItem key={user.id} value={user.id}>
-                      {user.name ?? user.email}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </span>
-          )} */}
+          <ListUserSelection />
         </div>
         <HomePageContent
           categories={categories}
           categoriesNonEmpty={categoriesNonEmpty}
           itemMessages={itemMessages}
+          selectedCategoryId={selectedCategoryId}
+          userId={selectedUserId}
         />
       </main>
     </>

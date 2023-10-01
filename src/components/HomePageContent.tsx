@@ -2,6 +2,7 @@
 
 import { TabsContent } from '@radix-ui/react-tabs';
 import { EyeOffIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import CategoryContent from '@/components/CategoryContent';
 import {
@@ -19,16 +20,21 @@ const HomePageContent = ({
   categoriesNonEmpty,
   itemMessages,
   userId,
+  selectedCategoryId,
 }: {
   categories: Awaited<ReturnType<typeof getCategories>>;
   categoriesNonEmpty: Awaited<ReturnType<typeof getCategories>>;
   itemMessages: Parameters<typeof CategoryContent>[0]['messages'];
   userId?: string;
+  selectedCategoryId?: string;
 }) => {
   return (
     <>
       {categories.length > 0 && (
-        <Tabs defaultValue={categoriesNonEmpty[0]?.id} className="mt-4">
+        <Tabs
+          defaultValue={selectedCategoryId ?? categoriesNonEmpty[0]?.id}
+          className="mt-4"
+        >
           <ScrollAreaHorizontal>
             <TabsList>
               {categoriesNonEmpty.map((category) => (
@@ -36,9 +42,17 @@ const HomePageContent = ({
                   key={category.id}
                   value={category.id}
                   className="flex gap-1"
+                  asChild
                 >
-                  {category.name}
-                  {!category.public && <EyeOffIcon size={14} />}
+                  <Link
+                    href={`?${new URLSearchParams({
+                      selectedUserId: userId ?? '',
+                      selectedCategoryId: category.id,
+                    }).toString()}`}
+                  >
+                    {category.name}
+                    {!category.public && <EyeOffIcon size={14} />}
+                  </Link>
                 </TabsTrigger>
               ))}
             </TabsList>

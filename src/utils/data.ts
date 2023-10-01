@@ -1,13 +1,17 @@
 import { prisma } from '@/server/db';
 
-export const getCategories = (userId: string) =>
+export const getCategories = (userId: string, onlyPublic?: boolean) =>
   prisma.category.findMany({
     where: {
       userId,
       parentCategoryId: null,
+      public: onlyPublic,
     },
     include: {
       subCategories: {
+        where: {
+          public: onlyPublic,
+        },
         include: {
           wishlistItems: {
             include: {
