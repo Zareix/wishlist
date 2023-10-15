@@ -31,6 +31,7 @@ const HomePage = async ({
       x.subCategories?.some((y) => y.wishlistItems.length > 0),
   );
 
+
   const itemMessages = {
     actions: {
       archive: tItemCard('actions.archive'),

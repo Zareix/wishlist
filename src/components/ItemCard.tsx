@@ -94,9 +94,8 @@ const ItemCard = ({
           if (silent) return;
           toast({
             title: 'Item updated',
-            description: `Item ${item.name} has been ${
-              state === 'ACTIVE' ? 'restored' : state.toLowerCase()
-            }.`,
+            description: `Item ${item.name} has been ${state === 'ACTIVE' ? 'restored' : state.toLowerCase()
+              }.`,
             action: (
               <ToastAction
                 altText="Undo"
@@ -146,7 +145,7 @@ const ItemCard = ({
 
   return (
     <Card
-      className="w-full max-w-sm"
+      className="w-full max-w-sm grid"
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -154,7 +153,7 @@ const ItemCard = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           {item.name}
-          {item.price && (
+          {((item.price ?? -1) > 0) && (
             <div className="muted ml-auto flex w-1/6 items-center">
               <span>{item.price}</span>
               <CurrencyIcon currency={item.currency} className="h-4 w-4" />
@@ -239,7 +238,7 @@ const ItemCard = ({
           </ScrollAreaHorizontal>
         )}
       </CardContent>
-      <CardFooter className="relative flex justify-end gap-2">
+      <CardFooter className="relative flex justify-end gap-2 mt-auto">
         {item.state !== 'ACTIVE' && (
           <div className="mr-auto">
             <span

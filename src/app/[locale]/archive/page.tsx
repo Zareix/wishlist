@@ -53,7 +53,11 @@ const ArchivePage = async ({
                 edit: tItemCard('actions.edit'),
                 move: tItemCard('actions.move'),
                 on: tItemCard('actions.on', {
-                  date: new Date(item.updatedAt).toLocaleDateString(),
+                  date: new Date(item.updatedAt).toLocaleDateString(locale, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }),
                 }),
                 restore: tItemCard('actions.restore'),
                 restoreIn: tItemCard('actions.restoreIn', {
