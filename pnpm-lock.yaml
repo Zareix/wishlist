@@ -97,7 +97,7 @@ dependencies:
     version: 23.10.0
   i18next-resources-to-backend:
     specifier: ^1.1.4
-    version: 1.1.4
+    version: 1.2.0
   lucide-react:
     specifier: ^0.338.0
     version: 0.338.0(react@18.2.0)
@@ -4862,10 +4862,10 @@ packages:
       entities: 4.5.0
     dev: false
 
-  /i18next-resources-to-backend@1.1.4:
-    resolution: {integrity: sha512-hMyr9AOmIea17AOaVe1srNxK/l3mbk81P7Uf3fdcjlw3ehZy3UNTd0OP3EEi6yu4J02kf9jzhCcjokz6AFlEOg==}
+  /i18next-resources-to-backend@1.2.0:
+    resolution: {integrity: sha512-8f1l03s+QxDmCfpSXCh9V+AFcxAwIp0UaroWuyOx+hmmv8484GcELHs+lnu54FrNij8cDBEXvEwhzZoXsKcVpg==}
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.23.9
     dev: false
 
   /i18next@23.10.0:
