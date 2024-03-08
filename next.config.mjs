@@ -19,11 +19,12 @@ const withBundleAnalyzer = bundleAnalyzer({
 const config = {
   reactStrictMode: true,
   images: {
-    domains: [new URL(env.S3_PUBLIC_URL).hostname],
+    domains: [new URL(process.env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname],
   },
   typescript: {
     ignoreBuildErrors: process.env.SKIP_LINT === 'true',
   },
+  output: 'standalone',
 };
 
 export default withBundleAnalyzer(withPlausible(config));
