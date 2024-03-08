@@ -1,5 +1,4 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
-import million from 'million/compiler';
 import { withPlausibleProxy } from 'next-plausible';
 
 import { env } from './src/env.mjs';
@@ -25,15 +24,6 @@ const config = {
   typescript: {
     ignoreBuildErrors: process.env.SKIP_LINT === 'true',
   },
-  experimental: { serverActions: true },
 };
 
-const millionConfig = {
-  auto: { rsc: true },
-};
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export default withBundleAnalyzer(
-  million.next(withPlausible(config), millionConfig),
-);
+export default withBundleAnalyzer(withPlausible(config));

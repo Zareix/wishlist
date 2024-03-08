@@ -116,18 +116,21 @@ const AddEditItem = ({
     name: 'images',
   });
   const { toast } = useToast();
-  const imageMutation = useMutation(['image', item?.id], (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-      return res.json() as Promise<{ url: string }>;
-    });
+  const imageMutation = useMutation({
+    mutationKey: ['image', item?.id],
+    mutationFn: (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json() as Promise<{ url: string }>;
+      });
+    },
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -412,7 +415,7 @@ const AddEditItem = ({
                   fileInputRef.current?.click();
                 }}
               >
-                {imageMutation.isLoading ? (
+                {imageMutation.isPending ? (
                   <Loading />
                 ) : (
                   <UploadIcon className="h-6 w-6" />

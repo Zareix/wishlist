@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-    provider     = "mysql"
+    provider     = "postgresql"
     url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
@@ -111,7 +111,7 @@ model Category {
     wishlistItems    WishlistItem[]
     public           Boolean        @default(false)
     parentCategoryId String?
-    parentCategory   Category?      @relation("CategorySubCategory", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentCategory   Category?      @relation("CategorySubCategory", fields: [parentCategoryId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     subCategories    Category[]     @relation("CategorySubCategory")
 
     @@index([parentCategoryId])
