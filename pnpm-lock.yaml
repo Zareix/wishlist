@@ -73,7 +73,7 @@ dependencies:
     version: 1.0.7(@types/react-dom@18.2.21)(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query':
     specifier: ^5.25.0
-    version: 5.26.3(react@18.2.0)
+    version: 5.27.3(react@18.2.0)
   accept-language:
     specifier: ^3.0.18
     version: 3.0.18
@@ -1486,8 +1486,8 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: false
 
-  /@jridgewell/source-map@0.3.5:
-    resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
+  /@jridgewell/source-map@0.3.6:
+    resolution: {integrity: sha512-1ZJTZebgqllO79ue2bm3rIGud/bOe0pP5BjSRCRxxYkEZS8STV7zN84UBbiYu7jy+eCKSnVIUgoWWE/tt+shMQ==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
@@ -3101,16 +3101,16 @@ packages:
       tslib: 2.5.3
     dev: false
 
-  /@tanstack/query-core@5.26.3:
-    resolution: {integrity: sha512-kKv7VHIleC7cwpMS3M63mWUFFbdiRo7JZMVUyZ4z/79RZoAi7/vGTVkCrnNqyKl+zwBRkumYL+eiYtyShGZd0A==}
+  /@tanstack/query-core@5.27.3:
+    resolution: {integrity: sha512-1SrNjrFX8eQRQ7DF3hMUhRYzxT9lEry4Uvj2lxl819Cmlq4uWQFGjZKS6moDuZoADG9/85oDdtcHbxmYQ7+HGw==}
     dev: false
 
-  /@tanstack/react-query@5.26.3(react@18.2.0):
-    resolution: {integrity: sha512-fP/kEu8aVLb6ln0ySazaeyivVkSQ9EnFfA5kQ7yIQNklx5JCW7otHVY6GVjZtd/3wK6QU99yvdSH0rN0LV2vmA==}
+  /@tanstack/react-query@5.27.3(react@18.2.0):
+    resolution: {integrity: sha512-a8c+lFvPdS4OR1r/p0F21Xwo6AxaJSqn/GbygzbzI+oZA6ZaUeJSs5GsazAn1x7XI/T/SDur78CuChWfMz9bhA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.26.3
+      '@tanstack/query-core': 5.27.3
       react: 18.2.0
     dev: false
 
@@ -6897,7 +6897,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      '@jridgewell/source-map': 0.3.5
+      '@jridgewell/source-map': 0.3.6
       acorn: 8.11.3
       commander: 2.20.3
       source-map-support: 0.5.21
