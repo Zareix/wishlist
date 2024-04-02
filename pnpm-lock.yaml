@@ -156,7 +156,7 @@ devDependencies:
     version: 3.4.5
   '@types/node':
     specifier: ^20.11.25
-    version: 20.12.1
+    version: 20.12.3
   '@types/prettier':
     specifier: ^3.0.0
     version: 3.0.0
@@ -3160,7 +3160,7 @@ packages:
   /@types/formidable@3.4.5:
     resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
     dependencies:
-      '@types/node': 20.12.1
+      '@types/node': 20.12.3
     dev: true
 
   /@types/json-schema@7.0.15:
@@ -3170,17 +3170,10 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@types/node@20.12.1:
-    resolution: {integrity: sha512-5lcxgB72hlSF7ZS9ZzX1RCLc9+BovxjL17T00xSmj3c0ygZFjPdNnN0RchfGpot/yniVMkWnyO6aR9Dr1q9qrg==}
+  /@types/node@20.12.3:
+    resolution: {integrity: sha512-sD+ia2ubTeWrOu+YMF+MTAB7E+O7qsMqAbMfW7DG3K1URwhZ5hN1pLlRVGbf4wDFzSfikL05M17EyorS86jShw==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
-
-  /@types/node@20.12.2:
-    resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: false
 
   /@types/prettier@3.0.0:
     resolution: {integrity: sha512-mFMBfMOz8QxhYVbuINtswBp9VL2b4Y0QqYHwqLz3YbgtfAcat2Dl6Y1o4e22S/OVE6Ebl9m7wWiMT2lSbAs1wA==}
@@ -5390,7 +5383,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.12.2
+      '@types/node': 20.12.3
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false
