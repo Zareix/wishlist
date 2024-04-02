@@ -73,7 +73,7 @@ dependencies:
     version: 1.0.7(@types/react-dom@18.2.23)(@types/react@18.2.73)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query':
     specifier: ^5.25.0
-    version: 5.28.9(react@18.2.0)
+    version: 5.28.14(react@18.2.0)
   accept-language:
     specifier: ^3.0.18
     version: 3.0.18
@@ -3108,16 +3108,16 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@tanstack/query-core@5.28.9:
-    resolution: {integrity: sha512-hNlfCiqZevr3GRVPXS3MhaGW5hjcxvCsIQ4q6ff7EPlvFwYZaS+0d9EIIgofnegDaU2BbCDlyURoYfRl5rmzow==}
+  /@tanstack/query-core@5.28.13:
+    resolution: {integrity: sha512-C3+CCOcza+mrZ7LglQbjeYEOTEC3LV0VN0eYaIN6GvqAZ8Foegdgch7n6QYPtT4FuLae5ALy+m+ZMEKpD6tMCQ==}
     dev: false
 
-  /@tanstack/react-query@5.28.9(react@18.2.0):
-    resolution: {integrity: sha512-vwifBkGXsydsLxFOBMe3+f8kvtDoqDRDwUNjPHVDDt+FoBetCbOWAUHgZn4k+CVeZgLmy7bx6aKeDbe3e8koOQ==}
+  /@tanstack/react-query@5.28.14(react@18.2.0):
+    resolution: {integrity: sha512-cZqt03Igb3I9tM72qNX5TAAmeYl75Z+k4Mv92VkXIXc2hCrv0fIywd7GN3JV1BBJl4mr7Cc+OOKKOPy8sNVOkA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.28.9
+      '@tanstack/query-core': 5.28.13
       react: 18.2.0
     dev: false
 
@@ -6757,12 +6757,12 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.30.1
+      terser: 5.30.2
       webpack: 5.91.0
     dev: false
 
-  /terser@5.30.1:
-    resolution: {integrity: sha512-PJhOnRttZqqmIujxOQOMu4QuFGvh43lR7Youln3k6OJvmxwZ5FxK5rbCEh8XABRCpLf7ZnhrZuclCNCASsScnA==}
+  /terser@5.30.2:
+    resolution: {integrity: sha512-vTDjRKYKip4dOFL5VizdoxHTYDfEXPdz5t+FbxCC5Rp2s+KbEO8w5wqMDPgj7CtFKZuzq7PXv28fZoXfqqBVuw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
