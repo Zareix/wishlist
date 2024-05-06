@@ -76,7 +76,7 @@ importers:
         version: 1.0.7(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.25.0
-        version: 5.34.2(react@18.3.1)
+        version: 5.35.1(react@18.3.1)
       accept-language:
         specifier: ^3.0.18
         version: 3.0.18
@@ -1590,11 +1590,11 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
-  '@tanstack/query-core@5.34.2':
-    resolution: {integrity: sha512-FM1UXldYcoMiWmVbpewV14EVpnr/ETBbdF84tmCktx29e2bXBFhGtAfyDHUD4X1FehaV5tC9GkXZUMZRQV3lcA==}
+  '@tanstack/query-core@5.35.1':
+    resolution: {integrity: sha512-0Dnpybqb8+ps6WgqBnqFEC+1F/xLvUosRAq+wiGisTgolOZzqZfkE2995dEXmhuzINiTM7/a6xSGznU0NIvBkw==}
 
-  '@tanstack/react-query@5.34.2':
-    resolution: {integrity: sha512-5L9W9XQ/lRcyhlVN0xrOkPZE9PJxZWw7BdJR244j3G7sxMfSreZWvxx13DJt08M5DWn9B5VstpKgqpIIQOIJKA==}
+  '@tanstack/react-query@5.35.1':
+    resolution: {integrity: sha512-i2T7m2ffQdNqlX3pO+uMsnQ0H4a59Ens2GxtlMsRiOvdSB4SfYmHb27MnvFV8rGmtWRaa4gPli0/rpDoSS5LbQ==}
     peerDependencies:
       react: ^18.0.0
 
@@ -5776,11 +5776,11 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
 
-  '@tanstack/query-core@5.34.2': {}
+  '@tanstack/query-core@5.35.1': {}
 
-  '@tanstack/react-query@5.34.2(react@18.3.1)':
+  '@tanstack/react-query@5.35.1(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.34.2
+      '@tanstack/query-core': 5.35.1
       react: 18.3.1
 
   '@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.2.5)':
