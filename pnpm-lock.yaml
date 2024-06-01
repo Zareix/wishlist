@@ -158,7 +158,7 @@ importers:
         version: 3.4.5
       '@types/node':
         specifier: ^20.11.25
-        version: 20.12.13
+        version: 20.13.0
       '@types/prettier':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1596,9 +1596,6 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-
-  '@types/node@20.12.13':
-    resolution: {integrity: sha512-gBGeanV41c1L171rR7wjbMiEpEI/l5XFQdLLfhr/REwpgDy/4U8y89+i8kRiLzDyZdOkXh+cRaTetUnCYutoXA==}
 
   '@types/node@20.13.0':
     resolution: {integrity: sha512-FM6AOb3khNkNIXPnHFDYaHerSv8uN22C91z098AnGccVu+Pcdhi+pNUFDi0iLmPIsVE0JBD0KVS7mzUYt4nRzQ==}
@@ -5749,15 +5746,11 @@ snapshots:
 
   '@types/formidable@3.4.5':
     dependencies:
-      '@types/node': 20.12.13
+      '@types/node': 20.13.0
 
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
-
-  '@types/node@20.12.13':
-    dependencies:
-      undici-types: 5.26.5
 
   '@types/node@20.13.0':
     dependencies:
