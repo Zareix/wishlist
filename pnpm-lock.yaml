@@ -158,7 +158,7 @@ importers:
         version: 3.4.5
       '@types/node':
         specifier: ^20.11.25
-        version: 20.16.2
+        version: 20.16.3
       '@types/prettier':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1592,8 +1592,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/node@20.16.2':
-    resolution: {integrity: sha512-91s/n4qUPV/wg8eE9KHYW1kouTfDk2FPGjXbBMfRWP/2vg1rCXNQL1OCabwGs0XSdukuK+MwCDXE30QpSeMUhQ==}
+  '@types/node@20.16.3':
+    resolution: {integrity: sha512-/wdGiWRkMOm53gAsSyFMXFZHbVg7C6CbkrzHNpaHoYfsUWPg7m6ZRKtvQjgvQ9i8WT540a3ydRlRQbxjY30XxQ==}
 
   '@types/prettier@3.0.0':
     resolution: {integrity: sha512-mFMBfMOz8QxhYVbuINtswBp9VL2b4Y0QqYHwqLz3YbgtfAcat2Dl6Y1o4e22S/OVE6Ebl9m7wWiMT2lSbAs1wA==}
@@ -5760,13 +5760,13 @@ snapshots:
 
   '@types/formidable@3.4.5':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
 
-  '@types/node@20.16.2':
+  '@types/node@20.16.3':
     dependencies:
       undici-types: 6.19.8
 
@@ -7223,7 +7223,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
